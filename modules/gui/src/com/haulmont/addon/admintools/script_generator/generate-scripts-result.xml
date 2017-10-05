@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption.generateScriptResultScreen"
+        class="com.haulmont.addon.admintools.script_generator.GenerateScriptsResult">
+    <dialogMode height="700"
+                width="1020"/>
+    <layout spacing="true" expand="editors">
+        <vbox id="editors" expand="resultScriptGroup" spacing="true">
+            <hbox spacing="true">
+                <label value="Script Type" align="MIDDLE_CENTER"/>
+                <lookupField id="generateOptions"
+                             textInputAllowed="false"
+                             nullOptionVisible="false"/>
+                <button id="execute"
+                        caption="Generate"
+                        invoke="execute"
+                        align="BOTTOM_RIGHT"/>
+            </hbox>
+            <groupBox id="querySettings" spacing="true" visible="false" caption="msg://caption.query">
+                <hbox spacing="true">
+                    <label value="Entity Type" align="MIDDLE_CENTER"/>
+                    <lookupField id="entitiesMetaClasses"
+                                 width="300px"
+                                 nullOptionVisible="false"
+                                 required="true"
+                                 requiredMessage="msg://alert.setEntityType"/>
+                    <label value="View"  align="MIDDLE_CENTER"/>
+                    <lookupField id="entityViews"
+                                 width="300px"
+                                 textInputAllowed="false"
+                                 nullOptionVisible="false"/>
+                </hbox>
+                <sourceCodeEditor id="query"
+                                  width="100%"
+                                  height="100"
+                                  required="true"
+                                  mode="SQL"
+                                  requiredMessage="msg://alert.enterQuery"/>
+            </groupBox>
+            <groupBox id="resultScriptGroup" expand="resultScript" spacing="true" caption="msg://caption.result">
+                <sourceCodeEditor id="resultScript"
+                                  width="100%"
+                                  editable="false"
+                                  mode="SQL"/>
+            </groupBox>
+        </vbox>
+        <hbox id="windowActions" align="BOTTOM_RIGHT" spacing="true">
+            <button id="windowClose"
+                    caption="mainMsg://actions.Ok"
+                    align="BOTTOM_RIGHT"
+                    invoke="windowClose"/>
+        </hbox>
+    </layout>
+</window>
