@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrTokenizer;
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -18,15 +19,17 @@ import java.util.List;
 @Component("autoimport_AutoImportBuildSupport")
 public class AutoImportBuildSupport {
 
-    public static final String AUTOIMPORT_CONFIG = "admin.autoimportConfig";
+    public static final String AUTOIMPORT_CONFIG = "admin.autoImportConfig";
     @Inject
     protected Resources resources;
+    @Inject
+    protected Logger log;
 
     public List<AutoimportObject> convertXmlToObject(List<XmlFile> xmlFiles) {
         List<AutoimportObject> list = new ArrayList<>();
-        for (XmlFile xmlFile: xmlFiles) {
-            List<Element> elements = Dom4j.elements(xmlFile.root, "auto-import");
-            Element element = elements.get(0);
+        XmlFile xmlFile = xmlFiles.get(0);
+        List<Element> elements = Dom4j.elements(xmlFile.root, "auto-import-file");
+        for (Element element: elements) {
             String path = element.attributeValue("path");
             String bean = element.attributeValue("bean");
             String importClass = element.attributeValue("class");
@@ -44,7 +47,7 @@ public class AutoImportBuildSupport {
         return xmlFiles;
     }
 
-    public String getAutoimportConfig() {
+    protected String getAutoimportConfig() {
         String config = AppContext.getProperty(AUTOIMPORT_CONFIG);
         if (StringUtils.isBlank(config))
             throw new IllegalStateException(AUTOIMPORT_CONFIG + " application property is not defined");
@@ -83,6 +86,15 @@ public class AutoImportBuildSupport {
             this.path = path;
             this.bean = bean;
             this.importClass = importClass;
+        }
+
+        @Override
+        public String toString() {
+            return "AutoimportObject{" +
+                    "path='" + path + '\'' +
+                    ", bean='" + bean + '\'' +
+                    ", importClass='" + importClass + '\'' +
+                    '}';
         }
     }
 }
