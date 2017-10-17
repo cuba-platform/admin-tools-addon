@@ -22,9 +22,9 @@ public class AutoImportListener implements AppContext.Listener {
 
     @Override
     public void applicationStarted() {
-        List<AutoImportBuildSupport.AutoimportObject> list = autoImportBuildSupport.convertXmlToObject(autoImportBuildSupport.init());
-        for (AutoImportBuildSupport.AutoimportObject autoimportObject: list) {
-            log.debug(">>>>>>>>>>>>>>>>>>>>>>>>>> " + autoimportObject);
+        List<AutoImportBuildSupport.AutoImportObject> list = autoImportBuildSupport.convertXmlToObject(autoImportBuildSupport.init());
+        for (AutoImportBuildSupport.AutoImportObject autoImportObject : list) {
+            log.debug(">>>>>>>>>>>>>>>>>>>>>>>>>> " + autoImportObject);
         }
     }
 

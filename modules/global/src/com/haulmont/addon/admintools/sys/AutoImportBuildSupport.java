@@ -8,7 +8,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrTokenizer;
 import org.dom4j.Document;
 import org.dom4j.Element;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -22,32 +21,30 @@ public class AutoImportBuildSupport {
     public static final String AUTOIMPORT_CONFIG = "admin.autoImportConfig";
     @Inject
     protected Resources resources;
-    @Inject
-    protected Logger log;
 
-    public List<AutoimportObject> convertXmlToObject(List<XmlFile> xmlFiles) {
-        List<AutoimportObject> list = new ArrayList<>();
+    public List<AutoImportObject> convertXmlToObject(List<XmlFile> xmlFiles) {
+        List<AutoImportObject> list = new ArrayList<>();
         XmlFile xmlFile = xmlFiles.get(0);
         List<Element> elements = Dom4j.elements(xmlFile.root, "auto-import-file");
         for (Element element: elements) {
             String path = element.attributeValue("path");
             String bean = element.attributeValue("bean");
             String importClass = element.attributeValue("class");
-            list.add(new AutoimportObject(path, bean, importClass));
+            list.add(new AutoImportObject(path, bean, importClass));
         }
         return list;
     }
 
     public List<XmlFile> init() {
         List<XmlFile> xmlFiles = new ArrayList<>();
-        StrTokenizer tokenizer = new StrTokenizer(getAutoimportConfig());
+        StrTokenizer tokenizer = new StrTokenizer(getAutoImportConfig());
         for (String fileName : tokenizer.getTokenArray()) {
             xmlFiles.add(new XmlFile(fileName, readXml(fileName)));
         }
         return xmlFiles;
     }
 
-    protected String getAutoimportConfig() {
+    protected String getAutoImportConfig() {
         String config = AppContext.getProperty(AUTOIMPORT_CONFIG);
         if (StringUtils.isBlank(config))
             throw new IllegalStateException(AUTOIMPORT_CONFIG + " application property is not defined");
@@ -77,12 +74,12 @@ public class AutoImportBuildSupport {
         }
     }
 
-    public static class AutoimportObject {
+    public static class AutoImportObject {
         public final String path;
         public final String bean;
         public final String importClass;
 
-        public AutoimportObject(String path, String bean, String importClass) {
+        public AutoImportObject(String path, String bean, String importClass) {
             this.path = path;
             this.bean = bean;
             this.importClass = importClass;
@@ -90,7 +87,7 @@ public class AutoImportBuildSupport {
 
         @Override
         public String toString() {
-            return "AutoimportObject{" +
+            return "AutoImportObject{" +
                     "path='" + path + '\'' +
                     ", bean='" + bean + '\'' +
                     ", importClass='" + importClass + '\'' +
