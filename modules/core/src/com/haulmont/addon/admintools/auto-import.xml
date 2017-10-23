@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <auto-import>
-    <auto-import-file path="testPath1" class="testClass1"/>
-    <auto-import-file path="testPath2" bean="testBean2"/>
-    <auto-import-file path="testPath3" class="testClass3"/>
+    <auto-import-file path="com/haulmont/addon/admintools/Roles.zip" class="com.haulmont.addon.admintools.processors.RolesAutoImportProcessor"/>
 </auto-import>
