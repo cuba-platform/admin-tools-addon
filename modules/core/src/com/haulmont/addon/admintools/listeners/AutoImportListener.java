@@ -30,20 +30,28 @@ public class AutoImportListener implements AppContext.Listener {
         authentication.begin();
         try {
             List<AutoImportBuildSupport.AutoImportObject> list = autoImportBuildSupport.convertXmlToObject(autoImportBuildSupport.init());
-            AutoImportBuildSupport.AutoImportObject importObject = list.get(0);
-            InputStream stream = resources.getResourceAsStream(importObject.path);
-            if (stream == null) {
-                return;
-            }
-            try {
-                AutoImportProcessor autoImportProcessor = (AutoImportProcessor) Class.forName(importObject.importClass).newInstance();
-                autoImportProcessor.processFile(stream);
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+
+            for (AutoImportBuildSupport.AutoImportObject importObject: list) {
+                InputStream stream = resources.getResourceAsStream(importObject.path);
+                String className = null;
+                if (stream == null) {
+                    continue;
+                }
+                if (importObject.bean != null) {
+                    className = importObject.bean;
+                } else if (importObject.importClass != null) {
+                    className = importObject.importClass;
+                }
+                try {
+                    AutoImportProcessor autoImportProcessor = (AutoImportProcessor) Class.forName(className).newInstance();
+                    autoImportProcessor.processFile(stream);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         } finally {
             authentication.end();
