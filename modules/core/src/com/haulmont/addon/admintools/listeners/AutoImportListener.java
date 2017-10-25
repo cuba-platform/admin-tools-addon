@@ -2,6 +2,7 @@ package com.haulmont.addon.admintools.listeners;
 
 import com.haulmont.addon.admintools.processors.AutoImportProcessor;
 import com.haulmont.addon.admintools.sys.AutoImportBuildSupport;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Resources;
 import com.haulmont.cuba.core.sys.AppContext;
 import com.haulmont.cuba.security.app.Authentication;
@@ -33,25 +34,27 @@ public class AutoImportListener implements AppContext.Listener {
 
             for (AutoImportBuildSupport.AutoImportObject importObject: list) {
                 InputStream stream = resources.getResourceAsStream(importObject.path);
-                String className = null;
                 if (stream == null) {
                     continue;
                 }
+
+                AutoImportProcessor autoImportProcessor = null;
                 if (importObject.bean != null) {
-                    className = importObject.bean;
-                } else if (importObject.importClass != null) {
-                    className = importObject.importClass;
-                }
-                try {
-                    AutoImportProcessor autoImportProcessor = (AutoImportProcessor) Class.forName(className).newInstance();
+                    autoImportProcessor = AppBeans.get(importObject.bean);
                     autoImportProcessor.processFile(stream);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                } else if (importObject.importClass != null) {
+                    try {
+                        autoImportProcessor = (AutoImportProcessor) Class.forName(importObject.importClass).newInstance();
+                        autoImportProcessor.processFile(stream);
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
+
             }
         } finally {
             authentication.end();
