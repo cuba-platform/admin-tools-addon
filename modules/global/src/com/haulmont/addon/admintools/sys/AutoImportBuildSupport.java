@@ -24,13 +24,14 @@ public class AutoImportBuildSupport {
 
     public List<AutoImportObject> convertXmlToObject(List<XmlFile> xmlFiles) {
         List<AutoImportObject> list = new ArrayList<>();
-        XmlFile xmlFile = xmlFiles.get(0);
-        List<Element> elements = Dom4j.elements(xmlFile.root, "auto-import-file");
-        for (Element element: elements) {
-            String path = element.attributeValue("path");
-            String bean = element.attributeValue("bean");
-            String importClass = element.attributeValue("class");
-            list.add(new AutoImportObject(path, bean, importClass));
+        for (XmlFile xmlFile: xmlFiles) {
+            List<Element> elements = Dom4j.elements(xmlFile.root, "auto-import-file");
+            for (Element element: elements) {
+                String path = element.attributeValue("path");
+                String bean = element.attributeValue("bean");
+                String importClass = element.attributeValue("class");
+                list.add(new AutoImportObject(path, bean, importClass));
+            }
         }
         return list;
     }
