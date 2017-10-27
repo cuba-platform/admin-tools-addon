@@ -1,5 +1,6 @@
 package com.haulmont.addon.admintools.processors;
 
+import com.haulmont.addon.admintools.exception.AutoImportException;
 import com.haulmont.cuba.core.app.importexport.CollectionImportPolicy;
 import com.haulmont.cuba.core.app.importexport.EntityImportExportService;
 import com.haulmont.cuba.core.app.importexport.EntityImportView;
@@ -28,7 +29,7 @@ public class GroupsAutoImportProcessor implements AutoImportProcessor {
             byte[] fileBytes = IOUtils.toByteArray(inputStream);
             entityImportExportService.importEntitiesFromZIP(fileBytes, createGroupsImportView());
         } catch (IOException e) {
-            throw new RuntimeException("Unable to import Groups file", e);
+            throw new AutoImportException("Unable to import Groups file", e);
         }
     }
 

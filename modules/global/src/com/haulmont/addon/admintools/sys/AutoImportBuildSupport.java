@@ -36,7 +36,7 @@ public class AutoImportBuildSupport {
         return list;
     }
 
-    public List<XmlFile> init() {
+    public List<XmlFile> retrieveImportXmlFile() {
         List<XmlFile> xmlFiles = new ArrayList<>();
         StrTokenizer tokenizer = new StrTokenizer(getAutoImportConfig());
         for (String fileName : tokenizer.getTokenArray()) {
