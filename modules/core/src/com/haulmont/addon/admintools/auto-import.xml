@@ -1,5 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<auto-import>
-    <auto-import-file path="com/haulmont/addon/admintools/Roles.zip" class="com.haulmont.addon.admintools.processors.RolesAutoImportProcessor"/>
-    <auto-import-file path="com/haulmont/addon/admintools/Groups.zip" class="com.haulmont.addon.admintools.processors.GroupsAutoImportProcessor"/>
-</auto-import>
+<auto-import />

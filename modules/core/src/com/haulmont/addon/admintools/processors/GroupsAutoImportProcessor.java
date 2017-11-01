@@ -5,22 +5,39 @@ import com.haulmont.cuba.core.app.importexport.CollectionImportPolicy;
 import com.haulmont.cuba.core.app.importexport.EntityImportExportService;
 import com.haulmont.cuba.core.app.importexport.EntityImportView;
 import com.haulmont.cuba.core.app.importexport.ReferenceImportBehaviour;
-import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Resources;
 import com.haulmont.cuba.security.entity.Constraint;
 import com.haulmont.cuba.security.entity.Group;
 import com.haulmont.cuba.security.entity.GroupHierarchy;
 import com.haulmont.cuba.security.entity.SessionAttribute;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+@Component("autoimport_GroupsAutoImportProcessor")
 public class GroupsAutoImportProcessor implements AutoImportProcessor {
 
-    protected EntityImportExportService entityImportExportService = AppBeans.get(EntityImportExportService.class);
+    protected EntityImportExportService entityImportExportService;
+    protected Resources resources;
+    protected Logger log = LoggerFactory.getLogger(GroupsAutoImportProcessor.class);
+
+    public GroupsAutoImportProcessor(EntityImportExportService entityImportExportService, Resources resources) {
+        this.entityImportExportService = entityImportExportService;
+        this.resources = resources;
+    }
 
     @Override
     public void processFile(String filePath) {
+        InputStream stream = resources.getResourceAsStream(filePath);
+        if (stream == null) {
+            log.warn("File {} not found.", filePath);
+            return;
+        }
+        processFile(stream);
     }
 
     @Override
