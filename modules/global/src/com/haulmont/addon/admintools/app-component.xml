@@ -19,6 +19,10 @@
             name="core">
         <artifact appJar="true"
                   name="tools-core"/>
+        <artifact classifier="db"
+                  configuration="dbscripts"
+                  ext="zip"
+                  name="tools-core"/>
         <property name="cuba.springContextConfig"
                   value="+com/haulmont/addon/admintools/spring.xml"/>
         <property name="cuba.mainMessagePack"
