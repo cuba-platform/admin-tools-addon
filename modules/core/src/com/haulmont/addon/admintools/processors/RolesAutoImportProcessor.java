@@ -22,6 +22,8 @@ public class RolesAutoImportProcessor implements AutoImportProcessor {
     protected Resources resources;
     protected Logger log = LoggerFactory.getLogger(RolesAutoImportProcessor.class);
 
+    private String filePath;
+
     public RolesAutoImportProcessor(EntityImportExportService entityImportExportService, Resources resources) {
         this.entityImportExportService = entityImportExportService;
         this.resources = resources;
@@ -34,6 +36,7 @@ public class RolesAutoImportProcessor implements AutoImportProcessor {
             log.warn("File {} not found.", filePath);
             return;
         }
+        this.filePath = filePath;
         processFile(stream);
     }
 
@@ -42,6 +45,7 @@ public class RolesAutoImportProcessor implements AutoImportProcessor {
         try {
             byte[] fileBytes = IOUtils.toByteArray(inputStream);
             entityImportExportService.importEntitiesFromZIP(fileBytes, createRolesImportView());
+            log.info("Successful importing file {}", filePath);
         } catch (IOException e) {
             throw new AutoImportException("Unable to import Roles file", e);
         }

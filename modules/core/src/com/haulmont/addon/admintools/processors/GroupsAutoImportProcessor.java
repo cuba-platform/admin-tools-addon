@@ -25,6 +25,8 @@ public class GroupsAutoImportProcessor implements AutoImportProcessor {
     protected Resources resources;
     protected Logger log = LoggerFactory.getLogger(GroupsAutoImportProcessor.class);
 
+    private String filePath;
+
     public GroupsAutoImportProcessor(EntityImportExportService entityImportExportService, Resources resources) {
         this.entityImportExportService = entityImportExportService;
         this.resources = resources;
@@ -37,6 +39,7 @@ public class GroupsAutoImportProcessor implements AutoImportProcessor {
             log.warn("File {} not found.", filePath);
             return;
         }
+        this.filePath = filePath;
         processFile(stream);
     }
 
@@ -45,6 +48,7 @@ public class GroupsAutoImportProcessor implements AutoImportProcessor {
         try {
             byte[] fileBytes = IOUtils.toByteArray(inputStream);
             entityImportExportService.importEntitiesFromZIP(fileBytes, createGroupsImportView());
+            log.info("Successful importing file {}", filePath);
         } catch (IOException e) {
             throw new AutoImportException("Unable to import Groups file", e);
         }
