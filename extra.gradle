@@ -1,0 +1,131 @@
+buildscript {
+    ext.cubaVersion = '6.6.3'
+    repositories {
+        mavenLocal()
+        maven {
+            url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
+            credentials {
+                //noinspection GroovyAssignabilityCheck
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'developer')
+                //noinspection GroovyAssignabilityCheck
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'Haul2010')
+            }
+        }
+    }
+
+    dependencies {
+        classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
+        classpath "com.haulmont.cuba:cuba-global:$cubaVersion"
+    }
+}
+
+def globalModule = project(':tools-global')
+def coreModule = project(':tools-core')
+def guiModule = project(':tools-gui')
+def webModule = project(':tools-web')
+
+configure([globalModule, coreModule, guiModule, webModule]) {
+    apply plugin: "groovy"
+
+    sourceSets {
+        test {
+            java {
+                srcDirs = ['test']
+            }
+            groovy {
+                srcDirs = ['test']
+            }
+        }
+        testUnit {
+            java {
+                srcDirs = ['test-unit']
+            }
+            groovy {
+                srcDirs = ['test-unit']
+            }
+        }
+    }
+
+    dependencies {
+        compile 'io.vavr:vavr:0.9.0'
+        compile 'org.codehaus.groovy:groovy-all:2.4.11'
+        compile 'jaxen:jaxen:1.1.6'
+        compile 'org.jetbrains:annotations:15.0'
+        testCompile 'junit:junit:4.12'
+        testCompile 'cglib:cglib-nodep:3.2.4'
+        testCompile 'org.spockframework:spock-core:1.1-groovy-2.4-rc-3'
+        testRuntime 'javax.servlet:javax.servlet-api:3.1.0'
+
+        testUnitCompile sourceSets.main.output
+        testUnitCompile configurations.testCompile
+        testUnitRuntime configurations.testRuntime
+    }
+
+    test {
+        ignoreFailures = true
+    }
+
+    idea {
+        module {
+            testSourceDirs += file('test-unit')
+        }
+    }
+
+    task testUnit(type: Test) {
+        testClassesDir = sourceSets.testUnit.output.classesDir
+        classpath = sourceSets.testUnit.runtimeClasspath
+    }
+
+    tasks.withType(Test) {
+        reports.html.destination = file("${reporting.baseDir}/${name}")
+    }
+}
+
+configure(globalModule){
+    configurations {
+        testOutput.extendsFrom (testCompile)
+    }
+
+    task jarTest (type: Jar, dependsOn: testClasses) {
+        from sourceSets.test.output
+        classifier = 'test'
+    }
+
+    artifacts {
+        testOutput jarTest
+    }
+}
+
+configure([coreModule, webModule]){
+    dependencies{
+        testCompile project(path: ':tools-global', configuration: 'testOutput')
+    }
+}
+
+def dbNameParam = 'cubaat'
+
+configure(coreModule) {
+
+    task startDb(description: 'Starts local HSQLDB server', type: CubaHsqlStart) {
+        dbName = dbNameParam
+    }
+
+    task stopDb(description: 'Stops local HSQLDB server', type: CubaHsqlStop)  {
+        dbName = dbNameParam
+    }
+
+    task removeDb(description: 'Removes local HSQL database', type: Delete) {
+        delete new File("$rootProject.projectDir/data")
+    }
+
+    task killDb(description: 'Kill local HSQLDB server process running on port 9001', type: CubaKillProcess) {
+        port = 9001
+    }
+
+    task createTestDb(dependsOn: assembleDbScripts, description: 'Creates local HSQL database', type: CubaDbCreation) {
+        dbms = 'hsql'
+        dbName = dbNameParam
+        dbUser = 'sa'
+        dbPassword = ''
+    }
+}

@@ -1,6 +1,6 @@
 package com.haulmont.addon.admintools.core;
 
-import com.haulmont.addon.admintools.CubaatTestContainer;
+import com.haulmont.addon.admintools.AdminToolsTestContainer;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 public class SampleIntegrationTest {
 
     @ClassRule
-    public static CubaatTestContainer cont = CubaatTestContainer.Common.INSTANCE;
+    public static AdminToolsTestContainer cont = AdminToolsTestContainer.Common.INSTANCE;
 
     private Metadata metadata;
     private Persistence persistence;

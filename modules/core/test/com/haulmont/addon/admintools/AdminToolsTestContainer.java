@@ -9,17 +9,17 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CubaatTestContainer extends TestContainer {
+public class AdminToolsTestContainer extends TestContainer {
 
-    public CubaatTestContainer() {
+    public AdminToolsTestContainer() {
         super();
         appComponents = new ArrayList<>(Arrays.asList(
-                "com.haulmont.cuba"
+                "com.haulmont.cuba",
                 // add CUBA premium add-ons here
                 // "com.haulmont.bpm",
                 // "com.haulmont.charts",
                 // "com.haulmont.fts",
-                // "com.haulmont.reports",
+                 "com.haulmont.reports"
                 // and custom app components if any
         ));
         appPropertiesFiles = Arrays.asList(
@@ -51,9 +51,9 @@ public class CubaatTestContainer extends TestContainer {
         dbPassword = resourceElem.attributeValue("password");
     }
 
-    public static class Common extends CubaatTestContainer {
+    public static class Common extends AdminToolsTestContainer {
 
-        public static final CubaatTestContainer.Common INSTANCE = new CubaatTestContainer.Common();
+        public static final AdminToolsTestContainer.Common INSTANCE = new AdminToolsTestContainer.Common();
 
         private static volatile boolean initialized;
 
