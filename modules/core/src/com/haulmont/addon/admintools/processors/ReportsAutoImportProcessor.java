@@ -42,8 +42,7 @@ public class ReportsAutoImportProcessor implements AutoImportProcessor {
         try {
             byte[] fileBytes = IOUtils.toByteArray(inputStream);
             reportService.importReports(fileBytes);
-            log.info("Successful importing file {}", filePath);
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             throw new AutoImportException("Unable to import Reports file", e);
         }
     }

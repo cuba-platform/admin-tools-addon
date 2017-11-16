@@ -45,8 +45,7 @@ public class RolesAutoImportProcessor implements AutoImportProcessor {
         try {
             byte[] fileBytes = IOUtils.toByteArray(inputStream);
             entityImportExportService.importEntitiesFromZIP(fileBytes, createRolesImportView());
-            log.info("Successful importing file {}", filePath);
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             throw new AutoImportException("Unable to import Roles file", e);
         }
     }

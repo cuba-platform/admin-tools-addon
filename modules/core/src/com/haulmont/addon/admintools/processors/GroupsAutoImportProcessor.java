@@ -48,8 +48,7 @@ public class GroupsAutoImportProcessor implements AutoImportProcessor {
         try {
             byte[] fileBytes = IOUtils.toByteArray(inputStream);
             entityImportExportService.importEntitiesFromZIP(fileBytes, createGroupsImportView());
-            log.info("Successful importing file {}", filePath);
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             throw new AutoImportException("Unable to import Groups file", e);
         }
     }
