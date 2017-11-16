@@ -43,7 +43,6 @@ public class AutoImportListener implements AppContext.Listener {
     public void applicationStarted() {
         authentication.begin();
         try {
-            autoImportConfiguration.setHashes(null);
             List<AutoImportObject> list = buildSupport.convertXmlToObject(buildSupport.retrieveImportXmlFile());
             for (AutoImportObject importObject: list) {
                 String emptyFileBytesMd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(new byte[0]);
@@ -53,29 +52,34 @@ public class AutoImportListener implements AppContext.Listener {
                     continue;
                 }
                 String fileName = importObject.path.substring(importObject.path.lastIndexOf("/") + 1);
-                Map<String, Map<String, Boolean>> map = autoImportConfiguration.getHashes();
+                Map<String, Map<String, String>> map = autoImportConfiguration.getHashes();
 
                 String savedMd5 = null;
-                if (MapUtils.isNotEmpty(map)) {
-                    Map<String, Boolean> hashAndResult = map.get(fileName);
+                Map<String, String> hashAndResult = null;
+                if (map != null) {
+                    hashAndResult = map.get(fileName);
                     if (MapUtils.isNotEmpty(hashAndResult)) {
                         savedMd5 = hashAndResult.keySet().iterator().next();
                     }
-                }
-                if (map == null) {
+                } else {
                     map = new HashMap<>();
                 }
 
-                if (map.isEmpty() || !md5.equals(savedMd5)) {
-                //    log.debug(">>>>>>>>>>>>>>>>>>>>>> " + savedMd5);
-                /*    Map<String, Boolean> innerMap = map.get(fileName);
-                    map.put(fileName, md5);
+                if (savedMd5 == null || !md5.equals(savedMd5)) {
+                    if (hashAndResult == null) {
+                        hashAndResult = new HashMap<>();
+                    } else {
+                        hashAndResult.clear();
+                    }
                     try {
                         processAutoImportObject(importObject);
-                        autoImportConfiguration.setHashes(map);
+                        hashAndResult.put(md5, "success");
                     } catch (Exception e) {
+                        hashAndResult.put(md5, "fail");
                         log.warn("", e);
-                    }*/
+                    }
+                    map.put(fileName, hashAndResult);
+                    autoImportConfiguration.setHashes(map);
                 }
             }
         } finally {

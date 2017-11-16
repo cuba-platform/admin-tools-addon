@@ -16,7 +16,7 @@ public interface AutoImportConfiguration extends Config {
     @Property("admintools.hashes")
     @Factory(factory = AutoImportType.Factory.class)
     @Stringify(stringify = AutoImportType.Stringify.class)
-    Map<String, Map<String, Boolean>> getHashes();
+    Map<String, Map<String, String>> getHashes();
 
-    void setHashes(Map<String, Map<String, Boolean>> hashes);
+    void setHashes(Map<String, Map<String, String>> hashes);
 }
