@@ -10,6 +10,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -76,14 +77,28 @@ public class AutoImportBuildSupport {
     }
 
     public static class AutoImportObject {
-        public final String path;
-        public final String bean;
-        public final String importClass;
+        protected final String path;
+        protected final String bean;
+        protected final String importClass;
 
-        public AutoImportObject(String path, String bean, String importClass) {
+        public AutoImportObject(String path, @Nullable String bean, @Nullable String importClass) {
             this.path = path;
             this.bean = bean;
             this.importClass = importClass;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        @Nullable
+        public String getBean() {
+            return bean;
+        }
+
+        @Nullable
+        public String getImportClass() {
+            return importClass;
         }
 
         @Override

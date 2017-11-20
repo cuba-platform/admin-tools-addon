@@ -1,6 +1,8 @@
 package com.haulmont.addon.admintools.config;
 
 import com.haulmont.addon.admintools.config.type.AutoImportType;
+import com.haulmont.addon.admintools.dto.ImportDataObject;
+import com.haulmont.addon.admintools.dto.ImportFileObjects;
 import com.haulmont.cuba.core.config.Config;
 import com.haulmont.cuba.core.config.Property;
 import com.haulmont.cuba.core.config.Source;
@@ -16,7 +18,7 @@ public interface AutoImportConfiguration extends Config {
     @Property("admintools.hashes")
     @Factory(factory = AutoImportType.Factory.class)
     @Stringify(stringify = AutoImportType.Stringify.class)
-    Map<String, Map<String, String>> getHashes();
+    ImportFileObjects getHashes();
 
-    void setHashes(Map<String, Map<String, String>> hashes);
+    void setHashes(ImportFileObjects hashes);
 }
