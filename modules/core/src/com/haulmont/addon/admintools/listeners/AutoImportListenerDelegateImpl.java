@@ -12,11 +12,13 @@ import io.vavr.CheckedFunction1;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
@@ -116,7 +118,8 @@ public class AutoImportListenerDelegateImpl implements AutoImportListenerDelegat
         return Try.of(() -> DigestUtils.md5Hex(mapper.apply(path)));
     }
 
-    protected InputStream getResourceAsStreamNN(String path) throws FileNotFoundException {
+    protected InputStream getResourceAsStreamNN(String path) throws IOException {
+        if (StringUtils.isBlank(path)) throw new IOException("File path is empty");
         InputStream is = resources.getResourceAsStream(path);
 
         // see documentation for {@link Resources#getResourceAsStream}
