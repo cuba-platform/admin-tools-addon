@@ -14,7 +14,7 @@ class AutoImportListenerDelegateImplTest extends Specification {
     @ClassRule @Shared
     AdminToolsTestContainer container = AdminToolsTestContainer.Common.INSTANCE
 
-    AutoImportListenerDelegate autoImportListenerDelegate
+    AutoImportListenerDelegateImpl delegate
 
     @Shared
     ImportDataObject importDataObject
@@ -24,12 +24,12 @@ class AutoImportListenerDelegateImplTest extends Specification {
     }
 
     void setup() {
-        autoImportListenerDelegate = AppBeans.get(AutoImportListenerDelegate)
+        delegate = AppBeans.get(AutoImportListenerDelegateImpl)
     }
 
     def "checks that method willObjectSkip compares hashes correctly"() {
         expect:
-        autoImportListenerDelegate.willObjectSkip(path, prevImportInteraction, newMd5Hex) == res
+        delegate.willObjectSkip(path, prevImportInteraction, newMd5Hex) == res
 
         where:
         path | prevImportInteraction | newMd5Hex | res
@@ -39,31 +39,31 @@ class AutoImportListenerDelegateImplTest extends Specification {
 
     def "checks that method getResourceAsStreamNN throws exception with incorrect file path"() {
         when:
-        autoImportListenerDelegate.getResourceAsStreamNN(null)
+        delegate.getResourceAsStreamNN(null)
         then:
         thrown(IOException)
 
         when:
-        autoImportListenerDelegate.getResourceAsStreamNN('com/example/invalid.zip')
+        delegate.getResourceAsStreamNN('com/example/invalid.zip')
         then:
         thrown(FileNotFoundException)
     }
 
     def "checks that method resolveEffectiveProcessor throws exception with incorrect class or bean"() {
         when:
-        autoImportListenerDelegate.resolveEffectiveProcessor(
+        delegate.resolveEffectiveProcessor(
                 new AutoImportBuildSupport.AutoImportObject('', 'admintools_InvalidBeanName', ''))
         then:
         thrown(NoSuchBeanDefinitionException)
 
         when:
-        autoImportListenerDelegate.resolveEffectiveProcessor(
+        delegate.resolveEffectiveProcessor(
                 new AutoImportBuildSupport.AutoImportObject('', null, 'com.test.example.InvalidProcessor'))
         then:
         thrown(RuntimeException)
 
         when:
-        autoImportListenerDelegate.resolveEffectiveProcessor(
+        delegate.resolveEffectiveProcessor(
                 new AutoImportBuildSupport.AutoImportObject('', null, null))
         then:
         thrown(RuntimeException)

@@ -8,8 +8,6 @@ import com.haulmont.cuba.core.global.Resources;
 import com.haulmont.cuba.security.entity.Permission;
 import com.haulmont.cuba.security.entity.Role;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -20,9 +18,6 @@ public class RolesAutoImportProcessor implements AutoImportProcessor {
 
     protected EntityImportExportService entityImportExportService;
     protected Resources resources;
-    protected Logger log = LoggerFactory.getLogger(RolesAutoImportProcessor.class);
-
-    private String filePath;
 
     public RolesAutoImportProcessor(EntityImportExportService entityImportExportService, Resources resources) {
         this.entityImportExportService = entityImportExportService;
@@ -32,11 +27,6 @@ public class RolesAutoImportProcessor implements AutoImportProcessor {
     @Override
     public void processFile(String filePath) {
         InputStream stream = resources.getResourceAsStream(filePath);
-        if (stream == null) {
-            log.warn("File {} not found.", filePath);
-            return;
-        }
-        this.filePath = filePath;
         processFile(stream);
     }
 

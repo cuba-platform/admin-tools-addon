@@ -11,8 +11,6 @@ import com.haulmont.cuba.security.entity.Group;
 import com.haulmont.cuba.security.entity.GroupHierarchy;
 import com.haulmont.cuba.security.entity.SessionAttribute;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,9 +21,6 @@ public class GroupsAutoImportProcessor implements AutoImportProcessor {
 
     protected EntityImportExportService entityImportExportService;
     protected Resources resources;
-    protected Logger log = LoggerFactory.getLogger(GroupsAutoImportProcessor.class);
-
-    private String filePath;
 
     public GroupsAutoImportProcessor(EntityImportExportService entityImportExportService, Resources resources) {
         this.entityImportExportService = entityImportExportService;
@@ -35,11 +30,6 @@ public class GroupsAutoImportProcessor implements AutoImportProcessor {
     @Override
     public void processFile(String filePath) {
         InputStream stream = resources.getResourceAsStream(filePath);
-        if (stream == null) {
-            log.warn("File {} not found.", filePath);
-            return;
-        }
-        this.filePath = filePath;
         processFile(stream);
     }
 

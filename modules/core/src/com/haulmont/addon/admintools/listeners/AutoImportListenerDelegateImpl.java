@@ -53,7 +53,8 @@ public class AutoImportListenerDelegateImpl implements AutoImportListenerDelegat
     public void applicationStarted() {
         authentication.begin();
         try {
-            List<AutoImportBuildSupport.AutoImportObject> autoImportObjects = buildSupport.convertXmlToObject(buildSupport.retrieveImportXmlFile());
+            List<AutoImportBuildSupport.AutoImportObject> autoImportObjects =
+                    buildSupport.convertXmlToObject(buildSupport.retrieveImportXmlFile());
             List<AutoImportBuildSupport.AutoImportObject> filteredAutoImports = autoImportObjects.stream()
                     .map(this::applyValidationChecks)
                     .flatMap(either -> Match(either).of(
@@ -77,15 +78,13 @@ public class AutoImportListenerDelegateImpl implements AutoImportListenerDelegat
 
                 try {
                     processAutoImportObject(importObject);
-                    importedObjects.put(importObject.getPath(),
-                            new ImportDataObject(newMd5Hex, SUCCESS));
+                    importedObjects.put(importObject.getPath(), new ImportDataObject(newMd5Hex, SUCCESS));
+                    log.info("File {} has been imported", importObject.getPath());
                 } catch (Exception e) {
-                    importedObjects.put(importObject.getPath(),
-                            new ImportDataObject(newMd5Hex, FAILURE));
+                    importedObjects.put(importObject.getPath(), new ImportDataObject(newMd5Hex, FAILURE));
                     log.warn("", e);
+                    log.warn("Importing file {} has been failed", importObject.getPath());
                 }
-
-                log.info("File {} has been imported", importObject.getPath());
             }
             autoImportConfiguration.setHashes(importedObjects);
         } finally {
@@ -135,7 +134,8 @@ public class AutoImportListenerDelegateImpl implements AutoImportListenerDelegat
         autoImportProcessor.processFile(importObject.getPath());
     }
 
-    protected AutoImportProcessor resolveEffectiveProcessor(AutoImportBuildSupport.AutoImportObject autoImport) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    protected AutoImportProcessor resolveEffectiveProcessor(AutoImportBuildSupport.AutoImportObject autoImport)
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         return Optional
                 .ofNullable(autoImport.getBean()).<AutoImportProcessor>map(AppBeans::get)
                 .orElseGet(() -> getInstanceByClassName(autoImport.getImportClass()));
