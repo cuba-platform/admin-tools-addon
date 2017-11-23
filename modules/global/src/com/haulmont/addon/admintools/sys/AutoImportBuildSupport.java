@@ -53,6 +53,11 @@ public class AutoImportBuildSupport {
         return config;
     }
 
+    /**
+     * copy/paste from {@link com.haulmont.cuba.core.sys.MetadataBuildSupport#readXml(String)}
+     * @param path
+     * @return
+     */
     protected Element readXml(String path) {
         InputStream stream = resources.getResourceAsStream(path);
         try {
