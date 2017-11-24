@@ -13,19 +13,17 @@ import com.haulmont.cuba.security.entity.SessionAttribute;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 
 @Component("autoimport_GroupsAutoImportProcessor")
 public class GroupsAutoImportProcessor implements AutoImportProcessor {
 
+    @Inject
     protected EntityImportExportService entityImportExportService;
+    @Inject
     protected Resources resources;
-
-    public GroupsAutoImportProcessor(EntityImportExportService entityImportExportService, Resources resources) {
-        this.entityImportExportService = entityImportExportService;
-        this.resources = resources;
-    }
 
     @Override
     public void processFile(String filePath) {
