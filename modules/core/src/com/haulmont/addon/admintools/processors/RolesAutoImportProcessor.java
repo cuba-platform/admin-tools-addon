@@ -10,19 +10,18 @@ import com.haulmont.cuba.security.entity.Role;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 
 @Component("autoimport_RolesAutoImportProcessor")
 public class RolesAutoImportProcessor implements AutoImportProcessor {
 
+    @Inject
     protected EntityImportExportService entityImportExportService;
+    @Inject
     protected Resources resources;
 
-    public RolesAutoImportProcessor(EntityImportExportService entityImportExportService, Resources resources) {
-        this.entityImportExportService = entityImportExportService;
-        this.resources = resources;
-    }
 
     @Override
     public void processFile(String filePath) {
