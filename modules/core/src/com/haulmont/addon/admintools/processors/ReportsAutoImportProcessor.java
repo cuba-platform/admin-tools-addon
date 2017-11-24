@@ -6,19 +6,17 @@ import com.haulmont.reports.app.service.ReportService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 
 @Component("autoimport_ReportsAutoImportProcessor")
 public class ReportsAutoImportProcessor implements AutoImportProcessor {
 
+    @Inject
     protected ReportService reportService;
+    @Inject
     protected Resources resources;
-
-    public ReportsAutoImportProcessor(ReportService reportService, Resources resources) {
-        this.reportService = reportService;
-        this.resources = resources;
-    }
 
     @Override
     public void processFile(String filePath) {
