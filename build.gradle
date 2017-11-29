@@ -3,11 +3,21 @@ buildscript {
     ext.cubaVersion = '6.7.3'
     repositories {
         maven {
-            url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
+            url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
-                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'degtyarjov')
-                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'Ltunzhtd!')
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
+        }
+        maven {
+            url 'https://repo.cuba-platform.com/content/groups/premium'
+            credentials {
+                username(rootProject.hasProperty('premiumRepoUser') ? rootProject['premiumRepoUser'] : System.getenv('CUBA_PREMIUM_USER'))
+                password(rootProject.hasProperty('premiumRepoPass') ? rootProject['premiumRepoPass'] : System.getenv('CUBA_PREMIUM_PASSWORD'))
+            }
+        }
+        maven {
+            url  "https://dl.bintray.com/mariodavid/cuba-components"
         }
     }
     dependencies {
@@ -40,6 +50,7 @@ cuba {
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
     appComponent("com.haulmont.reports:reports-global:$cubaVersion")
+    appComponent("de.diedavids.cuba.runtimediagnose:runtime-diagnose-global:0.3.1")
 
 }
 
