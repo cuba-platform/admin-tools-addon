@@ -50,7 +50,7 @@ cuba {
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
     appComponent("com.haulmont.reports:reports-global:$cubaVersion")
-    appComponent("de.diedavids.cuba.runtimediagnose:runtime-diagnose-global:0.3.1")
+    appComponent("de.diedavids.cuba.runtimediagnose:runtime-diagnose-global:0.4.0")
 
 }
 
