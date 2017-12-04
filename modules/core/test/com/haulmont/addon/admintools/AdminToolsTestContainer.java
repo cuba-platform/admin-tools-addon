@@ -14,12 +14,12 @@ public class AdminToolsTestContainer extends TestContainer {
     public AdminToolsTestContainer() {
         super();
         appComponents = new ArrayList<>(Arrays.asList(
-                "com.haulmont.cuba",
+                "com.haulmont.cuba"
                 // add CUBA premium add-ons here
                 // "com.haulmont.bpm",
                 // "com.haulmont.charts",
                 // "com.haulmont.fts",
-                 "com.haulmont.reports"
+                // "com.haulmont.reports"
                 // and custom app components if any
         ));
         appPropertiesFiles = Arrays.asList(
