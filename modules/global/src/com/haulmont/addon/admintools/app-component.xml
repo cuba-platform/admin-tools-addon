@@ -4,7 +4,7 @@
     <module blocks="*"
             name="global">
         <artifact appJar="true"
-                  name="tools-global"/>
+                  name="cuba-at-global"/>
         <property name="cuba.persistenceConfig"
                   value="+com/haulmont/addon/admintools/persistence.xml"/>
         <property name="cuba.metadataConfig"
@@ -18,11 +18,11 @@
             dependsOn="global"
             name="core">
         <artifact appJar="true"
-                  name="tools-core"/>
+                  name="cuba-at-core"/>
         <artifact classifier="db"
                   configuration="dbscripts"
                   ext="zip"
-                  name="tools-core"/>
+                  name="cuba-at-core"/>
         <property name="cuba.springContextConfig"
                   value="+com/haulmont/addon/admintools/spring.xml"/>
         <property name="cuba.mainMessagePack"
@@ -32,17 +32,17 @@
             dependsOn="global"
             name="gui">
         <artifact appJar="true"
-                  name="tools-gui"/>
+                  name="cuba-at-gui"/>
     </module>
     <module blocks="web"
             dependsOn="gui"
             name="web">
         <artifact appJar="true"
-                  name="tools-web"/>
+                  name="cuba-at-web"/>
         <artifact classifier="web"
                   configuration="webcontent"
                   ext="zip"
-                  name="tools-web"/>
+                  name="cuba-at-web"/>
         <property name="cuba.springContextConfig"
                   value="+com/haulmont/addon/admintools/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"

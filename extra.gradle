@@ -19,10 +19,10 @@ buildscript {
     }
 }
 
-def globalModule = project(':tools-global')
-def coreModule = project(':tools-core')
-def guiModule = project(':tools-gui')
-def webModule = project(':tools-web')
+def globalModule = project(':cuba-at-global')
+def coreModule = project(':cuba-at-core')
+def guiModule = project(':cuba-at-gui')
+def webModule = project(':cuba-at-web')
 
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply plugin: "groovy"
@@ -98,7 +98,7 @@ configure(globalModule){
 
 configure([coreModule, webModule]){
     dependencies{
-        testCompile project(path: ':tools-global', configuration: 'testOutput')
+        testCompile project(path: ':cuba-at-global', configuration: 'testOutput')
     }
 }
 

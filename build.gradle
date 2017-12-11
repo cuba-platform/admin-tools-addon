@@ -2,6 +2,7 @@
 buildscript {
     ext.cubaVersion = '6.7.3'
     repositories {
+        
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
@@ -9,19 +10,21 @@ buildscript {
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
+        
         maven {
             url  "https://dl.bintray.com/mariodavid/cuba-components"
         }
+        
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
     }
 }
 
-def globalModule = project(':tools-global')
-def coreModule = project(':tools-core')
-def guiModule = project(':tools-gui')
-def webModule = project(':tools-web')
+def globalModule = project(':cuba-at-global')
+def coreModule = project(':cuba-at-core')
+def guiModule = project(':cuba-at-gui')
+def webModule = project(':cuba-at-web')
 
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
 
@@ -43,6 +46,7 @@ cuba {
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
     appComponent("de.diedavids.cuba.runtimediagnose:runtime-diagnose-global:0.4.0")
+
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
@@ -97,7 +101,7 @@ configure(coreModule) {
 
     task cleanConf(description: 'Cleans up conf directory') {
         doLast {
-            def dir = new File(cuba.tomcat.dir, '/conf/tools-core')
+            def dir = new File(cuba.tomcat.dir, '/conf/cuba-at-core')
             if (dir.isDirectory()) {
                 ant.delete(includeemptydirs: true) {
                     fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -107,8 +111,8 @@ configure(coreModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'tools-core'
-        appJars('tools-global', 'tools-core')
+        appName = 'cuba-at-core'
+        appJars('cuba-at-global', 'cuba-at-core')
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
@@ -137,7 +141,7 @@ configure(guiModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/haulmont/addon/admintools/**"
-        into "$cuba.tomcat.dir/conf/tools"
+        into "$cuba.tomcat.dir/conf/cuba-at"
     }
 }
 
@@ -165,17 +169,17 @@ configure(webModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/haulmont/addon/admintools/**"
-        into "$cuba.tomcat.dir/conf/tools"
+        into "$cuba.tomcat.dir/conf/cuba-at"
     }
 
     task clearMessagesCache(type: CubaClearMessagesCache) {
-        appName = 'tools'
+        appName = 'cuba-at'
     }
     deployConf.dependsOn clearMessagesCache
 
     task cleanConf(description: 'Cleans up conf directory') {
         doLast {
-            def dir = new File(cuba.tomcat.dir, '/conf/tools')
+            def dir = new File(cuba.tomcat.dir, '/conf/cuba-at')
             if (dir.isDirectory()) {
                 ant.delete(includeemptydirs: true) {
                     fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -185,8 +189,8 @@ configure(webModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'tools'
-        appJars('tools-global', 'tools-gui', 'tools-web')
+        appName = 'cuba-at'
+        appJars('cuba-at-global', 'cuba-at-gui', 'cuba-at-web')
     }
 }
 
@@ -194,13 +198,13 @@ configure(webModule) {
 
 
 
-task undeploy(type: Delete, dependsOn: ':tools-web:cleanConf') {
+task undeploy(type: Delete, dependsOn: ':cuba-at-web:cleanConf') {
     delete("$cuba.tomcat.dir/shared")
-    delete("$cuba.tomcat.dir/webapps/tools-core")
-    delete("$cuba.tomcat.dir/webapps/tools")
+    delete("$cuba.tomcat.dir/webapps/cuba-at-core")
+    delete("$cuba.tomcat.dir/webapps/cuba-at")
 }
 
-task restart(dependsOn: ['stop', ':tools-core:deploy', ':tools-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') {
+task restart(dependsOn: ['stop', ':cuba-at-core:deploy', ':cuba-at-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') {
     doLast {
         ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
             not {
