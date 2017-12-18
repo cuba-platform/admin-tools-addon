@@ -4,4 +4,6 @@
             template="com/haulmont/addon/admintools/script_generator/generate-scripts.xml"/>
     <screen id="admintools$generateScriptsResult"
             template="com/haulmont/addon/admintools/script_generator/generate-scripts-result.xml"/>
+    <screen id="admintools$loadConfig"
+            template="com/haulmont/addon/admintools/load_config/load-config.xml"/>
 </screen-config>

@@ -7,4 +7,8 @@
           insertAfter="jmxConsole"
           openType="DIALOG"
           screen="admintools$generateScriptsResult"/>
+    <item id="loadConfig"
+          insertAfter="generateScripts"
+          openType="DIALOG"
+          screen="admintools$loadConfig"/>
 </menu-config>
