@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.7.3'
+    ext.cubaVersion = '6.7.4'
     repositories {
         
         maven {
@@ -28,7 +28,6 @@ def webModule = project(':cuba-at-web')
 
 def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
 
-
 apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
@@ -40,6 +39,14 @@ cuba {
     }
     tomcat {
         dir = "$project.rootDir/deploy/tomcat"
+    }
+    ide {
+        vcs = 'Git'
+    }
+    uploadRepository {
+        url='http://repository.haulmont.com:8587/nexus/content/repositories/snapshots'
+        user = haulmontNexusLogin
+        password = haulmontNexusPassword
     }
 }
 
