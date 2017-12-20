@@ -35,11 +35,11 @@ to the build.gradle of your CUBA application:
     ```
 
 2. Select a version of the add-on which is compatible with the platform version used in your project:
-   
-   | Platform Version | Add-on Version |
-   | ---------------- | -------------- |
-   | 6.7.x            | 0.1-SNAPSHOT   |
-      
+
+| Platform Version | Add-on Version |
+| ---------------- | -------------- |
+| 6.7.x            | 0.1-SNAPSHOT   |
+
    Add custom application component to your project:
    
    * Artifact group: `com.haulmont.addon.admintools`
@@ -52,7 +52,7 @@ to the build.gradle of your CUBA application:
 
 This part of Admin Tools allows generating SQL scripts for selected entities of a project.
 
-// add image
+![generate-scripts-menu](img/gen_scripts_menu.png)
 
 JPQL requests are used for entity selection. The user has to specify a metaclass, view and type
 of the script to be generated (insert, update, insert update). Selecting the metaclass automatically
@@ -62,7 +62,7 @@ generates a JPQL request:
 select e from example$Entity e
 ```
 
-// add image
+![generate-scripts-dialog](img/gen_scripts_dialog.png)
 
 After that, SQL scripts of the specified type are generated for the found entities.
 
