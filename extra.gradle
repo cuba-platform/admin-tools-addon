@@ -1,14 +1,18 @@
 buildscript {
-    ext.cubaVersion = '6.6.3'
+    ext.cubaVersion = '6.7.4'
     repositories {
-        mavenLocal()
         maven {
-            url 'http://repository.haulmont.com:8587/nexus/content/groups/work'
+            url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
-                //noinspection GroovyAssignabilityCheck
-                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'developer')
-                //noinspection GroovyAssignabilityCheck
-                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'Haul2010')
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
+            }
+        }
+        maven {
+            url 'https://repo.cuba-platform.com/content/repositories/premium-snapshots'
+            credentials {
+                username(rootProject['premiumRepoUser'])
+                password(rootProject['premiumRepoPass'])
             }
         }
     }
