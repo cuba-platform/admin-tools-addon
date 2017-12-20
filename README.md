@@ -143,7 +143,6 @@ then provide a path to the class
        <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.zip" class="com.company.demoforadmintoolscomponent.processors.SampleAutoImportProcessor"/>
    </auto-import>
    ```
-   
    Where path is a path to the zip-archive, bean/class — a processor. Bean = [bean name], class [class path].
    
 2. Add the `admin.autoImportConfig` property to app.properties including the configuration file path.
