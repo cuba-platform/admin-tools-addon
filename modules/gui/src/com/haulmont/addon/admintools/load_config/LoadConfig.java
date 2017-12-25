@@ -3,6 +3,7 @@ package com.haulmont.addon.admintools.load_config;
 import com.haulmont.cuba.core.global.Configuration;
 import com.haulmont.cuba.core.global.GlobalConfig;
 import com.haulmont.cuba.gui.components.*;
+import org.apache.commons.io.IOUtils;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -18,11 +19,9 @@ public class LoadConfig extends AbstractWindow {
     @Inject
     protected FileUploadField uploadField;
 
-    protected static final int BUFFER_SIZE = 64 * 1024;
-
-    protected String fileName;
+    protected String targetFileName;
     protected File dir;
-    protected File file;
+    protected File targetFile;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -31,17 +30,17 @@ public class LoadConfig extends AbstractWindow {
         String configDir = configuration.getConfig(GlobalConfig.class).getConfDir();
 
         uploadField.addFileUploadSucceedListener(event -> {
-            fileName = uploadField.getFileName();
+            targetFileName = uploadField.getFileName();
             dir = new File(configDir);
-            file = new File(dir, fileName);
+            targetFile = new File(dir, targetFileName);
         });
     }
 
     public void apply() {
-        if (file.exists()) {
-            confirmOverwriteFile(fileName, file);
+        if (targetFile.exists()) {
+            confirmOverwriteFile(targetFileName, targetFile);
         } else {
-            uploadFile(file);
+            uploadFile(targetFile);
         }
     }
 
@@ -49,7 +48,7 @@ public class LoadConfig extends AbstractWindow {
         this.close("cancel");
     }
 
-    protected void confirmOverwriteFile(String fileName, File file) {
+    protected void confirmOverwriteFile(String fileName, File targetFile) {
         showOptionDialog(
                 getMessage("replaceConfirmation"),
                 formatMessage(getMessage("replaceMessage"), fileName) ,
@@ -58,7 +57,7 @@ public class LoadConfig extends AbstractWindow {
                         new DialogAction(DialogAction.Type.OK) {
                             @Override
                             public void actionPerform(Component component) {
-                                uploadFile(file);
+                                uploadFile(targetFile);
                             }
                         },
                         new DialogAction(DialogAction.Type.CANCEL)
@@ -66,16 +65,14 @@ public class LoadConfig extends AbstractWindow {
         );
     }
 
-    protected void uploadFile(File file) {
+    protected void uploadFile(File targetFile) {
         InputStream originalFile = uploadField.getFileContent();
         boolean failed = false;
-        try (FileOutputStream fileOutput = new FileOutputStream(file)) {
-            byte buffer[] = new byte[BUFFER_SIZE];
-            int bytesRead;
+        try (FileOutputStream fileOutput = new FileOutputStream(targetFile)) {
             if (originalFile != null) {
-                while ((bytesRead = originalFile.read(buffer)) > 0) {
-                    fileOutput.write(buffer, 0, bytesRead);
-                }
+                IOUtils.copy(originalFile, fileOutput);
+            } else {
+                failed = true;
             }
         } catch (Exception ex) {
             failed = true;
