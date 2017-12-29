@@ -62,7 +62,7 @@ public class AutoImportListenerDelegateImpl implements AutoImportListenerDelegat
                             Case($Left($()), errMsg -> { log.warn(errMsg); return Stream.empty(); })
                     )).collect(Collectors.toList());
 
-            ImportFileObjects importedObjects = autoImportConfiguration.getHashes();
+            ImportFileObjects importedObjects = autoImportConfiguration.getImportFileInformation();
             for (AutoImportBuildSupport.AutoImportObject importObject : filteredAutoImports) {
                 log.info("File {} is importing...", importObject.getPath());
 
@@ -86,7 +86,7 @@ public class AutoImportListenerDelegateImpl implements AutoImportListenerDelegat
                     log.warn("Importing file {} has been failed", importObject.getPath());
                 }
             }
-            autoImportConfiguration.setHashes(importedObjects);
+            autoImportConfiguration.setImportFileInformation(importedObjects);
         } finally {
             authentication.end();
         }
