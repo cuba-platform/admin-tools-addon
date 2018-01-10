@@ -8,4 +8,14 @@
     <!-- Annotation-based beans -->
     <context:component-scan base-package="com.haulmont.addon.admintools"/>
 
+    <bean id="admintools_MBeanExporter" lazy-init="false"
+          class="com.haulmont.cuba.core.sys.jmx.MBeanExporter">
+        <property name="beans">
+            <map>
+                <entry key="admin-tools:type=Tomcat"
+                       value-ref="tomcat_TomcatMBean"/>
+            </map>
+        </property>
+    </bean>
+
 </beans>

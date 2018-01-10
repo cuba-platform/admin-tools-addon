@@ -11,4 +11,9 @@
           insertAfter="generateScripts"
           openType="DIALOG"
           screen="admintools$loadConfig"/>
+    <item id="shell-console"
+          insertAfter="loadConfig"
+          openType="DIALOG"
+          resizable="true"
+          screen="shell-console"/>
 </menu-config>

@@ -8,3 +8,7 @@ deploy/*
 modules/*/build/*
 out
 test-run
+.idea/*
+gradle/*
+gradlew
+gradlew.*
