@@ -1,7 +1,7 @@
 package com.haulmont.addon.admintools.script_generator;
 
+import com.haulmont.addon.admintools.app.EntityViewSqlGenerationService;
 import com.haulmont.chile.core.model.MetaClass;
-import com.haulmont.cuba.core.app.EntitySqlGenerationService;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.WindowParam;
@@ -45,7 +45,8 @@ public class GenerateScriptsResult extends AbstractWindow {
     @Inject
     private LookupField generateOptions;
 
-    private EntitySqlGenerationService sqlGenerationService = AppBeans.get(EntitySqlGenerationService.class);
+    @Inject
+    private EntityViewSqlGenerationService sqlGenerationService;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -72,7 +73,7 @@ public class GenerateScriptsResult extends AbstractWindow {
 
     public void execute() {
         if (validateAll()) {
-            List<String> result = getJPQLScript();
+            Set<String> result = getSQLScript();
 
             if (result == null || result.isEmpty()) {
                 showNotification(getMessage("message.noDataFound"), NotificationType.HUMANIZED);
@@ -90,12 +91,12 @@ public class GenerateScriptsResult extends AbstractWindow {
         }
     }
 
-    private List<String> getJPQLScript() {
-        List<String> result = new LinkedList<>();
+    private Set<String> getSQLScript() {
+        Set<String> result = new HashSet<>();
 
         Collection<Entity> entitiesForDownload;
         if (generationMode.equals(GenerationMode.CUSTOM_QUERY)) {
-           entitiesForDownload = getQueryResult(query.getValue());
+            entitiesForDownload = getQueryResult(query.getValue());
         } else {
             entitiesForDownload = this.selectedEntities;
         }
@@ -105,16 +106,16 @@ public class GenerateScriptsResult extends AbstractWindow {
 
             if (ScriptGenerationOptions.INSERT.equals(generateOption)) {
                 entitiesForDownload.forEach(entity ->
-                        result.add(sqlGenerationService.generateInsertScript(entity))
+                        result.addAll(sqlGenerationService.generateInsertScript(entity, entityViews.getValue()))
                 );
             } else if (ScriptGenerationOptions.UPDATE.equals(generateOption)) {
                 entitiesForDownload.forEach(entity ->
-                        result.add(sqlGenerationService.generateUpdateScript(entity))
+                        result.addAll(sqlGenerationService.generateUpdateScript(entity, entityViews.getValue()))
                 );
             } else {
                 entitiesForDownload.forEach(entity -> {
-                    result.add(sqlGenerationService.generateInsertScript(entity));
-                    result.add(sqlGenerationService.generateUpdateScript(entity));
+                    result.addAll(sqlGenerationService.generateInsertScript(entity, entityViews.getValue()));
+                    result.addAll(sqlGenerationService.generateUpdateScript(entity, entityViews.getValue()));
                 });
             }
         }
