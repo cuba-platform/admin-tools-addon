@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.persistence.JoinTable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static com.haulmont.addon.admintools.app.EntityViewSqlGenerationServiceBean.ScriptType.INSERT;
@@ -22,6 +23,7 @@ import static com.haulmont.chile.core.model.MetaProperty.Type.COMPOSITION;
 import static com.haulmont.chile.core.model.Range.Cardinality.*;
 import static java.lang.String.format;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+import static org.apache.commons.collections4.MapUtils.isNotEmpty;
 
 @Service(EntityViewSqlGenerationService.NAME)
 public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerationService {
@@ -66,6 +68,11 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
             }
 
             if (isAssociationProperty(metaProperty)) {
+
+                if (isEmbedded(metaProperty)) {
+                    return;
+                }
+
                 if (isReferenceProperty(metaProperty)) {
                     Entity refEntity = entity.getValue(metaProperty.getName());
                     View refView = view.getProperty(metaProperty.getName()).getView();
@@ -140,6 +147,17 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
     protected boolean isManyToManyProperty(MetaProperty metaProperty) {
         Range.Cardinality cardinality = metaProperty.getRange().getCardinality();
         return cardinality.equals(MANY_TO_MANY);
+    }
+
+    protected boolean isEmbedded(MetaProperty metaProperty) {
+        Map<String, Object> annotations = metaProperty.getAnnotations();
+
+        if (isNotEmpty(annotations)) {
+            Object embedded = annotations.get("cuba.embedded");
+            return embedded != null && ((Boolean) embedded);
+        }
+
+        return false;
     }
 
 
