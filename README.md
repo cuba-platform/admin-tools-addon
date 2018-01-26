@@ -3,7 +3,7 @@
 The Admin Tools component is a set of instruments that allows:
 * interacting with a database by using JPQL / SQL / Groovy scripts;
 * pre-configuring servers and transferring data between them;
-* exporting project entities in SQL scripts.
+* exporting project entities to SQL scripts.
 
 The component comprises the following parts:
 * Generator of SQL scripts for project entities;
@@ -15,7 +15,7 @@ The component comprises the following parts:
 The process of installation is described below.
 
 1. Add the following maven repository `https://repo.cuba-platform.com/content/repositories/premium-snapshots`
-to the build.gradle of your CUBA application:
+to the build.gradle file of your CUBA application:
     ```groovy
     buildscript {
         
@@ -40,15 +40,16 @@ to the build.gradle of your CUBA application:
 | ---------------- | -------------- |
 | 6.7.x            | 0.1-SNAPSHOT   |
 
-   Add custom application component to your project:
+Add a custom application component to your project:
    
    * Artifact group: `com.haulmont.addon.admintools`
    * Artifact name: `cuba-at-global`
    * Version: *add-on version*
    
-**Note:** for Auto Import an additional configuration is required (see Create an auto-import configuration file)
+**Note:** To activate the Auto Import subsystem, additional configurations are required (for more details, please refer to
+this [paragraph](###Creating an auto-import configuration file)).
   
-## Generator of SQL scripts for project entities
+## SQL Scripts Generator
 
 This part of Admin Tools allows generating SQL scripts for selected entities of a project.
 
@@ -65,16 +66,15 @@ select e from example$Entity e
 ![generate-scripts-dialog](img/gen_scripts_dialog.png)
 
 After that, SQL scripts of the specified type are generated for the found entities.
-
 If there are no results found, then the following notification appears: 'No data found'.
 
 ## Auto Import
 
-AutoImport can be used for server preconfiguration and transferring data among servers. The process
+AutoImport can be used for preconfiguring a server and transferring data among servers. The process
 is launched automatically during the server start/restart. 
 
-For importing data to the server, specify the path to a zip-archive in the configuration file. If the
-archive with the same name has already been processed, then it is skipped.
+For importing data, specify a path to a zip-archive in the configuration file. If an archive with the same name has 
+already been processed, then it is skipped.
 
 The component comprises ready-made solutions for importing security roles and access groups. The 'Export as ZIP'
 button allows generating archives containing the required data about security roles or access groups. The user
@@ -86,7 +86,7 @@ for any entity within a project by applying the AutoImportProcessor interface.
 
 ### Creating a custom import processor
 
-To create a custom processor, the following steps have to be followed:
+To create a custom processor, the following steps should be taken:
 
 1. Create a class that implements the AutoImportProcessor interface
    ```java
@@ -116,8 +116,8 @@ To create a custom processor, the following steps have to be followed:
    }
    ```
    
-2. If the processor is implemented as a java bean, then specify the component name and a path
-to the required zip-archive in the configuration file. If the processor is implemented as a class,
+2. If a processor is implemented as a java bean, then specify the component name and a path
+to the required zip-archive in the configuration file. If a processor is implemented as a class,
 then provide a path to the class
    ```xml
    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -129,7 +129,7 @@ then provide a path to the class
    </auto-import>
    ```
    
-### Create an auto-import configuration file
+### Creating an auto-import configuration file
 
 1. Configuration file example:
    ```xml
@@ -143,13 +143,13 @@ then provide a path to the class
        <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.zip" class="com.company.demoforadmintoolscomponent.processors.SampleAutoImportProcessor"/>
    </auto-import>
    ```
-   Where path is a path to the zip-archive, bean/class � a processor. Bean = [bean name], class [class path].
+   Where path is a path to the zip-archive, bean/class � a processor. Bean = [bean name], class [class path].
    
 2. Add the `admin.autoImportConfig` property to app.properties including the configuration file path.
 
 ### Additional information. Logging
 
-See logging information in `app.log` file.
+See logging information in the `app.log` file.
 
 #### Successful import
 
@@ -179,5 +179,15 @@ com.haulmont.addon.admintools.processors.ReportsAutoImportProcessor - File com/e
 ```
 
 ## JPQL Console
+JPQL Console allows interacting with an application database by using JPQL. 
+![JPQL-Console-menu-item](https://confluence.haulmont.com/download/attachments/17475637/menu.png)
+![JPQL-console](https://confluence.haulmont.com/download/attachments/17475637/jpql_console.png)
 
-User can find documentation in appropriate [documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md)
+Request results are displayed in the table and can be exported to an Excel file if required. Note that collection attributes
+are not shown in the Result table.
+### JPQL Console Security
+By default, only SELECT requests can be executed. If there is a need to send UPDATE and/or DELETE requests, then the 
+*runtime-diagnose.sql.allowDataManipulation* application property has to be set to 'true' 
+(**Menu**: Administration → Application properties → runtime-diagnose → sql → runtime-diagnose.sql.allowDataManipulation).
+
+To find out more about the Runtime Diagnose component, please get acquainted with [this documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md)
