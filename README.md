@@ -182,6 +182,7 @@ com.haulmont.addon.admintools.processors.ReportsAutoImportProcessor - File com/e
 JPQL Console allows interacting with an application database by using JPQL. 
 
 ![JPQL-Console-menu-item](img/menu-1.png)
+
 ![JPQL-console](img/jpql_console-1.png)
 
 Request results are displayed in the table and can be exported to an Excel file if required. Note that collection attributes
@@ -199,6 +200,7 @@ system UI without stopping the application. The location of the configuration di
 application property.
 
 ![Load-config-menu-item](img/load-config-menu-item.png)
+
 ![load-config](img/load-config.png)
 
 When trying to upload a config that already exists in the configuration directory or if names of two configs coincide,
