@@ -180,6 +180,7 @@ com.haulmont.addon.admintools.processors.ReportsAutoImportProcessor - File com/e
 
 ## JPQL Console
 JPQL Console allows interacting with an application database by using JPQL. 
+
 ![JPQL-Console-menu-item](https://confluence.haulmont.com/download/attachments/17475637/menu.png)
 ![JPQL-console](https://confluence.haulmont.com/download/attachments/17475637/jpql_console.png)
 
