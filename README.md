@@ -181,8 +181,8 @@ com.haulmont.addon.admintools.processors.ReportsAutoImportProcessor - File com/e
 ## JPQL Console
 JPQL Console allows interacting with an application database by using JPQL. 
 
-![JPQL-Console-menu-item](https://confluence.haulmont.com/download/attachments/17475637/menu.png)
-![JPQL-console](https://confluence.haulmont.com/download/attachments/17475637/jpql_console.png)
+![JPQL-Console-menu-item](img/menu-1.png)
+![JPQL-console](img/jpql_console-1.png)
 
 Request results are displayed in the table and can be exported to an Excel file if required. Note that collection attributes
 are not shown in the Result table.
@@ -192,3 +192,17 @@ By default, only SELECT requests can be executed. If there is a need to send UPD
 (**Menu**: Administration → Application properties → runtime-diagnose → sql → runtime-diagnose.sql.allowDataManipulation).
 
 To find out more about the Runtime Diagnose component, please get acquainted with [this documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md)
+
+## Load Config
+Using the Load Config functionality it is possible to upload configuration files to the configuration directory right from the
+system UI without stopping the application. The location of the configuration directory is determined by the `cuba.confDir` 
+application property.
+
+![Load-config-menu-item](img/load-config-menu-item.png)
+![load-config](img/load-config.png)
+
+When trying to upload a config that already exists in the configuration directory or if names of two configs coincide,
+then a message requesting to confirm file replacement appears.
+![confirm-file-replace](img/confirm-file-replacement.png)
+
+
