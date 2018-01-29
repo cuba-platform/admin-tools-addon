@@ -62,8 +62,6 @@ public class GenerateScriptsResult extends AbstractWindow {
         if (generationMode.equals(GenerationMode.CUSTOM_QUERY)) {
             initEntityTypeField();
             querySettings.setVisible(true);
-        } else {
-            execute();
         }
     }
 
@@ -112,11 +110,15 @@ public class GenerateScriptsResult extends AbstractWindow {
                 entitiesForDownload.forEach(entity ->
                         result.addAll(sqlGenerationService.generateUpdateScript(entity, entityViews.getValue()))
                 );
-            } else {
+            } else if(ScriptGenerationOptions.INSERT_UPDATE.equals(generateOption)) {
                 entitiesForDownload.forEach(entity -> {
                     result.addAll(sqlGenerationService.generateInsertScript(entity, entityViews.getValue()));
                     result.addAll(sqlGenerationService.generateUpdateScript(entity, entityViews.getValue()));
                 });
+            } else if(ScriptGenerationOptions.SELECT.equals(generateOption)){
+                entitiesForDownload.forEach(entity ->
+                        result.addAll(sqlGenerationService.generateSelectScript(entity, entityViews.getValue()))
+                );
             }
         }
 
@@ -151,7 +153,6 @@ public class GenerateScriptsResult extends AbstractWindow {
             String entitiesMetaClass = ((MetaClass) entitiesMetaClasses.getValue()).getName();
             if (entitiesMetaClass != null) {
                 setSimpleQuery(entitiesMetaClass);
-                execute();
             }
         });
     }

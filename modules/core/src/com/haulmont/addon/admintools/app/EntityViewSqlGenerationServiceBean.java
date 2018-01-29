@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.haulmont.addon.admintools.app.EntityViewSqlGenerationServiceBean.ScriptType.INSERT;
+import static com.haulmont.addon.admintools.app.EntityViewSqlGenerationServiceBean.ScriptType.SELECT;
 import static com.haulmont.addon.admintools.app.EntityViewSqlGenerationServiceBean.ScriptType.UPDATE;
 import static com.haulmont.chile.core.model.MetaProperty.Type.ASSOCIATION;
 import static com.haulmont.chile.core.model.MetaProperty.Type.COMPOSITION;
@@ -34,10 +35,11 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
     @Inject
     protected Metadata metadata;
 
-    protected enum ScriptType {INSERT, UPDATE}
+    protected enum ScriptType {INSERT, UPDATE, SELECT}
 
-    protected String insertTemplate = "insert into %s \n(%s, %s) \nvalues ('%s', '%s');\n";
-    protected String updateTemplate = "update %s \nset %s, %s \nwhere %s='%s';\n";
+    protected String INSERT_TEMPLATE = "insert into %s \n(%s, %s) \nvalues ('%s', '%s');\n";
+    protected String UPDATE_TEMPLATE = "update %s \nset %s, %s \nwhere %s='%s';\n";
+    protected String SELECT_TEMPLATE = "select e.$s e.$s from %s e";
 
     protected Set<String> scripts = new HashSet<>();
 
@@ -49,6 +51,11 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
     @Override
     public Set<String> generateUpdateScript(Entity entity, String viewName) {
         return generateScript(entity, viewName, UPDATE);
+    }
+
+    @Override
+    public Set<String> generateSelectScript(Entity entity, String viewName) {
+        return generateScript(entity, viewName, SELECT);
     }
 
     protected Set<String> generateScript(Entity entity, String viewName, ScriptType scriptType) {
@@ -105,24 +112,36 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
         String joinColumnName = annotation.joinColumns()[0].name();
         String inverseJoinColumnName = annotation.inverseJoinColumns()[0].name();
 
-        String template = scriptType == INSERT ? insertTemplate : updateTemplate;
-
-        for (Entity refEntity : refEntities) {
-            scripts.add(
-                    format(template, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId())
-            );
+        switch (scriptType) {
+            case SELECT:
+                scripts.add(format(SELECT_TEMPLATE, joinColumnName, inverseJoinColumnName, tableName));
+                break;
+            case INSERT:
+                refEntities.forEach(refEntity -> scripts.add(
+                        format(INSERT_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId())
+                ));
+                break;
+            case UPDATE:
+                refEntities.forEach(refEntity -> scripts.add(
+                        format(UPDATE_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId())
+                ));
+                break;
+            default:
+                break;
         }
     }
 
-
     protected String generateScript(Entity entity, ScriptType scriptType) {
-        if (scriptType.equals(INSERT)) {
-            return sqlGenerationService.generateInsertScript(entity);
-        } else if (scriptType.equals(UPDATE)) {
-            return sqlGenerationService.generateUpdateScript(entity);
+        switch (scriptType) {
+            case INSERT:
+                return sqlGenerationService.generateInsertScript(entity);
+            case UPDATE:
+                return sqlGenerationService.generateUpdateScript(entity);
+            case SELECT:
+                return sqlGenerationService.generateSelectScript(entity);
+            default:
+                return "";
         }
-
-        return "";
     }
 
     protected boolean isViewNotContainsProperty(View view, MetaProperty metaProperty) {

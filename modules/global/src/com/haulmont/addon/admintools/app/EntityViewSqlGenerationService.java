@@ -12,4 +12,5 @@ public interface EntityViewSqlGenerationService {
 
     Set<String> generateUpdateScript(Entity entity, String viewName);
 
+    Set<String> generateSelectScript(Entity entity, String viewName);
 }
