@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.global.RemoteException;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.SourceCodeEditor;
 import com.haulmont.cuba.gui.components.TextArea;
+import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.executors.BackgroundTask;
 import com.haulmont.cuba.gui.executors.BackgroundTaskHandler;
 import com.haulmont.cuba.gui.executors.BackgroundWorker;
@@ -16,11 +17,11 @@ import java.io.IOException;
 
 public class ShellConsole extends AbstractWindow {
 
-    @Named("shellText")
+    @Inject
     protected SourceCodeEditor shellText;
 
-    @Named("args")
-    protected TextArea args;
+    @Inject
+    protected TextField args;
 
     @Inject
     protected ConsoleService consoleService;
