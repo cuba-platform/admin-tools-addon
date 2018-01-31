@@ -8,6 +8,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static org.apache.commons.lang.SystemUtils.IS_OS_LINUX;
+import static org.apache.commons.lang.SystemUtils.IS_OS_MAC;
+import static org.apache.commons.lang.SystemUtils.IS_OS_MAC_OSX;
+
 @Service(ConsoleService.NAME)
 public class ConsoleServiceBean implements ConsoleService {
 
@@ -17,14 +21,14 @@ public class ConsoleServiceBean implements ConsoleService {
 
     @Override
     public String executeShell(String prefix, String absolutePath, String scriptName, String arguments) throws IOException {
-        checkLinuxOS();
+        checkIsOsSupported();
         return executeScript(prefix, absolutePath, scriptName, arguments, SH);
     }
 
 
     @Override
     public String executeShell(String prefix, String script, String arguments) throws IOException {
-        checkLinuxOS();
+        checkIsOsSupported();
         return executeCommand(prefix, script, arguments, SH);
     }
 
@@ -88,11 +92,16 @@ public class ConsoleServiceBean implements ConsoleService {
         }
     }
 
-    void checkLinuxOS() {
-        if (!SystemUtils.IS_OS_LINUX) {
+    void checkIsOsSupported() {
+        if (!isOsSupported()) {
             throw new UnsupportedOperationException("This operation is not supported for not Linux OS");
         }
     }
+
+    protected boolean isOsSupported() {
+        return IS_OS_LINUX || IS_OS_MAC || IS_OS_MAC_OSX;
+    }
+
 
     void checkWindowsOS() {
         if (!SystemUtils.IS_OS_WINDOWS) {
