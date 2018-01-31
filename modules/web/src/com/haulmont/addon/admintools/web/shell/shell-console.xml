@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://header"
+        class="com.haulmont.addon.admintools.web.shell.ShellConsole"
+        messagesPack="com.haulmont.addon.admintools.web.shell">
+    <actions>
+        <action id="runSqlConsoleAction"
+                caption="msg://runConsole"
+                icon="icons/run.png"
+                invoke="runConsole"
+                description="msg://runConsoleDescription"
+                shortcut="SHIFT-ENTER"/>
+        <action id="cancelSqlConsoleAction"
+                caption="msg://cancelConsole"
+                icon="icons/cancel.png"
+                invoke="cancelConsole"
+                description="msg://cancelConsoleDescription"/>
+        <action id="clearSqlConsoleAction"
+                icon="icons/erase.png"
+                description="msg://clearConsoleDescription"
+                invoke="clearConsole"/>
+
+        <action id="downloadConsoleResultAction"
+                icon="icons/download.png"
+                invoke="downloadConsoleResult"/>
+        <action id="downloadDiagnoseRequestFileAction"
+                icon="icons/download.png"
+                caption="msg://diagnoseRequestFile"
+                description="msg://diagnoseRequestFileDescription"
+                invoke="downloadDiagnoseRequestFile"/>
+
+        <action id="maximizeConsoleAction"
+                icon="font-icon:EXPAND"
+                invoke="maximizeConsole"/>
+        <action id="minimizeConsoleAction"
+                icon="font-icon:COMPRESS"
+                invoke="minimizeConsole"/>
+        <action id="maximizeConsoleResultAction"
+                icon="font-icon:EXPAND"
+                invoke="maximizeConsoleResult"/>
+        <action id="minimizeConsoleResultAction"
+                icon="font-icon:COMPRESS"
+                invoke="minimizeConsoleResult"/>
+        <action id="clearConsoleResultAction"
+                icon="icons/erase.png"
+                invoke="clearConsoleResult"/>
+    </actions>
+    <layout>
+        <split id="consoleResultSplitter"
+               height="100%"
+               orientation="vertical"
+               width="100%">
+            <vbox id="consoleVBox"
+                  height="100%"
+                  margin="true"
+                  expand="console"
+                  spacing="true">
+                <hbox spacing="true"
+                      width="100%"
+                      expand="runningBar">
+                    <hbox>
+                        <buttonsPanel id="consoleInstrumentalPanel">
+                            <button id="sqlRunBtn"
+                                    action="runSqlConsoleAction"/>
+                            <button id="sqlCancelBtn"
+                                    action="cancelSqlConsoleAction"/>
+                            <button id="sqlClearBtn"
+                                    action="clearSqlConsoleAction"/>
+                            <button id="downloadDiagnoseRequestFileBtn"
+                                    action="downloadDiagnoseRequestFileAction"/>
+                        </buttonsPanel>
+                    </hbox>
+                    <progressBar id="runningBar" width="100%" align="MIDDLE_CENTER"/>
+                    <hbox align="TOP_RIGHT">
+                        <buttonsPanel>
+                            <button id="maximizeSqlConsoleBtn"
+                                    action="maximizeConsoleAction"/>
+                            <button id="minimizeSqlConsoleBtn"
+                                    action="minimizeConsoleAction"/>
+                        </buttonsPanel>
+                    </hbox>
+                </hbox>
+                <groupBox id="argumentsBox"
+                          caption="msg://arguments"
+                          collapsable="true"
+                          collapsed="true"
+                          expand="args"
+                          orientation="horizontal"
+                          spacing="true"
+                          width="100%">
+                    <label align="MIDDLE_LEFT"
+                           value="msg://arguments"
+                           width="AUTO"/>
+                    <textField id="args"/>
+                </groupBox>
+                <sourceCodeEditor id="console"
+                                  mode="SQL"
+                                  width="100%"/>
+            </vbox>
+            <vbox id="consoleResultVBox"
+                  expand="consoleResultTabSheet"
+                  height="100%"
+                  margin="true"
+                  spacing="true">
+                <hbox spacing="true"
+                      width="100%">
+                    <hbox>
+                        <buttonsPanel id="resultButtonPanel">
+                            <button id="clearResultBtn"
+                                    action="clearConsoleResultAction"/>
+                            <button id="downloadResultBtn"
+                                    action="downloadConsoleResultAction"/>
+                        </buttonsPanel>
+                    </hbox>
+                    <hbox align="TOP_RIGHT">
+                        <buttonsPanel>
+                            <button id="maximizeConsoleResultBtn"
+                                    action="maximizeConsoleResultAction"/>
+                            <button id="minimizeConsoleResultBtn"
+                                    action="minimizeConsoleResultAction"/>
+                        </buttonsPanel>
+                    </hbox>
+                </hbox>
+                <tabSheet id="consoleResultTabSheet">
+                    <tab id="consoleResultTabResult"
+                         caption="Result"
+                         margin="true,false,true,false"
+                         spacing="true">
+                        <sourceCodeEditor id="consoleResult"
+                                          editable="false"
+                                          height="100%"
+                                          mode="Text"
+                                          width="100%"/>
+                    </tab>
+                </tabSheet>
+            </vbox>
+        </split>
+    </layout>
+</window>

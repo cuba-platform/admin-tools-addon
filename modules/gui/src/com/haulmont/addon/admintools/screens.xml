@@ -7,5 +7,5 @@
     <screen id="admintools$loadConfig"
             template="com/haulmont/addon/admintools/load_config/load-config.xml"/>
     <screen id="shell-console"
-            template="com/haulmont/addon/admintools/shell/shell-console.xml"/>
+            template="/com/haulmont/addon/admintools/web/shell/shell-console.xml"/>
 </screen-config>
