@@ -3,4 +3,7 @@
 
     <include file="com/haulmont/addon/admintools/screens.xml"/>
 
+    <screen id="shell-console"
+            template="/com/haulmont/addon/admintools/web/shell/shell-console.xml"/>
+
 </screen-config>
