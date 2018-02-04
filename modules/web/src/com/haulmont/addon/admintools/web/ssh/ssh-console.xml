@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="com.haulmont.addon.admintools.web.ssh.SshConsole"
+        messagesPack="com.haulmont.addon.admintools.web.ssh"
+        xmlns:at="http://schemas.haulmont.com/cubaat/0.1/ui-component.xsd">
+    <dsContext>
+        <datasource id="sshCredentialsDs"
+                    allowCommit="false"
+                    class="com.haulmont.addon.admintools.entity.SshCredentials"/>
+    </dsContext>
+    <timers>
+        <timer id="updateConsole"
+               autostart="true"
+               delay="300"
+               onTimer="onUpdateConsole"
+               repeating="true"/>
+    </timers>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="terminalBox"
+            spacing="true">
+        <groupBox id="fieldsBox"
+                  caption="msg://fieldBox.caption"
+                  collapsable="true"
+                  collapsed="true"
+                  spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="sshCredentialsDs">
+                <column width="250px">
+                    <field caption="msg://host.caption"
+                           generator="generateHostnameField"
+                           property="hostname"/>
+                    <field property="login"/>
+                    <field generator="generatePasswordField"
+                           property="password"/>
+                </column>
+            </fieldGroup>
+        </groupBox>
+        <vbox id="terminalBox"
+              expand="terminal"
+              spacing="true">
+            <buttonsPanel id="terminalBtn">
+                <button id="connectBtn"
+                        caption="msg://connect"
+                        invoke="connect"/>
+                <button id="disconnectBtn"
+                        caption="msg://disconnect"
+                        invoke="disconnect"/>
+                <button id="fitBtn"
+                        caption="msg://fit"
+                        invoke="onFitBtnClick"/>
+            </buttonsPanel>
+            <at:xterm-js id="terminal"
+                         width="100%"/>
+        </vbox>
+    </layout>
+</window>

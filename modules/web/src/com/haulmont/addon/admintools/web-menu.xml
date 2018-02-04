@@ -15,4 +15,8 @@
           insertAfter="jpqlConsole"
           openType="NEW_TAB"
           screen="shell-console"/>
+    <item id="ssh-console"
+          insertAfter="shell-console"
+          openType="NEW_TAB"
+          screen="ssh-console"/>
 </menu-config>
