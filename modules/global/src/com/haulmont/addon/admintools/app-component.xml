@@ -43,6 +43,11 @@
                   configuration="webcontent"
                   ext="zip"
                   name="cuba-at-web"/>
+        <artifact classifier="web"
+                  configuration="webcontent"
+                  ext="zip"
+                  name="cuba-at-web-toolkit"
+                  skipIfExists="web-toolkit"/>
         <property name="cuba.springContextConfig"
                   value="+com/haulmont/addon/admintools/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"
@@ -55,5 +60,11 @@
                   value="+com/haulmont/addon/admintools/web-permissions.xml"/>
         <property name="cuba.mainMessagePack"
                   value="+com.haulmont.addon.admintools.web"/>
+        <property name="cuba.web.widgetSet"
+                  value="com.haulmont.addon.admintools.web.toolkit.ui.AppWidgetSet"/>
+    </module>
+    <module dependsOn="web"
+            name="web-toolkit">
+        <artifact name="cuba-at-web-toolkit"/>
     </module>
 </app-component>
