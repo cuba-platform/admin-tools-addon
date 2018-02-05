@@ -108,6 +108,9 @@ public class SshConsole extends AbstractWindow {
         } else {
             internalConnect();
         }
+
+        // resolve problem with size of console
+        terminal.fit();
     }
 
     protected void internalConnect() {
