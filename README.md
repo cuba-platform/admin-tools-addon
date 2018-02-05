@@ -207,4 +207,8 @@ When trying to upload a config that already exists in the configuration director
 then a message requesting to confirm file replacement appears.
 ![confirm-file-replace](img/confirm-file-replacement.png)
 
+## SSH Console
 
+### Known issues
+
+- Utility `screen` doesn't work in the console
