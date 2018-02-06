@@ -1,46 +1,29 @@
 package com.haulmont.addon.admintools.web.ssh;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.haulmont.addon.admintools.entity.SshCredentials;
 import com.haulmont.addon.admintools.gui.components.XtermJs;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.components.AbstractWindow;
-import com.haulmont.cuba.gui.components.Action;
-import com.haulmont.cuba.gui.components.DialogAction;
-import com.haulmont.cuba.gui.components.HBoxLayout;
-import com.haulmont.cuba.gui.components.PasswordField;
-import com.haulmont.cuba.gui.components.TextField;
-import com.haulmont.cuba.gui.components.ValidationException;
+import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PipedInputStream;
 import java.io.PrintStream;
-import java.io.Reader;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.gui.data.Datasource;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.text.StrBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.haulmont.cuba.gui.components.Timer;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.io.Charsets.toCharset;
 
 public class SshConsole extends AbstractWindow {
@@ -80,10 +63,10 @@ public class SshConsole extends AbstractWindow {
 
     @Override
     protected boolean preClose(String actionId) {
-        if (mainChannel != null) {
+        if (isMainChannelOpen()) {
             mainChannel.disconnect();
         }
-        if (session != null) {
+        if (isSessionOpen()) {
             session.disconnect();
             showNotification(formatMessage("console.disconnected", sshCredentialsDs.getItem().getHostname()));
         }
@@ -101,6 +84,10 @@ public class SshConsole extends AbstractWindow {
 
     protected boolean isMainChannelOpen() {
         return mainChannel != null && mainChannel.isConnected();
+    }
+
+    protected  boolean isSessionOpen() {
+        return session != null && session.isConnected();
     }
 
     public void connect() throws ValidationException {
@@ -177,10 +164,13 @@ public class SshConsole extends AbstractWindow {
     }
 
     public void disconnect() {
-        mainChannel.disconnect();
-        session.disconnect();
-
-        terminal.writeln(formatMessage("console.disconnected", sshCredentialsDs.getItem().getHostname()));
+        if (isMainChannelOpen()) {
+            mainChannel.disconnect();
+        }
+        if (isSessionOpen()) {
+            session.disconnect();
+            terminal.writeln(formatMessage("console.disconnected", sshCredentialsDs.getItem().getHostname()));
+        }
     }
 
     public void onUpdateConsole(Timer source) throws IOException {
