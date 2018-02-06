@@ -50,6 +50,9 @@
                 <button id="fitBtn"
                         caption="msg://fit"
                         invoke="onFitBtnClick"/>
+                <progressBar id="terminalProgressBar"
+                             indeterminate="true"
+                             stylename="indeterminate-circle"/>
             </buttonsPanel>
             <at:xterm-js id="terminal"
                          width="100%"/>
