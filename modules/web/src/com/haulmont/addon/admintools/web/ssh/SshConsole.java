@@ -78,6 +78,18 @@ public class SshConsole extends AbstractWindow {
         terminal.setDataListener(this::terminalDataListener);
     }
 
+    @Override
+    protected boolean preClose(String actionId) {
+        if (mainChannel != null) {
+            mainChannel.disconnect();
+        }
+        if (session != null) {
+            session.disconnect();
+            showNotification(formatMessage("console.disconnected", sshCredentialsDs.getItem().getHostname()));
+        }
+        return super.preClose(actionId);
+    }
+
     protected void terminalDataListener(String data) {
         if (! isMainChannelOpen()) {
             return;
