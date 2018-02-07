@@ -40,20 +40,23 @@
         <vbox id="terminalBox"
               expand="terminal"
               spacing="true">
-            <buttonsPanel id="terminalBtn">
-                <button id="connectBtn"
-                        caption="msg://connect"
-                        invoke="connect"/>
-                <button id="disconnectBtn"
-                        caption="msg://disconnect"
-                        invoke="disconnect"/>
-                <button id="fitBtn"
-                        caption="msg://fit"
-                        invoke="onFitBtnClick"/>
+            <hbox width="100%"
+                  spacing="true"
+                  expand="terminalProgressBar">
+                <buttonsPanel id="terminalBtn">
+                    <button id="connectBtn"
+                            caption="msg://connect"
+                            invoke="connect"/>
+                    <button id="disconnectBtn"
+                            caption="msg://disconnect"
+                            invoke="disconnect"/>
+                    <button id="fitBtn"
+                            caption="msg://fit"
+                            invoke="onFitBtnClick"/>
+                </buttonsPanel>
                 <progressBar id="terminalProgressBar"
-                             indeterminate="true"
-                             stylename="indeterminate-circle"/>
-            </buttonsPanel>
+                             align="MIDDLE_CENTER"/>
+            </hbox>
             <at:xterm-js id="terminal"
                          width="100%"/>
         </vbox>

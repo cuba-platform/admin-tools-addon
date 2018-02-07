@@ -6,6 +6,9 @@ import com.haulmont.addon.admintools.gui.components.XtermJs;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.executors.BackgroundTask;
+import com.haulmont.cuba.gui.executors.BackgroundTaskWrapper;
+import com.haulmont.cuba.gui.executors.TaskLifeCycle;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
@@ -42,6 +45,9 @@ public class SshConsole extends AbstractWindow {
     protected Datasource<SshCredentials> sshCredentialsDs;
 
     @Inject
+    protected ProgressBar terminalProgressBar;
+
+    @Inject
     protected XtermJs terminal;
 
     protected JSch jsch = new JSch();
@@ -51,12 +57,28 @@ public class SshConsole extends AbstractWindow {
     protected PrintStream mainOut;
 
     protected NonBlockingIOUtils ioUtils = new NonBlockingIOUtils();
+    protected BackgroundTaskWrapper<Integer, Void> connectionTaskWrapper;
+    protected SshCredentials credentials;
 
     @Override
     public void init(Map<String, Object> params) {
         SshCredentials credentials = metadata.create(SshCredentials.class);
         credentials.setPort(DEFAULT_SSH_PORT);
         sshCredentialsDs.setItem(credentials);
+
+        BackgroundTask<Integer, Void> connectionTask = new BackgroundTask<Integer, Void>(10, getFrame()) {
+            @Override
+            public Void run(TaskLifeCycle<Integer> taskLifeCycle) throws Exception {
+                internalConnect();
+                return null;
+            }
+
+            @Override
+            public void done(Void result) {
+                terminalProgressBar.setIndeterminate(false);
+            }
+        };
+        connectionTaskWrapper = new BackgroundTaskWrapper<>(connectionTask);
 
         terminal.setDataListener(this::terminalDataListener);
     }
@@ -100,20 +122,26 @@ public class SshConsole extends AbstractWindow {
                     MessageType.CONFIRMATION, new Action[]{
                             new DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY).withHandler(e -> {
                                 disconnect();
-                                internalConnect();
+                                executeConnectionProgressTask();
                             }),
                             new DialogAction(DialogAction.Type.CANCEL, Action.Status.NORMAL)
                     });
         } else {
-            internalConnect();
+            executeConnectionProgressTask();
         }
 
         // resolve problem with size of console
         terminal.fit();
     }
 
+    protected void executeConnectionProgressTask() {
+        credentials = sshCredentialsDs.getItem();
+        terminalProgressBar.setIndeterminate(true);
+        connectionTaskWrapper.restart();
+        terminal.writeln(formatMessage("console.connected", credentials.getHostname()));
+    }
+
     protected void internalConnect() {
-        SshCredentials credentials = sshCredentialsDs.getItem();
         try {
             session = jsch.getSession(
                     credentials.getLogin(), credentials.getHostname(), credentials.getPort());
@@ -128,8 +156,6 @@ public class SshConsole extends AbstractWindow {
 
             mainOut = new PrintStream(mainChannel.getOutputStream());
             mainIn = mainChannel.getInputStream();
-
-            terminal.writeln(formatMessage("console.connected", credentials.getHostname()));
         } catch (JSchException | IOException e) {
             terminal.writeln(formatMessage("console.error",e.getMessage()));
 
