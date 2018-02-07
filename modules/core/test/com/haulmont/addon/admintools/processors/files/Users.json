@@ -1,0 +1,43 @@
+[
+  {
+    "_entityName": "sec$User",
+    "id": "24fcfa61-ff19-05ec-afbc-a99795f166f0",
+    "lastName": "User1",
+    "loginLowerCase": "user1",
+    "login": "User1",
+    "changePasswordAtNextLogon": false,
+    "createTs": "2018-01-29 12:40:13.239",
+    "group": {
+      "_entityName": "sec$Group",
+      "id": "20b6c9ef-4086-f596-ec05-4b3713cbe91d",
+      "version": 2,
+      "deletedBy": "admin",
+      "deleteTs": "2018-01-29 12:41:44.406",
+      "name": "GR1"
+    },
+    "updatedBy": "admin",
+    "active": true,
+    "version": 3,
+    "createdBy": "admin",
+    "updateTs": "2018-01-29 16:28:23.852"
+  },
+  {
+    "_entityName": "sec$User",
+    "id": "2a918523-2c62-b3d5-9e84-4c5a8399d929",
+    "lastName": "User2",
+    "loginLowerCase": "user2",
+    "login": "User2",
+    "changePasswordAtNextLogon": false,
+    "createTs": "2018-01-29 16:30:40.103",
+    "group": {
+      "_entityName": "sec$Group",
+      "id": "0fa2b1a5-1d68-4d69-9fbd-dff348347f93",
+      "version": 0,
+      "name": "Company"
+    },
+    "active": true,
+    "version": 1,
+    "createdBy": "admin",
+    "updateTs": "2018-01-29 16:30:40.103"
+  }
+]

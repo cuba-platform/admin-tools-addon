@@ -76,9 +76,9 @@ is launched automatically during the server start/restart.
 For importing data, specify a path to a zip-archive in the configuration file. If an archive with the same name has 
 already been processed, then it is skipped.
 
-The component comprises ready-made solutions for importing security roles and access groups. The 'Export as ZIP'
-button allows generating archives containing the required data about security roles or access groups. The user
-can export project entities to a zip-archive using Entity Inspector. 
+The component comprises ready-made solutions for importing security roles and access groups. The 'Export as ZIP' and 
+the 'Export as JSON' buttons allows generating files containing the required data about security roles or access
+groups. The user can export project entities to a zip-archive or json using Entity Inspector. 
 
 There is a class-processor responsible for file processing that can be implemented as a bean or
 a simple java-class. If necessary, the user can specify a custom implementation of the processor
@@ -90,7 +90,7 @@ To create a custom processor, the following steps should be taken:
 
 1. Create a class that implements the AutoImportProcessor interface
    ```java
-   @Component("autoimport_ReportsAutoImportProcessor")
+   @Component("admintools_ReportsAutoImportProcessor")
    public class ReportsAutoImportProcessor implements AutoImportProcessor {
     
        @Inject
@@ -124,7 +124,7 @@ then provide a path to the class
    <auto-import>
        ...
     
-       <auto-import-file path="com/company/demoforadmintoolscomponent/Reports.zip" bean="autoimport_ReportsAutoImportProcessor"/>
+       <auto-import-file path="com/company/demoforadmintoolscomponent/Reports.zip" bean="admintools_ReportsAutoImportProcessor"/>
        ...
    </auto-import>
    ```
@@ -135,9 +135,9 @@ then provide a path to the class
    ```xml
    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
    <auto-import>
-       <!--default processors-->
-       <auto-import-file path="com/company/demoforadmintoolscomponent/Roles.zip" bean="autoimport_RolesAutoImportProcessor"/>
-       <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.zip" bean="autoimport_GroupsAutoImportProcessor"/>
+       <!--default processor-->
+       <auto-import-file path="com/company/demoforadmintoolscomponent/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
+       <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.json" bean="admintools_DefaultAutoImportProcessor"/>
         
        <!--custom processor-->
        <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.zip" class="com.company.demoforadmintoolscomponent.processors.SampleAutoImportProcessor"/>
@@ -156,7 +156,7 @@ See logging information in the `app.log` file.
 ```
 com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/autoimporttest/Roles.zip by bean autoimport_RolesAutoImportProcessor
 ...
-com.haulmont.addon.admintools.processors.RolesAutoImportProcessor - Successful importing file com/company/autoimporttest/Roles.zip
+com.haulmont.addon.admintools.processors.DefaultAutoImportProcessor - Successful importing file com/company/autoimporttest/Roles.zip
 ```
 
 #### Incorrect name of a processor

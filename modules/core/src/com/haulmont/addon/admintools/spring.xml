@@ -18,4 +18,6 @@
         </property>
     </bean>
 
+    <bean id="cuba_EntityImportViewBuilderAPI" class="com.haulmont.addon.admintools.processors.ExtendedEntityImportViewBuilder"/>
+
 </beans>
