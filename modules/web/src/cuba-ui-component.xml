@@ -5,4 +5,9 @@
         <componentLoader>com.haulmont.addon.admintools.gui.xml.layout.loaders.XtermJsLoader</componentLoader>
         <class>com.haulmont.addon.admintools.web.gui.components.WebXtermJs</class>
     </component>
+    <component>
+        <name>enterReactivePasswordField</name>
+        <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.PasswordFieldLoader</componentLoader>
+        <class>com.haulmont.addon.admintools.web.gui.components.WebEnterReactivePasswordField</class>
+    </component>
 </components>

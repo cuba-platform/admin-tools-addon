@@ -2,6 +2,7 @@ package com.haulmont.addon.admintools.web.ssh;
 
 import com.google.common.io.CharStreams;
 import com.haulmont.addon.admintools.entity.SshCredentials;
+import com.haulmont.addon.admintools.gui.components.EnterReactivePasswordField;
 import com.haulmont.addon.admintools.gui.components.XtermJs;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.*;
@@ -112,7 +113,7 @@ public class SshConsole extends AbstractWindow {
         return session != null && session.isConnected();
     }
 
-    public void connect() throws ValidationException {
+    public void connect() {
         if (! validateAll()) {
             return;
         }
@@ -184,7 +185,8 @@ public class SshConsole extends AbstractWindow {
     }
 
     public Component generatePasswordField(Datasource datasource, String fieldId) {
-        PasswordField component = componentsFactory.createComponent(PasswordField.class);
+        EnterReactivePasswordField component = componentsFactory.createComponent(EnterReactivePasswordField.class);
+        component.addEnterPressListener(e -> connect());
         component.setDatasource(datasource, fieldId);
         return component;
     }
