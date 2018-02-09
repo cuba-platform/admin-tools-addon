@@ -200,7 +200,7 @@ system UI without stopping the application.
 
 ![Load-config-menu-item](img/load-config-menu-item.png)
 
-The location of the configuration directory is determined by the `cuba.confDir` application property. However, you can
+The location of the configuration directory is determined by the `cuba.confDir` application property. Additionally, you can
 specify a relative path in the corresponding field.
 
 ![load-config](img/load-config.png)
