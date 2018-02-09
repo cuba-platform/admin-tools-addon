@@ -70,9 +70,17 @@ public class SshConsole extends AbstractWindow {
 
         BackgroundTask<Integer, Void> connectionTask = new BackgroundTask<Integer, Void>(10, getFrame()) {
             @Override
-            public Void run(TaskLifeCycle<Integer> taskLifeCycle) throws Exception {
+            public Void run(TaskLifeCycle<Integer> taskLifeCycle) throws JSchException, IOException {
                 internalConnect();
                 return null;
+            }
+
+            @Override
+            public boolean handleException(Exception ex) {
+                terminal.writeln(formatMessage("console.error", ex.getMessage()));
+                terminalProgressBar.setIndeterminate(false);
+                log.info("User can't create ssh connection", ex);
+                return true;
             }
 
             @Override
@@ -115,7 +123,7 @@ public class SshConsole extends AbstractWindow {
         return mainChannel != null && mainChannel.isConnected();
     }
 
-    protected  boolean isSessionOpen() {
+    protected boolean isSessionOpen() {
         return session != null && session.isConnected();
     }
 
@@ -148,26 +156,19 @@ public class SshConsole extends AbstractWindow {
         terminal.writeln(formatMessage("console.connected", credentials.getHostname()));
     }
 
-    protected void internalConnect() {
-        try {
-            session = jsch.getSession(
-                    credentials.getLogin(), credentials.getHostname(), credentials.getPort());
-            session.setPassword(credentials.getPassword());
-            session.setConfig("StrictHostKeyChecking", "no");
-            session.connect();
+    protected void internalConnect() throws JSchException, IOException {
+        session = jsch.getSession(credentials.getLogin(), credentials.getHostname(), credentials.getPort());
+        session.setPassword(credentials.getPassword());
+        session.setConfig("StrictHostKeyChecking", "no");
+        session.connect();
 
-            mainChannel = (ChannelShell) session.openChannel("shell");
-            mainChannel.setPtyType("xterm");
-            mainChannel.setEnv("LANG", "en_US.UTF-8");
-            mainChannel.connect();
+        mainChannel = (ChannelShell) session.openChannel("shell");
+        mainChannel.setPtyType("xterm");
+        mainChannel.setEnv("LANG", "en_US.UTF-8");
+        mainChannel.connect();
 
-            mainOut = new PrintStream(mainChannel.getOutputStream());
-            mainIn = mainChannel.getInputStream();
-        } catch (JSchException | IOException e) {
-            terminal.writeln(formatMessage("console.error",e.getMessage()));
-
-            log.info("User can't create ssh connection", e);
-        }
+        mainOut = new PrintStream(mainChannel.getOutputStream());
+        mainIn = mainChannel.getInputStream();
     }
 
     public Component generateHostnameField(Datasource datasource, String fieldId) {
