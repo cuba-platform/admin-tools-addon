@@ -60,6 +60,7 @@ public class SshConsole extends AbstractWindow {
     protected NonBlockingIOUtils ioUtils = new NonBlockingIOUtils();
     protected BackgroundTaskWrapper<Integer, Void> connectionTaskWrapper;
     protected SshCredentials credentials;
+    protected TextField hostnameField;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -82,6 +83,11 @@ public class SshConsole extends AbstractWindow {
         connectionTaskWrapper = new BackgroundTaskWrapper<>(connectionTask);
 
         terminal.setDataListener(this::terminalDataListener);
+    }
+
+    @Override
+    public void ready() {
+        hostnameField.requestFocus();
     }
 
     @Override
@@ -165,7 +171,7 @@ public class SshConsole extends AbstractWindow {
     }
 
     public Component generateHostnameField(Datasource datasource, String fieldId) {
-        TextField hostnameField = componentsFactory.createComponent(TextField.class);
+        hostnameField = componentsFactory.createComponent(TextField.class);
         hostnameField.setDatasource(datasource, "hostname");
         hostnameField.setWidth("70%");
 
