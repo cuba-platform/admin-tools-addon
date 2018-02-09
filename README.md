@@ -196,16 +196,39 @@ To find out more about the Runtime Diagnose component, please get acquainted wit
 
 ## Load Config
 Using the Load Config functionality it is possible to upload configuration files to the configuration directory right from the
-system UI without stopping the application. The location of the configuration directory is determined by the `cuba.confDir` 
-application property.
+system UI without stopping the application. 
 
 ![Load-config-menu-item](img/load-config-menu-item.png)
+
+The location of the configuration directory is determined by the `cuba.confDir` application property. However, you can
+specify a relative path in the corresponding field.
 
 ![load-config](img/load-config.png)
 
 When trying to upload a config that already exists in the configuration directory or if names of two configs coincide,
 then a message requesting to confirm file replacement appears.
+
 ![confirm-file-replace](img/confirm-file-replacement.png)
+
+## Shell Console
+Shell Console is a functionality for running unix shell scripts (sh files). It allows operating with data efficiently and 
+enables to run various OS commands right from the application UI. Note that this functionality is available only if you 
+use UNIX systems.
+
+![shell_console_menu_item](img/shell_console_menu_item.png)
+
+![shell_console](img/shell_console.png)
+
+The screen consists of two sections: the first section allows inputting and managing scripts and the second one provides functionalities
+for operating with results.
+
+The toolbar of the first section comprises action buttons that enable to run scripts, cancel the operation, clear input data
+and generate diagnose file requests. 
+In addition to the console, there is the 'Arguments' field for specifying positional parameters.
+
+The second section allows viewing results of running scripts, saving and clearing them.
+
+
 
 ## SSH Console
 
