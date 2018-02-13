@@ -84,6 +84,18 @@ public class SshConsole extends AbstractWindow {
             }
 
             @Override
+            public void canceled() {
+                terminalProgressBar.setIndeterminate(false);
+            }
+
+            @Override
+            public boolean handleTimeoutException() {
+                disconnect();
+                terminalProgressBar.setIndeterminate(false);
+                return true;
+            }
+
+            @Override
             public void done(Void result) {
                 terminalProgressBar.setIndeterminate(false);
             }
@@ -199,6 +211,7 @@ public class SshConsole extends AbstractWindow {
     }
 
     public void disconnect() {
+        connectionTaskWrapper.cancel();
         if (isMainChannelOpen()) {
             mainChannel.disconnect();
         }
