@@ -5,6 +5,7 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import com.haulmont.chile.core.annotations.NumberFormat;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
 
@@ -17,9 +18,10 @@ public class SshCredentials extends BaseUuidEntity {
     @MetaProperty(mandatory = true)
     protected String hostname;
 
-    @Max(message = "{msg://max-port-validation}", value = 65536)
-    @Min(message = "{msg://min-port-validation}", value = 1)
+    @Max(message = "{msg://com.haulmont.addon.admintools.entity/max-port-validation}", value = 65535)
+    @Min(message = "{msg://com.haulmont.addon.admintools.entity/min-port-validation}", value = 1)
     @NotNull
+    @NumberFormat(pattern = "#")
     @MetaProperty(mandatory = true)
     protected Integer port;
 
