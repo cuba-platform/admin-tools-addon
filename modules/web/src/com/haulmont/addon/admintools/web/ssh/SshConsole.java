@@ -112,6 +112,7 @@ public class SshConsole extends AbstractWindow {
 
     @Override
     protected boolean preClose(String actionId) {
+        connectionTaskWrapper.cancel();
         if (isMainChannelOpen()) {
             mainChannel.disconnect();
         }
