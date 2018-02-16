@@ -16,7 +16,7 @@ The component comprises the following parts:
 
 ## Installation
 
-The process of installation is described below.
+The process of the component installation consists of several steps and is described below.
 
 1. Add the following maven repository `https://repo.cuba-platform.com/content/repositories/premium-snapshots`
 to the build.gradle file of your CUBA application:
@@ -55,13 +55,12 @@ this [paragraph](###Creating an auto-import configuration file)).
   
 ## SQL Scripts Generator
 
-This part of Admin Tools allows generating SQL scripts for selected entities of a project.
+This functionality of the Admin Tools component allows generating SQL scripts for selected entities of a project.
 
 ![generate-scripts-menu](img/gen_scripts_menu.png)
 
-JPQL requests are used for entity selection. The user has to specify a metaclass, view and type
-of the script to be generated (insert, update, insert update). Selecting the metaclass automatically
-generates a JPQL request:
+JPQL requests are used for entity selection. Start by specifying a metaclass, view and type of a script to be generated 
+(insert, update, insert update). Selecting a metaclass automatically generates a JPQL request:
 
 ```sql
 select e from example$Entity e
@@ -69,28 +68,28 @@ select e from example$Entity e
 
 ![generate-scripts-dialog](img/gen_scripts_dialog.png)
 
-After that, SQL scripts of the specified type are generated for the found entities.
-If there are no results found, then the following notification appears: 'No data found'.
+After that, SQL scripts of the specified type are generated for the found entities. If there are no results found, then 
+the system shows a corresponding notification: 'No data found'.
 
 ## Auto Import
 
-AutoImport can be used for preconfiguring a server and transferring data among servers. The process
-is launched automatically during the server start/restart. 
+The AutoImport subsystem is designed to preconfigure servers and transfer data among servers. The process is launched 
+automatically during the server start/restart. 
 
-For importing data, specify a path to a zip-archive in the configuration file. If an archive with the same name has 
-already been processed, then it is skipped.
+For importing data, specify a path to a zip-archive in a configuration file. If an archive with the same name has already
+ been processed, then it is not considered by the system and skipped.
 
-The component comprises ready-made solutions for importing security roles and access groups. The 'Export as ZIP' and 
-the 'Export as JSON' buttons allows generating files containing the required data about security roles or access
-groups. The user can export project entities to a zip-archive or json using Entity Inspector. 
+The component comprises ready-made solutions for importing security roles and access groups. The __Export as ZIP__ button 
+allows generating archives containing the required data about security roles or access groups. The user can export 
+project entities to a zip-archive or json using Entity Inspector (learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
 
-There is a class-processor responsible for file processing that can be implemented as a bean or
-a simple java-class. If necessary, the user can specify a custom implementation of the processor
-for any entity within a project by applying the AutoImportProcessor interface.
+A class-processor is responsible for file processing and can be implemented as a bean or a simple java-class. 
+If necessary, you can provide a custom implementation of a processor for any entity within a project by applying the 
+AutoImportProcessor interface.
 
 ### Creating a custom import processor
 
-To create a custom processor, the following steps should be taken:
+To create a custom processor, the next steps should be taken:
 
 1. Create a class that implements the AutoImportProcessor interface
    ```java
@@ -120,8 +119,8 @@ To create a custom processor, the following steps should be taken:
    }
    ```
    
-2. If a processor is implemented as a java bean, then specify the component name and a path
-to the required zip-archive in the configuration file. If a processor is implemented as a class,
+2. If a processor is implemented as a java bean, then specify a component name and a path
+to the required zip-archive in a configuration file. If a processor is implemented as a class,
 then provide a path to the class
    ```xml
    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -149,7 +148,7 @@ then provide a path to the class
    ```
    Where path is a path to the zip-archive, bean/class � a processor. Bean = [bean name], class [class path].
    
-2. Add the `admin.autoImportConfig` property to app.properties including the configuration file path.
+2. Add the `admin.autoImportConfig` property to app.properties and, additionally, specify the configuration file path.
 
 ### Additional information. Logging
 
@@ -199,8 +198,8 @@ By default, only SELECT requests can be executed. If there is a need to send UPD
 To find out more about the Runtime Diagnose component, please get acquainted with [this documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md)
 
 ## Load Config
-Using the Load Config functionality it is possible to upload configuration files to the configuration directory right from the
-system UI without stopping the application. 
+Using the Load Config functionality it is possible upload configuration files and various scripts to a configuration 
+directory right from the system UI without stopping the application. 
 
 ![Load-config-menu-item](img/load-config-menu-item.png)
 
@@ -215,7 +214,7 @@ a message requesting to confirm file replacement appears.
 ![confirm-file-replace](img/confirm-file-replacement.png)
 
 ## Shell Console
-Shell Console is a functionality for running unix shell scripts (sh files). It allows operating with data efficiently and 
+Shell Console is a functionality for running UNIX shell scripts (sh files). It allows operating with data efficiently and 
 enables to run various OS commands right from the application UI. Note that this functionality is available only if you 
 use UNIX systems.
 
