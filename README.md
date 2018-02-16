@@ -228,6 +228,9 @@ In addition to the console, there is the 'Arguments' field for specifying positi
 
 The second section allows viewing results of running scripts, saving and clearing them.
 
+When SH scripts are run, the system generates temporary files, which are stored in the `.\tomcat\temp` directory. Note
+that the component does not remove these files automatically. 
+
 
 
 ## SSH Console
