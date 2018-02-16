@@ -3,12 +3,16 @@
 The Admin Tools component is a set of instruments that allows:
 * interacting with a database by using JPQL / SQL / Groovy scripts;
 * pre-configuring servers and transferring data between them;
-* exporting project entities to SQL scripts.
+* exporting project entities to SQL scripts;
+* running sh scripts;
+* operating network services on remote servers using SSH Console.
 
 The component comprises the following parts:
 * Generator of SQL scripts for project entities;
 * Auto Import subsystem;
-* JPQL / SQL / Groovy console.
+* JPQL / SQL / Groovy console;
+* Shell Console;
+* SSH Console.
 
 ## Installation
 
@@ -205,8 +209,8 @@ specify a relative path in the corresponding field.
 
 ![load-config](img/load-config.png)
 
-When trying to upload a config that already exists in the configuration directory or if names of two configs coincide,
-then a message requesting to confirm file replacement appears.
+When trying to upload a config that already exists in the configuration directory or if names of two configs coincide, 
+a message requesting to confirm file replacement appears.
 
 ![confirm-file-replace](img/confirm-file-replacement.png)
 
@@ -234,6 +238,12 @@ that the component does not remove these files automatically.
 
 
 ## SSH Console
+SSH Console allows operating network services on remote servers right from the application UI. Note that this functionality
+is available only for UNIX systems.
+ 
+ ![ssh_console_menu_item](img/SSH-Console_menu_item.png)
+ 
+
 
 ### Known issues
 
