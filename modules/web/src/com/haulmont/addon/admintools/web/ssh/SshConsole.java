@@ -1,9 +1,9 @@
 package com.haulmont.addon.admintools.web.ssh;
 
-import com.google.common.io.CharStreams;
 import com.haulmont.addon.admintools.entity.SshCredentials;
 import com.haulmont.addon.admintools.gui.components.EnterReactivePasswordField;
 import com.haulmont.addon.admintools.gui.components.XtermJs;
+import com.haulmont.addon.admintools.web.utils.NonBlockingIOUtils;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
@@ -21,14 +21,9 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
-import static org.apache.commons.io.Charsets.toCharset;
 
 public class SshConsole extends AbstractWindow {
 
@@ -235,57 +230,4 @@ public class SshConsole extends AbstractWindow {
         terminal.fit();
     }
 
-    protected static class NonBlockingIOUtils {
-
-        public static final int BUF_SIZE = 0x800; // 2K chars (4K bytes)
-
-        private Logger log = LoggerFactory.getLogger(NonBlockingIOUtils.class);
-
-        protected CharBuffer buf = CharBuffer.allocate(BUF_SIZE);
-
-        /**
-         * Inspired by {@link CharStreams#copy(Readable, Appendable)}
-         */
-        public String toString(InputStream input,
-                               Charset encoding) throws IOException {
-            InputStreamReader in = new InputStreamReader(input, toCharset(encoding));
-            StringBuilder out = new StringBuilder();
-
-            while (in.ready() && in.read(buf) != -1) {
-                buf.flip();
-                out.append(buf);
-                buf.clear();
-            }
-
-            return out.toString();
-        }
-
-        /**
-         * Inspired by {@link CharStreams#copy(Readable, Appendable)}
-         */
-        public String toStringWithBarrier(InputStream input,
-                                          Charset encoding,
-                                          int maxBarrier) throws IOException {
-            InputStreamReader in = new InputStreamReader(input, toCharset(encoding));
-            StringBuilder out = new StringBuilder();
-
-            int barrier = 0;
-            for (; in.ready() && in.read(buf) != -1 && barrier <= maxBarrier; barrier++) {
-                buf.flip();
-                out.append(buf);
-                buf.clear();
-            }
-
-            log.warn("barrier " + barrier);
-            if (isBarrierAchieved(barrier, maxBarrier)) {
-                log.warn("A read has been stopped, because max barrier was achieved");
-            }
-
-            return out.toString();
-        }
-
-        protected boolean isBarrierAchieved(int barrier, int maxBarrier) {
-            return barrier >= maxBarrier;
-        }
-    }
 }
