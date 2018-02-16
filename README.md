@@ -235,15 +235,15 @@ The second section allows viewing results of running scripts, saving and clearin
 When SH scripts are run, the system generates temporary files, which are stored in the `.\tomcat\temp` directory. Note
 that the component does not remove these files automatically. 
 
-
-
 ## SSH Console
 SSH Console allows operating network services on remote servers right from the application UI. Note that this functionality
 is available only for UNIX systems.
  
  ![ssh_console_menu_item](img/SSH-Console_menu_item.png)
  
-
+Before connecting to a remote server, it is required to specify credentials and a hostname in the corresponding section.
+After that, use action buttons to connect to a server via SSH or to disconnect. The toolbar of SSH Console also comprises
+the __Fit__ button, which allows managing the size of a terminal, and a progress bar.
 
 ### Known issues
 
