@@ -21,23 +21,23 @@ The process of the component installation consists of several steps and is descr
 1. Add the following maven repository `https://repo.cuba-platform.com/content/repositories/premium-snapshots`
 to the build.gradle file of your CUBA application:
    
-   ```groovy
-   buildscript {
-       
-      //...
-        
-      repositories {
-        
-         // ...
-        
-         maven {
-            url  "https://repo.cuba-platform.com/content/repositories/premium-snapshots"
-         }
-      }
-        
-      // ...
-   }
-   ```
+     ```groovy
+     buildscript {
+           
+        //...
+            
+        repositories {
+            
+           // ...
+            
+           maven {
+              url  "https://repo.cuba-platform.com/content/repositories/premium-snapshots"
+           }
+        }
+            
+        // ...
+     }
+     ```
 
 2. Select a version of the add-on which is compatible with the platform version used in your project:
 
