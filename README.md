@@ -88,15 +88,15 @@ project entities to a zip-archive or json using Entity Inspector (learn more abo
 
 1. Configuration file example:
        
-   ```xml
-   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-   <auto-import>
-       <!--default processor-->
-       <auto-import-file path="com/company/demoforadmintoolscomponent/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
-       <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.json" bean="admintools_DefaultAutoImportProcessor"/>
+     ```xml
+     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+     <auto-import>
+         <!--default processor-->
+         <auto-import-file path="com/company/demoforadmintoolscomponent/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
+         <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.json" bean="admintools_DefaultAutoImportProcessor"/>
         
-   </auto-import>
-   ```
+     </auto-import>
+     ```
    
    Where path is a path to the data file, bean/class a processor. Bean = [bean name], class [class path].
    
@@ -114,46 +114,46 @@ To create a custom processor, the next steps should be taken:
 
 1. Create a class that implements the AutoImportProcessor interface
    
-   ```java
-   @Component("admintools_ReportsAutoImportProcessor")
-   public class ReportsAutoImportProcessor implements AutoImportProcessor {
-    
-       @Inject
-       protected ReportService reportService;
-       @Inject
-       protected Resources resources;
-    
-       @Override
-       public void processFile(String filePath) {
-           InputStream stream = resources.getResourceAsStream(filePath);
-           processFile(stream);
-       }
-    
-       @Override
-       public void processFile(InputStream inputStream) {
-           try {
-               byte[] fileBytes = IOUtils.toByteArray(inputStream);
-               reportService.importReports(fileBytes);
-           } catch (IOException | RuntimeException e) {
-               throw new AutoImportException("Unable to import Reports file", e);
-           }
-       }
-   }
-   ```
+     ```java
+     @Component("admintools_ReportsAutoImportProcessor")
+     public class ReportsAutoImportProcessor implements AutoImportProcessor {
+      
+         @Inject
+         protected ReportService reportService;
+         @Inject
+         protected Resources resources;
+      
+         @Override
+         public void processFile(String filePath) {
+             InputStream stream = resources.getResourceAsStream(filePath);
+             processFile(stream);
+         }
+      
+         @Override
+         public void processFile(InputStream inputStream) {
+             try {
+                 byte[] fileBytes = IOUtils.toByteArray(inputStream);
+                 reportService.importReports(fileBytes);
+             } catch (IOException | RuntimeException e) {
+                 throw new AutoImportException("Unable to import Reports file", e);
+             }
+         }
+     }
+     ```
    
 2. If a processor is implemented as a java bean, then specify a component name and a path
 to the required zip-archive in a configuration file. If a processor is implemented as a class,
 then provide a path to the class
    
-   ```xml
-   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-   <auto-import>
-       ...
-    
-       <auto-import-file path="com/company/demoforadmintoolscomponent/Reports.zip" bean="admintools_ReportsAutoImportProcessor"/>
-       ...
-   </auto-import>
-   ```
+     ```xml
+     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+     <auto-import>
+         ...
+      
+         <auto-import-file path="com/company/demoforadmintoolscomponent/Reports.zip" bean="admintools_ReportsAutoImportProcessor"/>
+         ...
+     </auto-import>
+     ```
    
 ### Additional information.
 
