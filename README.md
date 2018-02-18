@@ -20,23 +20,24 @@ The process of the component installation consists of several steps and is descr
 
 1. Add the following maven repository `https://repo.cuba-platform.com/content/repositories/premium-snapshots`
 to the build.gradle file of your CUBA application:
-    ```groovy
-    buildscript {
+   
+   ```groovy
+   buildscript {
+       
+      //...
         
-        //...
+      repositories {
         
-        repositories {
+         // ...
         
-            // ...
+         maven {
+            url  "https://repo.cuba-platform.com/content/repositories/premium-snapshots"
+         }
+      }
         
-            maven {
-                url  "https://repo.cuba-platform.com/content/repositories/premium-snapshots"
-            }
-        }
-        
-        // ...
-    }
-    ```
+      // ...
+   }
+   ```
 
 2. Select a version of the add-on which is compatible with the platform version used in your project:
 
@@ -86,6 +87,7 @@ project entities to a zip-archive or json using Entity Inspector (learn more abo
 #### Creating an auto-import configuration file
 
 1. Configuration file example:
+       
    ```xml
    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
    <auto-import>
@@ -95,6 +97,7 @@ project entities to a zip-archive or json using Entity Inspector (learn more abo
         
    </auto-import>
    ```
+   
    Where path is a path to the data file, bean/class a processor. Bean = [bean name], class [class path].
    
 2. Add the `admin.autoImportConfig` property to app.properties and, additionally, specify the configuration file path.
@@ -110,6 +113,7 @@ AutoImportProcessor interface.
 To create a custom processor, the next steps should be taken:
 
 1. Create a class that implements the AutoImportProcessor interface
+   
    ```java
    @Component("admintools_ReportsAutoImportProcessor")
    public class ReportsAutoImportProcessor implements AutoImportProcessor {
@@ -140,6 +144,7 @@ To create a custom processor, the next steps should be taken:
 2. If a processor is implemented as a java bean, then specify a component name and a path
 to the required zip-archive in a configuration file. If a processor is implemented as a class,
 then provide a path to the class
+   
    ```xml
    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
    <auto-import>
