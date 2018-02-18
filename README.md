@@ -87,6 +87,24 @@ A class-processor is responsible for file processing and can be implemented as a
 If necessary, you can provide a custom implementation of a processor for any entity within a project by applying the 
 AutoImportProcessor interface.
 
+### Creating an auto-import configuration file
+
+1. Configuration file example:
+   ```xml
+   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+   <auto-import>
+       <!--default processor-->
+       <auto-import-file path="com/company/demoforadmintoolscomponent/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
+       <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.json" bean="admintools_DefaultAutoImportProcessor"/>
+        
+       <!--custom processor-->
+       <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.zip" class="com.company.demoforadmintoolscomponent.processors.SampleAutoImportProcessor"/>
+   </auto-import>
+   ```
+   Where path is a path to the zip-archive, bean/class � a processor. Bean = [bean name], class [class path].
+   
+2. Add the `admin.autoImportConfig` property to app.properties and, additionally, specify the configuration file path.
+
 ### Creating a custom import processor
 
 To create a custom processor, the next steps should be taken:
@@ -132,29 +150,13 @@ then provide a path to the class
    </auto-import>
    ```
    
-### Creating an auto-import configuration file
+### Additional information.
 
-1. Configuration file example:
-   ```xml
-   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-   <auto-import>
-       <!--default processor-->
-       <auto-import-file path="com/company/demoforadmintoolscomponent/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
-       <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.json" bean="admintools_DefaultAutoImportProcessor"/>
-        
-       <!--custom processor-->
-       <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.zip" class="com.company.demoforadmintoolscomponent.processors.SampleAutoImportProcessor"/>
-   </auto-import>
-   ```
-   Where path is a path to the zip-archive, bean/class � a processor. Bean = [bean name], class [class path].
-   
-2. Add the `admin.autoImportConfig` property to app.properties and, additionally, specify the configuration file path.
-
-### Additional information. Logging
+#### Logging
 
 See logging information in the `app.log` file.
 
-#### Successful import
+##### Successful import
 
 ```
 com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/autoimporttest/Roles.zip by bean autoimport_RolesAutoImportProcessor
@@ -162,7 +164,7 @@ com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/
 com.haulmont.addon.admintools.processors.DefaultAutoImportProcessor - Successful importing file com/company/autoimporttest/Roles.zip
 ```
 
-#### Incorrect name of a processor
+##### Incorrect name of a processor
 
 ```
 com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/demoforadmintoolscomponent/Groups.zip by bean autoimport_InvalidAutoImportProcessor
@@ -174,7 +176,7 @@ com.haulmont.addon.admintools.listeners.AutoImportListener - org.springframework
 com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/demoforadmintoolscomponent/Groups.zip by class com.example.InvalidAutoImportProcessor ... com.haulmont.addon.admintools.listeners.AutoImportListener - java.lang.ClassNotFoundException: com.example.InvalidAutoImportProcessor
 ```
 
-#### Uploaded archive is not found
+##### Uploaded archive is not found
 
 ```
 com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/example/invalid.zip by bean autoimport_ReportsAutoImportProcessor
