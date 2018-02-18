@@ -83,11 +83,7 @@ The component comprises ready-made solutions for importing security roles and ac
 allows generating archives containing the required data about security roles or access groups. The user can export 
 project entities to a zip-archive or json using Entity Inspector (learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
 
-A class-processor is responsible for file processing and can be implemented as a bean or a simple java-class. 
-If necessary, you can provide a custom implementation of a processor for any entity within a project by applying the 
-AutoImportProcessor interface.
-
-### Creating an auto-import configuration file
+#### Creating an auto-import configuration file
 
 1. Configuration file example:
    ```xml
@@ -97,15 +93,19 @@ AutoImportProcessor interface.
        <auto-import-file path="com/company/demoforadmintoolscomponent/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
        <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.json" bean="admintools_DefaultAutoImportProcessor"/>
         
-       <!--custom processor-->
-       <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.zip" class="com.company.demoforadmintoolscomponent.processors.SampleAutoImportProcessor"/>
    </auto-import>
    ```
    Where path is a path to the zip-archive, bean/class � a processor. Bean = [bean name], class [class path].
    
 2. Add the `admin.autoImportConfig` property to app.properties and, additionally, specify the configuration file path.
 
-### Creating a custom import processor
+### Custom import processor
+
+A class-processor is responsible for file processing and can be implemented as a bean or a simple java-class. 
+If necessary, you can provide a custom implementation of a processor for any entity within a project by applying the 
+AutoImportProcessor interface.
+
+#### Creating a custom import processor
 
 To create a custom processor, the next steps should be taken:
 
