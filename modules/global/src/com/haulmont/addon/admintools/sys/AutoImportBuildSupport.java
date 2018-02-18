@@ -46,11 +46,9 @@ public class AutoImportBuildSupport {
         return xmlFiles;
     }
 
+    @SuppressWarnings("ConstantConditions") // It is checked in {@link AutoImportListenerDelegateImpl#applicationStarted}
     protected String getAutoImportConfig() {
-        String config = AppContext.getProperty(AUTOIMPORT_CONFIG);
-        if (StringUtils.isBlank(config))
-            throw new IllegalStateException(AUTOIMPORT_CONFIG + " application property is not defined");
-        return config;
+        return AppContext.getProperty(AUTOIMPORT_CONFIG);
     }
 
     /**
