@@ -7,12 +7,12 @@ import com.haulmont.addon.admintools.processors.AutoImportProcessor;
 import com.haulmont.addon.admintools.sys.AutoImportBuildSupport;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Resources;
+import com.haulmont.cuba.core.sys.AppContext;
 import com.haulmont.cuba.security.app.Authentication;
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -28,10 +28,15 @@ import java.util.stream.Stream;
 
 import static com.haulmont.addon.admintools.dto.ImportStatus.FAILURE;
 import static com.haulmont.addon.admintools.dto.ImportStatus.SUCCESS;
-import static io.vavr.API.*;
+import static com.haulmont.addon.admintools.sys.AutoImportBuildSupport.AUTOIMPORT_CONFIG;
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
 import static io.vavr.Patterns.$Left;
 import static io.vavr.Patterns.$Right;
 import static java.lang.String.format;
+import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 @Component(AutoImportListenerDelegate.NAME)
 public class AutoImportListenerDelegateImpl implements AutoImportListenerDelegate {
@@ -49,8 +54,17 @@ public class AutoImportListenerDelegateImpl implements AutoImportListenerDelegat
     @Inject
     protected Resources resources;
 
+
+
     @SuppressWarnings("Convert2MethodRef")
     public void applicationStarted() {
+
+        // fast exit if subsystem isn't configured
+        if (! hasAutoImportBeenConfigured()) {
+           log.info("AutoImport is not configured.");
+           return;
+        }
+
         authentication.begin();
         try {
             List<AutoImportBuildSupport.AutoImportObject> autoImportObjects =
@@ -92,6 +106,10 @@ public class AutoImportListenerDelegateImpl implements AutoImportListenerDelegat
         }
     }
 
+    protected boolean hasAutoImportBeenConfigured() {
+        return isNotBlank(AppContext.getProperty(AUTOIMPORT_CONFIG));
+    }
+
     protected Either<String, AutoImportBuildSupport.AutoImportObject> applyValidationChecks(AutoImportBuildSupport.AutoImportObject autoImport) {
         if (autoImport.getBean() != null && autoImport.getImportClass() != null) {
             return Either.left("Bean and class defined");
@@ -118,7 +136,7 @@ public class AutoImportListenerDelegateImpl implements AutoImportListenerDelegat
     }
 
     protected InputStream getResourceAsStreamNN(String path) throws IOException {
-        if (StringUtils.isBlank(path)) throw new IOException("File path is empty");
+        if (isBlank(path)) throw new IOException("File path is empty");
         InputStream is = resources.getResourceAsStream(path);
 
         // see documentation for {@link Resources#getResourceAsStream}
