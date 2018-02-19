@@ -100,7 +100,7 @@ project entities to a zip-archive or json using Entity Inspector (learn more abo
 
      Where path is a path to the data file, bean/class a processor. Bean = [bean name], class [class path].
    
-2. Add the `admin.autoImportConfig` property to app.properties and, additionally, specify the configuration file path.
+2. Add the `admin.autoImportConfig` property to `app.properties` and, additionally, specify the configuration file path.
 
 ### Custom import processor
 
@@ -238,7 +238,7 @@ In addition to the console, there is the 'Arguments' field for specifying positi
 
 The second section allows viewing results of running scripts, saving and clearing them.
 
-When SH scripts are run, the system generates temporary files, which are stored in the `.\tomcat\temp` directory. Note
+When scripts are run, the system generates temporary files, which are stored in the `.\tomcat\temp` directory. Note
 that the component does not remove these files automatically. 
 
 ## SSH Console
