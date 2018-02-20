@@ -7,9 +7,7 @@ import com.haulmont.addon.admintools.web.utils.NonBlockingIOUtils;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
-import com.haulmont.cuba.gui.executors.BackgroundTask;
-import com.haulmont.cuba.gui.executors.BackgroundTaskWrapper;
-import com.haulmont.cuba.gui.executors.TaskLifeCycle;
+import com.haulmont.cuba.gui.executors.*;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
@@ -28,6 +26,7 @@ import java.util.Map;
 public class SshConsole extends AbstractWindow {
 
     public static final Integer DEFAULT_SSH_PORT = 22;
+    public static final Integer CONNECTION_TIMEOUT_SECONDS = 22;
 
     private Logger log = LoggerFactory.getLogger(SshConsole.class);
 
@@ -46,6 +45,9 @@ public class SshConsole extends AbstractWindow {
     @Inject
     protected XtermJs terminal;
 
+    @Inject
+    protected BackgroundWorker backgroundWorker;
+
     protected JSch jsch = new JSch();
     protected Session session;
     protected ChannelShell mainChannel;
@@ -53,7 +55,8 @@ public class SshConsole extends AbstractWindow {
     protected PrintStream mainOut;
 
     protected NonBlockingIOUtils ioUtils = new NonBlockingIOUtils();
-    protected BackgroundTaskWrapper<Integer, Void> connectionTaskWrapper;
+    protected BackgroundTask<Integer, Void> connectionTask;
+    protected BackgroundTaskHandler connectionTaskHandler;
     protected SshCredentials credentials;
     protected TextField hostnameField;
 
@@ -63,16 +66,20 @@ public class SshConsole extends AbstractWindow {
         credentials.setPort(DEFAULT_SSH_PORT);
         sshCredentialsDs.setItem(credentials);
 
-        BackgroundTask<Integer, Void> connectionTask = new BackgroundTask<Integer, Void>(10, getFrame()) {
+        connectionTask = new BackgroundTask<Integer, Void>(CONNECTION_TIMEOUT_SECONDS, getFrame()) {
             @Override
             public Void run(TaskLifeCycle<Integer> taskLifeCycle) throws JSchException, IOException {
                 internalConnect();
+                if (connectionTaskHandler.isCancelled()) {
+                    disconnectSsh();
+                }
                 return null;
             }
 
             @Override
             public boolean handleException(Exception ex) {
                 terminal.writeln(formatMessage("console.error", ex.getMessage()));
+                disconnectSsh();
                 terminalProgressBar.setIndeterminate(false);
                 log.info("User can't create ssh connection", ex);
                 return true;
@@ -80,12 +87,13 @@ public class SshConsole extends AbstractWindow {
 
             @Override
             public void canceled() {
+                terminal.writeln(formatMessage("console.disconnected", sshCredentialsDs.getItem().getHostname()));
                 terminalProgressBar.setIndeterminate(false);
             }
 
             @Override
             public boolean handleTimeoutException() {
-                disconnect();
+                terminal.writeln(formatMessage("console.disconnected.timeout", sshCredentialsDs.getItem().getHostname()));
                 terminalProgressBar.setIndeterminate(false);
                 return true;
             }
@@ -95,7 +103,6 @@ public class SshConsole extends AbstractWindow {
                 terminalProgressBar.setIndeterminate(false);
             }
         };
-        connectionTaskWrapper = new BackgroundTaskWrapper<>(connectionTask);
 
         terminal.setDataListener(this::terminalDataListener);
     }
@@ -107,7 +114,7 @@ public class SshConsole extends AbstractWindow {
 
     @Override
     protected boolean preClose(String actionId) {
-        connectionTaskWrapper.cancel();
+        connectionTaskHandler.cancel();
         if (isMainChannelOpen()) {
             mainChannel.disconnect();
         }
@@ -136,7 +143,7 @@ public class SshConsole extends AbstractWindow {
     }
 
     public void connect() {
-        if (! validateAll()) {
+        if (! validateAll() || (connectionTaskHandler != null && connectionTaskHandler.isAlive())) {
             return;
         }
 
@@ -144,7 +151,7 @@ public class SshConsole extends AbstractWindow {
             showOptionDialog(getMessage("confirmReconnect.title"), getMessage("confirmReconnect.msg"),
                     MessageType.CONFIRMATION, new Action[]{
                             new DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY).withHandler(e -> {
-                                disconnect();
+                                disconnectSsh();
                                 executeConnectionProgressTask();
                             }),
                             new DialogAction(DialogAction.Type.CANCEL, Action.Status.NORMAL)
@@ -160,7 +167,8 @@ public class SshConsole extends AbstractWindow {
     protected void executeConnectionProgressTask() {
         credentials = sshCredentialsDs.getItem();
         terminalProgressBar.setIndeterminate(true);
-        connectionTaskWrapper.restart();
+        connectionTaskHandler = backgroundWorker.handle(connectionTask);
+        connectionTaskHandler.execute();
         terminal.writeln(formatMessage("console.connected", credentials.getHostname()));
     }
 
@@ -207,7 +215,12 @@ public class SshConsole extends AbstractWindow {
     }
 
     public void disconnect() {
-        connectionTaskWrapper.cancel();
+        if (connectionTaskHandler.isAlive()) {
+            connectionTaskHandler.cancel();
+        } else disconnectSsh();
+    }
+
+    protected void disconnectSsh() {
         if (isMainChannelOpen()) {
             mainChannel.disconnect();
         }
