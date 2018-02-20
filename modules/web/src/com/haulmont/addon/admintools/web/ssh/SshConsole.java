@@ -114,13 +114,17 @@ public class SshConsole extends AbstractWindow {
 
     @Override
     protected boolean preClose(String actionId) {
-        connectionTaskHandler.cancel();
-        if (isMainChannelOpen()) {
-            mainChannel.disconnect();
-        }
-        if (isSessionOpen()) {
-            session.disconnect();
+        if (isBackgroundTaskExecuted()) {
+            connectionTaskHandler.cancel();
             showNotification(formatMessage("console.disconnected", sshCredentialsDs.getItem().getHostname()));
+        } else {
+            if (isMainChannelOpen()) {
+                mainChannel.disconnect();
+            }
+            if (isSessionOpen()) {
+                session.disconnect();
+                showNotification(formatMessage("console.disconnected", sshCredentialsDs.getItem().getHostname()));
+            }
         }
         return super.preClose(actionId);
     }
@@ -142,8 +146,12 @@ public class SshConsole extends AbstractWindow {
         return session != null && session.isConnected();
     }
 
+    protected boolean isBackgroundTaskExecuted() {
+        return connectionTaskHandler != null && connectionTaskHandler.isAlive();
+    }
+
     public void connect() {
-        if (! validateAll() || (connectionTaskHandler != null && connectionTaskHandler.isAlive())) {
+        if (! validateAll() || isBackgroundTaskExecuted()) {
             return;
         }
 
@@ -215,7 +223,7 @@ public class SshConsole extends AbstractWindow {
     }
 
     public void disconnect() {
-        if (connectionTaskHandler.isAlive()) {
+        if (isBackgroundTaskExecuted()) {
             connectionTaskHandler.cancel();
         } else disconnectSsh();
     }
