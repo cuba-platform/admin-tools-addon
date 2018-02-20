@@ -117,25 +117,16 @@ To create a custom processor, the next steps should be taken:
      ```java
      @Component("admintools_ReportsAutoImportProcessor")
      public class ReportsAutoImportProcessor implements AutoImportProcessor {
-      
          @Inject
          protected ReportService reportService;
          @Inject
          protected Resources resources;
-      
+     
          @Override
-         public void processFile(String filePath) {
-             InputStream stream = resources.getResourceAsStream(filePath);
-             processFile(stream);
-         }
-      
-         @Override
-         public void processFile(InputStream inputStream) {
-             try {
+         public void processFile(String filePath) throws Exception {
+             try (InputStream inputStream = resources.getResourceAsStream(filePath)) {
                  byte[] fileBytes = IOUtils.toByteArray(inputStream);
                  reportService.importReports(fileBytes);
-             } catch (IOException | RuntimeException e) {
-                 throw new AutoImportException("Unable to import Reports file", e);
              }
          }
      }
