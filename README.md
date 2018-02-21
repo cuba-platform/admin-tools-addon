@@ -96,6 +96,11 @@ project entities to a zip-archive or json using Entity Inspector (learn more abo
      Where path is a path to the data file, bean/class a processor. Bean = [bean name], class [class path].
    
 2. Add the `admin.autoImportConfig` property to `app.properties` and, additionally, specify the configuration file path.
+There is example of `app-properties` with the auto-import configuration:
+
+    ```properties
+    admin.autoImportConfig = +com/haulmont/addon/admintools/auto-import.xml
+    ```
 
 ### Custom import processor
 
