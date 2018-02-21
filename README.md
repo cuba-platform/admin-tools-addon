@@ -87,8 +87,8 @@ project entities to a zip-archive or json using Entity Inspector (learn more abo
      <?xml version="1.0" encoding="UTF-8" standalone="no"?>
      <auto-import>
          <!--default processor-->
-         <auto-import-file path="com/company/demoforadmintoolscomponent/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
-         <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.json" bean="admintools_DefaultAutoImportProcessor"/>
+         <auto-import-file path="com/company/example/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
+         <auto-import-file path="com/company/example/Groups.json" bean="admintools_DefaultAutoImportProcessor"/>
         
      </auto-import>
      ```
@@ -141,7 +141,7 @@ then provide a path to the class
      <auto-import>
          ...
       
-         <auto-import-file path="com/company/demoforadmintoolscomponent/Reports.zip" bean="admintools_ReportsAutoImportProcessor"/>
+         <auto-import-file path="com/company/example/Reports.zip" bean="admintools_ReportsAutoImportProcessor"/>
          ...
      </auto-import>
      ```
@@ -163,13 +163,13 @@ com.haulmont.addon.admintools.processors.DefaultAutoImportProcessor - Successful
 ##### Incorrect name of a processor
 
 ```
-com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/demoforadmintoolscomponent/Groups.zip by bean autoimport_InvalidAutoImportProcessor
+com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/example/Groups.zip by bean autoimport_InvalidAutoImportProcessor
 ...
 com.haulmont.addon.admintools.listeners.AutoImportListener - org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'autoimport_InvalidAutoImportProcessor' available
 ```
 
 ```
-com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/demoforadmintoolscomponent/Groups.zip by class com.example.InvalidAutoImportProcessor ... com.haulmont.addon.admintools.listeners.AutoImportListener - java.lang.ClassNotFoundException: com.example.InvalidAutoImportProcessor
+com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/example/Groups.zip by class com.example.InvalidAutoImportProcessor ... com.haulmont.addon.admintools.listeners.AutoImportListener - java.lang.ClassNotFoundException: com.example.InvalidAutoImportProcessor
 ```
 
 ##### Uploaded archive is not found
