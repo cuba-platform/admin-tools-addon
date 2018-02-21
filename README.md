@@ -1,7 +1,7 @@
 # CUBA Platform Component - Admin Tools
 
 The component comprises the following parts:
-* Generator of SQL scripts;
+* [Generator of SQL scripts](#sql-scripts-generator);
 * Auto Import subsystem;
 * JPQL console;
 * SQL console;
@@ -47,7 +47,7 @@ Add a custom application component to your project:
    * Version: *add-on version*
    
 **Note:** To activate the Auto Import subsystem, additional configurations are required (for more details, please refer to
-this [paragraph](###Creating an auto-import configuration file)).
+this [paragraph](#creating-an-auto-import-configuration-file)).
   
 ## SQL Scripts Generator
 
