@@ -2,12 +2,12 @@
 
 The component comprises the following parts:
 * [Generator of SQL scripts](#sql-scripts-generator);
-* Auto Import subsystem;
-* JPQL console;
-* SQL console;
-* Groovy console;
-* Shell Console;
-* SSH Console.
+* [Auto Import subsystem](#auto-import);
+* [JPQL console](#jpql-console);
+* [SQL console](#);
+* [Groovy console](#);
+* [Shell Console](#shell-console);
+* [SSH Console](#ssh-console).
 
 ## Installation
 
