@@ -1,16 +1,11 @@
 # CUBA Platform Component - Admin Tools
 
-The Admin Tools component is a set of instruments that allows:
-* interacting with a database by using JPQL / SQL / Groovy scripts;
-* pre-configuring servers and transferring data between them;
-* exporting project entities to SQL scripts;
-* running sh scripts;
-* operating network services on remote servers using SSH Console.
-
 The component comprises the following parts:
-* Generator of SQL scripts for project entities;
+* Generator of SQL scripts;
 * Auto Import subsystem;
-* JPQL / SQL / Groovy console;
+* JPQL console;
+* SQL console;
+* Groovy console;
 * Shell Console;
 * SSH Console.
 
