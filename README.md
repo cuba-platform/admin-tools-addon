@@ -72,12 +72,12 @@ the system shows a corresponding notification: 'No data found'.
 The AutoImport subsystem is designed to preconfigure servers and transfer data among servers. The process is launched 
 automatically during the server start/restart. 
 
-For importing data, specify a path to a zip-archive in a configuration file. If an archive with the same name has already
+For importing data, specify a path to a zip-archive or a json file in a configuration file. If an archive with the same name has already
  been processed, then it is not considered by the system and skipped.
 
 The component comprises ready-made solutions for importing security roles and access groups. The __Export as ZIP__ button 
 allows generating archives containing the required data about security roles or access groups. The user can export 
-project entities to a zip-archive or json using Entity Inspector (learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
+project entities to a zip-archive or json file using Entity Inspector (learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
 
 #### Creating an auto-import configuration file
 
@@ -133,7 +133,7 @@ To create a custom processor, the next steps should be taken:
      ```
    
 2. If a processor is implemented as a java bean, then specify a component name and a path
-to the required zip-archive in a configuration file. If a processor is implemented as a class,
+to the required file in a configuration file. If a processor is implemented as a class,
 then provide a path to the class
    
      ```xml
