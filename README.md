@@ -78,7 +78,9 @@ For importing data, specify a path to a zip-archive or a json file in a configur
 You can extort entities in following ways:
 
 * For export groups click Administration > Access Groups. Then select groups and click The __Export as ZIP__ button  or  __Export as JSON__ button
+(learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/groups.html)). 
 * For export roles click Administration > Roles. Then select roles and click The __Export as ZIP__ button  or  __Export as JSON__ button
+(learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/roles.html)). 
 * For export any entities click Administration > Entity Inspector and a select entity type. Then select needed entities 
 and click The __Export as ZIP__ button  or  __Export as JSON__ button. (learn more about this functionality 
 [here﻿](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
