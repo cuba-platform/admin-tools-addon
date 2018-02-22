@@ -74,10 +74,14 @@ automatically during the server start/restart.
 
 For importing data, specify a path to a zip-archive or a json file in a configuration file. If an archive with the same name has already
  been processed, then it is not considered by the system and skipped.
+ 
+You can extort entities in following ways:
 
-The component comprises ready-made solutions for importing security roles and access groups. The __Export as ZIP__ button 
-allows generating archives containing the required data about security roles or access groups. The user can export 
-project entities to a zip-archive or json file using Entity Inspector (learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
+* For export groups click Administration > Access Groups. Then select groups and click The __Export as ZIP__ button  or  __Export as JSON__ button
+* For export roles click Administration > Roles. Then select roles and click The __Export as ZIP__ button  or  __Export as JSON__ button
+* For export any entities click Administration > Entity Inspector and a select entity type. Then select needed entities 
+and click The __Export as ZIP__ button  or  __Export as JSON__ button. (learn more about this functionality 
+[here﻿](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
 
 #### Creating an auto-import configuration file
 
