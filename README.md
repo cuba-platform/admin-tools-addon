@@ -239,8 +239,7 @@ When scripts are run, the system generates temporary files, which are stored in 
 that the component does not remove these files automatically. 
 
 ## SSH Console
-SSH Console allows operating network services on remote servers right from the application UI. Note that this functionality
-is available only for UNIX systems.
+SSH Console allows operating network services on remote servers right from the application UI.
  
  ![ssh_console_menu_item](img/SSH-Console_menu_item.png)
  
