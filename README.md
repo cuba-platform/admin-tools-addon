@@ -3,9 +3,8 @@
 The component comprises the following parts:
 * [Generator of SQL scripts](#sql-scripts-generator);
 * [Auto Import subsystem](#auto-import);
-* [JPQL console](#jpql-console);
-* [SQL console](#);
-* [Groovy console](#);
+* [JPQL and SQL console](#jpql-and-sql-console);
+* [Groovy console](#groovy-console);
 * [Shell Console](#shell-console);
 * [SSH Console](#ssh-console);
 * [JMX Tomcat](#jmx-tomcat).
@@ -186,21 +185,15 @@ com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/
 com.haulmont.addon.admintools.processors.ReportsAutoImportProcessor - File com/example/invalid.zip not found.
 ```
 
-## JPQL Console
-JPQL Console allows interacting with an application database by using JPQL. 
+## JPQL and SQL Console
+JPQL and SQL Console allow interacting with an application database by using JPQL or SQL. 
+These components are imported from **CUBA Platform Component - Runtime diagnose**
+See [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
 
-![JPQL-Console-menu-item](img/menu-1.png)
-
-![JPQL-console](img/jpql_console-1.png)
-
-Request results are displayed in the table and can be exported to an Excel file if required. Note that collection attributes
-are not shown in the Result table.
-### JPQL Console Security
-By default, only SELECT requests can be executed. If there is a need to send UPDATE and/or DELETE requests, then the 
-*runtime-diagnose.sql.allowDataManipulation* application property has to be set to 'true' 
-(**Menu**: Administration → Application properties → runtime-diagnose → sql → runtime-diagnose.sql.allowDataManipulation).
-
-To find out more about the Runtime Diagnose component, please get acquainted with [this documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md)
+## Groovy Console
+The groovy console allows you to interactivly inspect the running application. You enter a groovy script and execute it in an ad-hoc fashion.
+This component is imported from **CUBA Platform Component - Runtime diagnose**. 
+See [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
 
 ## Load Config
 Using the Load Config functionality it is possible upload configuration files and various scripts to a configuration 
