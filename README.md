@@ -7,7 +7,8 @@ The component comprises the following parts:
 * [SQL console](#);
 * [Groovy console](#);
 * [Shell Console](#shell-console);
-* [SSH Console](#ssh-console).
+* [SSH Console](#ssh-console);
+* [JMX Tomcat](#jmx-tomcat).
 
 ## Installation
 
@@ -250,3 +251,21 @@ the __Fit__ button, which allows managing the size of a terminal, and a progress
 ### Known issues
 
 - Utility `screen` doesn't work in the console
+
+## JMX Tomcat
+JMX Tomcat is a managed bean, which allows operating with Tomcat. JMX Tomcat supports Windows and Unix OS.
+You can find bean using following way: Administration > JMX Console, the searching by the object name 'Tomcat'
+and the domain 'cuba-at'.
+
+![find jmx tomcat](img/find-jmx-tomcat.png) 
+
+JMX Tomcat includes following operations:
+
+* getTomcatAbsolutePath. It returns an absolute path to the tomcat's directory;
+* shutdown. It shutdowns a Tomcat process;
+* reboot. It shutdowns and runs a new Tomcat process;
+* runShellScript. It runs a script in tomcat's workspace and contains arguments:
+    1. Path - a relative from tomcat's directory;
+    2. Arguments - arguments that you can specify for the script.
+
+![jmx tomcat](img/jmx-tomcat.png)
