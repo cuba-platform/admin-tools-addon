@@ -1,10 +1,10 @@
 package com.haulmont.addon.admintools.web.toolkit.ui.xtermjs;
 
-import com.haulmont.addon.admintools.gui.components.XtermJs;
+import com.haulmont.addon.admintools.gui.components.XtermJs.RowsCountListener;
 import com.haulmont.addon.admintools.gui.components.XtermJs.DataListener;
+import com.vaadin.annotations.JavaScript;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.ui.AbstractJavaScriptComponent;
-import com.vaadin.annotations.JavaScript;
 
 @JavaScript({"xtermjs-connector.js", "dist/xterm.js", "dist/addons/fit/fit.js"})
 @StyleSheet({"dist/xterm.css"})
@@ -12,12 +12,18 @@ public class XtermJsComponent extends AbstractJavaScriptComponent {
 
     private static final long serialVersionUID = -3510903164972910396L;
 
-    protected DataListener listener;
+    protected DataListener dataListener;
+    protected RowsCountListener rowsCountListener;
 
     public XtermJsComponent() {
         addFunction("data", arguments -> {
-            if (listener != null) {
-                listener.data(arguments.getString(0));
+            if (dataListener != null) {
+                dataListener.data(arguments.getString(0));
+            }
+        });
+        addFunction("rows", arguments -> {
+            if (rowsCountListener != null) {
+                rowsCountListener.changeRowsCount((int) arguments.getNumber(0));
             }
         });
     }
@@ -35,11 +41,19 @@ public class XtermJsComponent extends AbstractJavaScriptComponent {
     }
 
     public DataListener getDataListener() {
-        return listener;
+        return dataListener;
     }
 
     public void setDataListener(DataListener listener) {
-        this.listener = listener;
+        this.dataListener = listener;
+    }
+
+    public RowsCountListener getRowsCountListener() {
+        return rowsCountListener;
+    }
+
+    public void setRowsCountListener(RowsCountListener listener) {
+        this.rowsCountListener = listener;
     }
 
     @Override

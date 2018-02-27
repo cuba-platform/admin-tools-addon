@@ -105,6 +105,7 @@ public class SshConsole extends AbstractWindow {
         };
 
         terminal.setDataListener(this::terminalDataListener);
+        terminal.setRowsCountListener(this::terminalRowCountListener);
     }
 
     @Override
@@ -136,6 +137,12 @@ public class SshConsole extends AbstractWindow {
 
         mainOut.append(data);
         mainOut.flush();
+    }
+
+    protected void terminalRowCountListener(int rows) {
+        if (isMainChannelOpen()) {
+            mainChannel.setPtySize(80, rows, 640, 480);
+        }
     }
 
     protected boolean isMainChannelOpen() {

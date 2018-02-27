@@ -15,7 +15,15 @@ public interface XtermJs extends Component {
 
     DataListener getDataListener();
 
+    void setRowsCountListener(RowsCountListener listener);
+
+    RowsCountListener getRowsCountListener();
+
     interface DataListener {
         void data(String data);
+    }
+
+    interface RowsCountListener {
+        void changeRowsCount(int rows);
     }
 }
