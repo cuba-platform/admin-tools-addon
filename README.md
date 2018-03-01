@@ -241,6 +241,8 @@ Before connecting to a remote server, it is required to specify credentials and 
 After that, use action buttons to connect to a server via SSH or to disconnect. The toolbar of SSH Console also comprises
 the __Fit__ button, which allows managing the size of a terminal, and a progress bar.
 
+![ssh_console_connected](img/SSH-Console_connected.png)
+
 ### Known issues
 
 - Utility `screen` doesn't work in the console
