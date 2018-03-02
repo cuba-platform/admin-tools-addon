@@ -22,6 +22,8 @@ public class NonBlockingIOUtils {
 
     /**
      * Inspired by {@link CharStreams#copy(Readable, Appendable)}
+     * Read all characters from the {@code input} and convert them to the String.
+     * It does not close the {@code input}.
      */
     public String toString(InputStream input,
                            Charset encoding) throws IOException {
@@ -39,6 +41,10 @@ public class NonBlockingIOUtils {
 
     /**
      * Inspired by {@link CharStreams#copy(Readable, Appendable)}
+     * Read all characters from the {@code input} and convert them to the String.
+     * It does not close the {@code input}.
+     *
+     * @param maxBarrier maximum count of reading of {@code input} before returning the String
      */
     public String toStringWithBarrier(InputStream input,
                                       Charset encoding,
