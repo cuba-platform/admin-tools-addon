@@ -1,46 +1,62 @@
 package com.haulmont.addon.admintools.load_config;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.Configuration;
 import com.haulmont.cuba.core.global.GlobalConfig;
+import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.components.*;
-import org.apache.commons.io.IOUtils;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.*;
 import java.util.Map;
+
+import static java.lang.String.valueOf;
+import static org.apache.commons.io.FilenameUtils.getExtension;
+import static org.apache.commons.lang.StringUtils.*;
 
 public class LoadConfig extends AbstractWindow {
 
     @Inject
     protected Configuration configuration;
-
     @Inject
     protected FileUploadField uploadField;
+    @Inject
+    protected TextField configPathField;
+    @Inject
+    protected Messages messages;
 
-    protected String targetFileName;
-    protected File dir;
-    protected File targetFile;
+    protected Path webConfigDir;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-
-        String configDir = configuration.getConfig(GlobalConfig.class).getConfDir();
-
-        uploadField.addFileUploadSucceedListener(event -> {
-            targetFileName = uploadField.getFileName();
-            dir = new File(configDir);
-            targetFile = new File(dir, targetFileName);
-        });
+        webConfigDir = Paths.get(configuration.getConfig(GlobalConfig.class).getConfDir());
     }
 
     public void apply() {
-        if (targetFile.exists()) {
-            confirmOverwriteFile(targetFileName, targetFile);
+        FileDescriptor fileDescriptor = uploadField.getValue();
+
+        if (fileDescriptor == null) {
+            showNotification(getMessage("fileNotUploaded"));
         } else {
-            uploadFile(targetFile);
+            String pathFieldValue = parse(configPathField.getRawValue().trim());
+
+            try {
+                Path filePath = webConfigDir.resolve(pathFieldValue);
+                String fileName = fileDescriptor.getName();
+                File targetFile = new File(filePath.toString(), fileName);
+
+                if (targetFile.exists()) {
+                    confirmOverwriteFile(fileName, targetFile);
+                } else {
+                    createNewFile(targetFile);
+                }
+            } catch (InvalidPathException e) {
+                showNotification(formatMessage(getMessage("pathValidMessage"), pathFieldValue));
+            }
         }
     }
 
@@ -51,13 +67,13 @@ public class LoadConfig extends AbstractWindow {
     protected void confirmOverwriteFile(String fileName, File targetFile) {
         showOptionDialog(
                 getMessage("replaceConfirmation"),
-                formatMessage(getMessage("replaceMessage"), fileName) ,
+                formatMessage(getMessage("replaceMessage"), fileName),
                 MessageType.CONFIRMATION,
-                new Action[] {
+                new Action[]{
                         new DialogAction(DialogAction.Type.OK) {
                             @Override
                             public void actionPerform(Component component) {
-                                uploadFile(targetFile);
+                                writeToFile(targetFile);
                             }
                         },
                         new DialogAction(DialogAction.Type.CANCEL)
@@ -65,24 +81,41 @@ public class LoadConfig extends AbstractWindow {
         );
     }
 
-    protected void uploadFile(File targetFile) {
-        InputStream originalFile = uploadField.getFileContent();
-        boolean failed = false;
-        try (FileOutputStream fileOutput = new FileOutputStream(targetFile)) {
-            if (originalFile != null) {
-                IOUtils.copy(originalFile, fileOutput);
-            } else {
-                failed = true;
-            }
-        } catch (Exception ex) {
-            failed = true;
-        } finally {
-            if (failed) {
-                showNotification(getMessage("uploadFailed"), NotificationType.ERROR);
-            } else {
-                showNotification(getMessage("uploadSuccessful"), NotificationType.HUMANIZED);
-                uploadField.setValue(null);
-            }
+    protected void createNewFile(File targetFile) {
+        targetFile.getParentFile().mkdirs();
+        writeToFile(targetFile);
+    }
+
+    protected void writeToFile(File targetFile) {
+        InputStream loadedFile = uploadField.getFileContent();
+
+        if (loadedFile == null) {
+            showNotification(getMessage("uploadFailed"), NotificationType.ERROR);
+            return;
         }
+
+        try {
+            Files.copy(loadedFile, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            showNotification(getMessage("uploadSuccessful"), NotificationType.HUMANIZED);
+            uploadField.setValue(null);
+
+            if ("properties".equals(getExtension(targetFile.getPath()))) {
+                messages.clearCache();
+            }
+        } catch (IOException e) {
+            showNotification(getMessage("uploadFailed"), NotificationType.ERROR);
+        }
+    }
+
+    protected String parse(String fieldPath) {
+        char[] separators = new char[]{'\\', '/'};
+        //replace all '.' to '/' if path not contains separators
+        if (contains(fieldPath, '.') && !containsAny(fieldPath, separators)) {
+            return replaceChars(fieldPath, '.', '/');
+            //if first character is separator then exclude it
+        } else if (isNotBlank(fieldPath) && containsAny(valueOf(fieldPath.charAt(0)), separators)) {
+            return fieldPath.substring(1);
+        }
+        return fieldPath;
     }
 }

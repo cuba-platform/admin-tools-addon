@@ -2,28 +2,46 @@
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://caption.loadConfigScreen"
         class="com.haulmont.addon.admintools.load_config.LoadConfig">
-    <dialogMode height="auto"
-                width="auto"/>
-    <layout spacing="true" width="100%">
-        <upload id="uploadField"
-                dropZone="dropZone"
-                showClearButton="true"
-                showFileName="true"/>
-        <vbox id="dropZone"
-              height="150px"
-              width="300px"
+    <dialogMode height="350px"
+                resizable="true"
+                width="500px"/>
+    <layout expand="vBox"
+            spacing="true"
+            width="100%">
+        <label id="helpLabel" value="msg://helpMessage"/>
+        <label id="helpLabel2" value="msg://helpMessage2"/>
+        <hbox expand="configPathField"
               spacing="true"
-              align="MIDDLE_CENTER"
-              stylename="dropzone-container">
-            <label stylename="dropzone-description"
-                   width="100%"
-                   value="msg://dropZoneDescription"
-                   align="MIDDLE_CENTER"/>
-        </vbox>
-        <hbox spacing="true">
-            <button id="apply" invoke="apply" caption="mainMsg://actions.Apply"/>
-            <button id="cancel" invoke="cancel" caption="mainMsg://actions.Cancel"/>
+              width="100%">
+            <label align="MIDDLE_LEFT"
+                   value="msg://configPath"/>
+            <textField id="configPathField"
+                       datatype="string"/>
         </hbox>
-
+        <vbox id="vBox"
+              expand="dropZone"
+              spacing="true">
+            <upload id="uploadField"
+                    dropZone="dropZone"
+                    showClearButton="true"
+                    showFileName="true"/>
+            <vbox id="dropZone"
+                  align="MIDDLE_CENTER"
+                  spacing="true"
+                  stylename="dropzone-container">
+                <label align="MIDDLE_CENTER"
+                       stylename="dropzone-description"
+                       value="msg://dropZoneDescription"
+                       width="100%"/>
+            </vbox>
+            <hbox spacing="true">
+                <button id="apply"
+                        caption="mainMsg://actions.Apply"
+                        invoke="apply"/>
+                <button id="cancel"
+                        caption="mainMsg://actions.Cancel"
+                        invoke="cancel"/>
+            </hbox>
+        </vbox>
     </layout>
 </window>
