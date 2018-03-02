@@ -224,7 +224,7 @@ task restart(dependsOn: ['stop', ':cuba-at-core:deploy', ':cuba-at-web:deploy'],
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.4'
+    gradleVersion = '4.3.1'
 }
 
 apply from: 'extra.gradle'
