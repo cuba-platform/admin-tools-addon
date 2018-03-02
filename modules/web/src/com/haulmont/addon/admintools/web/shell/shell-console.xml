@@ -3,6 +3,9 @@
         caption="msg://header"
         class="com.haulmont.addon.admintools.web.shell.ShellConsole"
         messagesPack="com.haulmont.addon.admintools.web.shell">
+    <timers>
+        <timer id="timer" delay="1000" repeating="true" autostart="false" onTimer="printResult"/>
+    </timers>
     <actions>
         <action id="runSqlConsoleAction"
                 caption="msg://runConsole"
@@ -70,7 +73,7 @@
                                     action="downloadDiagnoseRequestFileAction"/>
                         </buttonsPanel>
                     </hbox>
-                    <progressBar id="runningBar" width="100%" align="MIDDLE_CENTER"/>
+                    <progressBar id="runningBar" align="MIDDLE_CENTER"/>
                     <hbox align="TOP_RIGHT">
                         <buttonsPanel>
                             <button id="maximizeSqlConsoleBtn"

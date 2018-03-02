@@ -6,4 +6,4 @@ set _EXECJAVA=
 set JSSE_OPTS=
 set JAVA_OPTS=
 set DEBUG_OPTS=
-startup.bat & exit
+shutdown.bat & exit

@@ -7,21 +7,22 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 
 import java.io.IOException;
 
-@ManagedResource(description = "Operations for TomCat container")
+@ManagedResource(description = "Operations for Tomcat container")
 public interface TomcatMBean {
 
-    @ManagedOperation(description = "Run shell script by path in tomcat directory")
+    @ManagedOperation(description = "Execute script by path in tomcat directory")
     @ManagedOperationParameters({
-            @ManagedOperationParameter(name = "prefix", description = "Prefix for script"),
-            @ManagedOperationParameter(name = "path", description = "Relative path from tomcat dir"),
-            @ManagedOperationParameter(name = "name", description = "Script name"),
+            @ManagedOperationParameter(name = "path", description = "Relative script path from tomcat dir"),
             @ManagedOperationParameter(name = "arguments", description = "Arguments for a script")
     })
-    void runShellScript(String prefix, String path, String name, String arguments) throws IOException;
+    void executeScript(String relativePath, String arguments) throws IOException;
 
-    @ManagedOperation(description = "Reboot TomCat in the core module")
-    void reboot() throws IOException;
+    @ManagedOperation(description = "Reboot tomcat in the core module")
+    void reboot() throws IOException, InterruptedException;
 
-    @ManagedOperation(description = "Shutdown TomCat in the core module")
-    void shutdown() throws IOException;
+    @ManagedOperation(description = "Shutdown tomcat in the core module")
+    void shutdown() throws IOException, InterruptedException;
+
+    @ManagedOperation(description = "Return an absolute path to the tomcat directory")
+    String getTomcatAbsolutePath();
 }

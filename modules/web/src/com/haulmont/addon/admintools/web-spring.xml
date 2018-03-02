@@ -12,7 +12,6 @@
         <property name="serverSelector" ref="cuba_ServerSelector"/>
         <property name="remoteServices">
             <map>
-                <entry key="admintools_ConsoleService" value="com.haulmont.addon.admintools.console.ConsoleService"/>
                 <entry key="admintools_EntityViewSqlGenerationService" value="com.haulmont.addon.admintools.app.EntityViewSqlGenerationService"/>
             </map>
         </property>

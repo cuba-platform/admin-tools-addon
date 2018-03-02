@@ -22,7 +22,7 @@ if %is_number% == "false" (
     set JSSE_OPTS=
     set JAVA_OPTS=
     set DEBUG_OPTS=
-    shutdown.bat
+    startup.bat & exit
 )
 
 :get_tomcat_pid

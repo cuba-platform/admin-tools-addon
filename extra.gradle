@@ -32,6 +32,11 @@ configure([globalModule, coreModule, guiModule, webModule]) {
     apply plugin: "groovy"
 
     sourceSets {
+        main {
+            resources{
+                srcDir 'resources'
+            }
+        }
         test {
             java {
                 srcDirs = ['test']
