@@ -1,0 +1,78 @@
+package com.haulmont.addon.admintools.db
+
+import com.haulmont.chile.core.model.MetaClass
+import com.haulmont.cuba.core.entity.Entity
+import com.haulmont.cuba.core.entity.KeyValueEntity
+import com.haulmont.cuba.core.global.DatatypeFormatter
+import de.diedavids.cuba.runtimediagnose.db.DbQueryResult
+import de.diedavids.cuba.runtimediagnose.db.SqlSelectResultFactoryBean
+
+import javax.inject.Inject
+import java.sql.Timestamp
+import java.util.stream.Collectors
+import java.util.stream.IntStream
+
+class ExtendedSqlSelectResultFactoryBean extends SqlSelectResultFactoryBean {
+
+    @Inject
+    DatatypeFormatter datatypeFormatter
+
+    protected final String COLUMN = 'Column'
+
+    @Override
+    DbQueryResult createFromRows(List<Object> rows) {
+        def result = new DbQueryResult()
+        def queryValue = rows[0]
+
+        if (queryValue instanceof Entity) {
+            MetaClass queryValueMetaClass = queryValue.metaClass
+            for (def prop : queryValueMetaClass.properties) {
+                if (!Collection.isAssignableFrom(prop.javaType)) {
+                    result.addColumn(prop.name)
+                }
+            }
+
+            rows.each { result.addEntity(createKeyValueEntity(it.properties)) }
+        } else if (queryValue instanceof Map) {
+            ((Map) queryValue).keySet().each { result.addColumn(it.toString()) }
+            rows.each { result.addEntity(createKeyValueEntity((Map) it)) }
+
+        //Admin-tools added
+        } else if (queryValue.getClass().isArray()) {
+            int columnsCount = (queryValue as Object[]).size()
+            List<String> columns = IntStream.range(0, columnsCount).mapToObj({ i -> "${COLUMN} ${i}" }).collect(Collectors.toList())
+            columns.forEach { result.addColumn(it) }
+
+            rows.each {
+                def fieldValues = it as Object[]
+                Map<String, Object> content = new HashMap<>()
+
+                for (int i = 0; i < columns.size(); i++) {
+                    content.put(columns.get(i), fieldValues[i])
+                }
+                result.addEntity(createKeyValueEntity(content))
+            }
+        } else { //if one column
+            result.addColumn(COLUMN)
+            rows.each { result.addEntity(createKeyValueEntity(Collections.singletonMap(COLUMN, it))) }
+        }
+        //Admin-tools end
+
+        result
+    }
+
+    protected KeyValueEntity createKeyValueEntity(Map<String, Object> content) {
+        def kv = new KeyValueEntity()
+        content.each { k, v ->
+            def displayedValue = v.toString()
+            if (v instanceof Timestamp) {
+                displayedValue = datatypeFormatter.formatDateTime(new Date(v.time))
+            } else if (v instanceof Entity) {
+                displayedValue = v.id.toString()
+            }
+            kv.setValue(k, displayedValue)
+        }
+        kv
+    }
+
+}

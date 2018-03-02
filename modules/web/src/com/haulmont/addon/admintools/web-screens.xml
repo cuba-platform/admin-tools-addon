@@ -5,4 +5,6 @@
             template="/com/haulmont/addon/admintools/web/shell/shell-console.xml"/>
     <screen id="ssh-console"
             template="com/haulmont/addon/admintools/web/ssh/ssh-console.xml"/>
+    <screen id="groovyConsole"
+            template="com/haulmont/addon/admintools/web/screens/groovy/groovy-console-extended.xml"/>
 </screen-config>

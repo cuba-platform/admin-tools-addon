@@ -33,6 +33,7 @@ configure([globalModule, coreModule, guiModule, webModule]) {
 
     sourceSets {
         main {
+            groovy { srcDirs = ["src"] }
             resources{
                 srcDir 'resources'
             }
