@@ -1,18 +1,13 @@
 # CUBA Platform Component - Admin Tools
 
-The Admin Tools component is a set of instruments that allows:
-* interacting with a database by using JPQL / SQL / Groovy scripts;
-* pre-configuring servers and transferring data between them;
-* exporting project entities to SQL scripts;
-* running sh scripts;
-* operating network services on remote servers using SSH Console.
-
 The component comprises the following parts:
-* Generator of SQL scripts for project entities;
-* Auto Import subsystem;
-* JPQL / SQL / Groovy console;
-* Shell Console;
-* SSH Console.
+* [Generator of SQL scripts](#sql-scripts-generator);
+* [Auto Import subsystem](#auto-import);
+* [JPQL and SQL console](#jpql-and-sql-console);
+* [Groovy console](#groovy-console);
+* [Shell Console](#shell-console);
+* [SSH Console](#ssh-console);
+* [JMX Tomcat](#jmx-tomcat).
 
 ## Installation
 
@@ -52,7 +47,7 @@ Add a custom application component to your project:
    * Version: *add-on version*
    
 **Note:** To activate the Auto Import subsystem, additional configurations are required (for more details, please refer to
-this [paragraph](###Creating an auto-import configuration file)).
+this [paragraph](#creating-an-auto-import-configuration-file)).
   
 ## SQL Scripts Generator
 
@@ -77,12 +72,18 @@ the system shows a corresponding notification: 'No data found'.
 The AutoImport subsystem is designed to preconfigure servers and transfer data among servers. The process is launched 
 automatically during the server start/restart. 
 
-For importing data, specify a path to a zip-archive in a configuration file. If an archive with the same name has already
+For importing data, specify a path to a zip-archive or a json file in a configuration file. If an archive with the same name has already
  been processed, then it is not considered by the system and skipped.
+ 
+You can extort entities in following ways:
 
-The component comprises ready-made solutions for importing security roles and access groups. The __Export as ZIP__ button 
-allows generating archives containing the required data about security roles or access groups. The user can export 
-project entities to a zip-archive or json using Entity Inspector (learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
+* For export groups click Administration > Access Groups. Then select groups and click The __Export as ZIP__ button  or  __Export as JSON__ button
+(learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/groups.html)). 
+* For export roles click Administration > Roles. Then select roles and click The __Export as ZIP__ button  or  __Export as JSON__ button
+(learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/roles.html)). 
+* For export any entities click Administration > Entity Inspector and a select entity type. Then select needed entities 
+and click The __Export as ZIP__ button  or  __Export as JSON__ button. (learn more about this functionality 
+[here﻿](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
 
 #### Creating an auto-import configuration file
 
@@ -92,8 +93,8 @@ project entities to a zip-archive or json using Entity Inspector (learn more abo
      <?xml version="1.0" encoding="UTF-8" standalone="no"?>
      <auto-import>
          <!--default processor-->
-         <auto-import-file path="com/company/demoforadmintoolscomponent/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
-         <auto-import-file path="com/company/demoforadmintoolscomponent/Groups.json" bean="admintools_DefaultAutoImportProcessor"/>
+         <auto-import-file path="com/company/example/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
+         <auto-import-file path="com/company/example/Groups.json" bean="admintools_DefaultAutoImportProcessor"/>
         
      </auto-import>
      ```
@@ -101,6 +102,11 @@ project entities to a zip-archive or json using Entity Inspector (learn more abo
      Where path is a path to the data file, bean/class a processor. Bean = [bean name], class [class path].
    
 2. Add the `admin.autoImportConfig` property to `app.properties` and, additionally, specify the configuration file path.
+There is example of `app-properties` with the auto-import configuration:
+
+    ```properties
+    admin.autoImportConfig = +com/haulmont/addon/admintools/auto-import.xml
+    ```
 
 ### Custom import processor
 
@@ -133,7 +139,7 @@ To create a custom processor, the next steps should be taken:
      ```
    
 2. If a processor is implemented as a java bean, then specify a component name and a path
-to the required zip-archive in a configuration file. If a processor is implemented as a class,
+to the required file in a configuration file. If a processor is implemented as a class,
 then provide a path to the class
    
      ```xml
@@ -141,7 +147,7 @@ then provide a path to the class
      <auto-import>
          ...
       
-         <auto-import-file path="com/company/demoforadmintoolscomponent/Reports.zip" bean="admintools_ReportsAutoImportProcessor"/>
+         <auto-import-file path="com/company/example/Reports.zip" bean="admintools_ReportsAutoImportProcessor"/>
          ...
      </auto-import>
      ```
@@ -163,13 +169,13 @@ com.haulmont.addon.admintools.processors.DefaultAutoImportProcessor - Successful
 ##### Incorrect name of a processor
 
 ```
-com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/demoforadmintoolscomponent/Groups.zip by bean autoimport_InvalidAutoImportProcessor
+com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/example/Groups.zip by bean autoimport_InvalidAutoImportProcessor
 ...
 com.haulmont.addon.admintools.listeners.AutoImportListener - org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'autoimport_InvalidAutoImportProcessor' available
 ```
 
 ```
-com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/demoforadmintoolscomponent/Groups.zip by class com.example.InvalidAutoImportProcessor ... com.haulmont.addon.admintools.listeners.AutoImportListener - java.lang.ClassNotFoundException: com.example.InvalidAutoImportProcessor
+com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/example/Groups.zip by class com.example.InvalidAutoImportProcessor ... com.haulmont.addon.admintools.listeners.AutoImportListener - java.lang.ClassNotFoundException: com.example.InvalidAutoImportProcessor
 ```
 
 ##### Uploaded archive is not found
@@ -179,21 +185,15 @@ com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/
 com.haulmont.addon.admintools.processors.ReportsAutoImportProcessor - File com/example/invalid.zip not found.
 ```
 
-## JPQL Console
-JPQL Console allows interacting with an application database by using JPQL. 
+## JPQL and SQL Console
+JPQL and SQL Console allow interacting with an application database by using JPQL or SQL. 
+These components are imported from **CUBA Platform Component - Runtime diagnose**
+See [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
 
-![JPQL-Console-menu-item](img/menu-1.png)
-
-![JPQL-console](img/jpql_console-1.png)
-
-Request results are displayed in the table and can be exported to an Excel file if required. Note that collection attributes
-are not shown in the Result table.
-### JPQL Console Security
-By default, only SELECT requests can be executed. If there is a need to send UPDATE and/or DELETE requests, then the 
-*runtime-diagnose.sql.allowDataManipulation* application property has to be set to 'true' 
-(**Menu**: Administration → Application properties → runtime-diagnose → sql → runtime-diagnose.sql.allowDataManipulation).
-
-To find out more about the Runtime Diagnose component, please get acquainted with [this documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md)
+## Groovy Console
+The groovy console allows you to interactivly inspect the running application. You enter a groovy script and execute it in an ad-hoc fashion.
+This component is imported from **CUBA Platform Component - Runtime diagnose**. 
+See [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
 
 ## Load Config
 Using the Load Config functionality it is possible upload configuration files and various scripts to a configuration 
@@ -233,15 +233,34 @@ When scripts are run, the system generates temporary files, which are stored in 
 that the component does not remove these files automatically. 
 
 ## SSH Console
-SSH Console allows operating network services on remote servers right from the application UI. Note that this functionality
-is available only for UNIX systems.
+SSH Console allows operating network services on remote servers right from the application UI.
  
  ![ssh_console_menu_item](img/SSH-Console_menu_item.png)
  
 Before connecting to a remote server, it is required to specify credentials and a hostname in the corresponding section.
 After that, use action buttons to connect to a server via SSH or to disconnect. The toolbar of SSH Console also comprises
-the __Fit__ button, which allows managing the size of a terminal, and a progress bar.
+the __Fit__ button, which allows managing the size of a terminal.
+
+![ssh_console_connected](img/SSH-Console_connected.png)
 
 ### Known issues
 
 - Utility `screen` doesn't work in the console
+
+## JMX Tomcat
+JMX Tomcat is a managed bean, which allows operating with Tomcat. JMX Tomcat supports Windows and Unix OS.
+You can find bean using following way: Administration > JMX Console, the searching by the object name 'Tomcat'
+and the domain 'cuba-at'.
+
+![find jmx tomcat](img/find-jmx-tomcat.png) 
+
+JMX Tomcat includes following operations:
+
+* getTomcatAbsolutePath. It returns an absolute path to the tomcat's directory;
+* shutdown. It shutdowns a Tomcat process;
+* reboot. It shutdowns and runs a new Tomcat process;
+* runShellScript. It runs a script in tomcat's workspace and contains arguments:
+    1. Path - a relative from tomcat's directory;
+    2. Arguments - arguments that you can specify for the script.
+
+![jmx tomcat](img/jmx-tomcat.png)
