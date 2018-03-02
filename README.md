@@ -106,7 +106,7 @@ the __Export as ZIP__ button  or  __Export as JSON__ button.
      Where path is a path to the data file, bean/class — a processor. Bean = [bean name], class = [class path].
    
 2. Add the `admin.autoImportConfig` property to `app.properties` and, additionally, specify the configuration file path.
-The example of `app-properties` with an auto-import configuration is given below:
+The example of `app-properties` with the auto-import configuration is given below:
 
     ```properties
     admin.autoImportConfig = +com/haulmont/addon/admintools/auto-import.xml
