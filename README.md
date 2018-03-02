@@ -77,14 +77,16 @@ automatically during the server start/restart.
 For importing data, specify a path to a zip-archive or a json file in a configuration file. If an archive with the same name has already
  been processed, then it is not considered by the system and skipped.
  
-You can extort entities in following ways:
+There are several options for exporting various entities:
 
-* For export groups click Administration > Access Groups. Then select groups and click The __Export as ZIP__ button  or  __Export as JSON__ button
+* To export access groups, open Menu: Administration > Access Groups. There, select the required groups in the table and click the 
+__Export as ZIP__ button  or  __Export as JSON__ button.
 (learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/groups.html)). 
-* For export roles click Administration > Roles. Then select roles and click The __Export as ZIP__ button  or  __Export as JSON__ button
+* To export user roles, open Menu: Administration > Roles. There, select the required roles and click 
+the __Export as ZIP__ button  or  __Export as JSON__ button.
 (learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/roles.html)). 
-* For export any entities click Administration > Entity Inspector and a select entity type. Then select needed entities 
-and click The __Export as ZIP__ button  or  __Export as JSON__ button. (learn more about this functionality 
+* To export any other entities, open Menu: Administration > Entity Inspector and specify an entity type in the corresponding field.
+ Then select the required entities and click The __Export as ZIP__ button  or  __Export as JSON__ button. (learn more about this functionality 
 [here﻿](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
 
 #### Creating an auto-import configuration file
@@ -247,22 +249,22 @@ the __Fit__ button, which allows managing the size of a terminal.
 
 ### Known issues
 
-- Utility `screen` doesn't work in the console
+- The `screen` utility does not work in the console
 
 ## JMX Tomcat
-JMX Tomcat is a managed bean, which allows operating with Tomcat. JMX Tomcat supports Windows and Unix OS.
-You can find bean using following way: Administration > JMX Console, the searching by the object name 'Tomcat'
+JMX Tomcat is a managed bean, which allows operating with Tomcat. JMX Tomcat is supported on Windows and Unix OS.
+The bean can be accessed from Menu: Administration → JMX Console. Start searching by the object name 'Tomcat'
 and the domain 'cuba-at'.
 
 ![find jmx tomcat](img/find-jmx-tomcat.png) 
 
-JMX Tomcat includes following operations:
+JMX Tomcat allows executing the following operations:
 
-* getTomcatAbsolutePath. It returns an absolute path to the tomcat's directory;
-* shutdown. It shutdowns a Tomcat process;
-* reboot. It shutdowns and runs a new Tomcat process;
-* runShellScript. It runs a script in tomcat's workspace and contains arguments:
-    1. Path - a relative from tomcat's directory;
-    2. Arguments - arguments that you can specify for the script.
+* getTomcatAbsolutePath: returns an absolute path to the Tomcat directory;
+* shutdown: shutdowns a Tomcat process;
+* reboot: shutdowns an existing Tomcat process and runs a new one;
+* runShellScript: runs a script in a Tomcat workspace with the next arguments:
+    1. Path - a relative of a Tomcat directory;
+    2. Arguments - arguments that can be specified for a script.
 
 ![jmx tomcat](img/jmx-tomcat.png)
