@@ -239,7 +239,7 @@ SSH Console allows operating network services on remote servers right from the a
  
 Before connecting to a remote server, it is required to specify credentials and a hostname in the corresponding section.
 After that, use action buttons to connect to a server via SSH or to disconnect. The toolbar of SSH Console also comprises
-the __Fit__ button, which allows managing the size of a terminal, and a progress bar.
+the __Fit__ button, which allows managing the size of a terminal.
 
 ![ssh_console_connected](img/SSH-Console_connected.png)
 
