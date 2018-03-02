@@ -264,7 +264,7 @@ JMX Tomcat allows executing the following operations:
 * shutdown: shutdowns a Tomcat process;
 * reboot: shutdowns an existing Tomcat process and runs a new one;
 * runShellScript: runs a script in a Tomcat workspace with the next arguments:
-    1. Path - a relative of a Tomcat directory;
-    2. Arguments - arguments that can be specified for a script.
+    1. Path — a relative of a Tomcat directory;
+    2. Arguments — arguments that can be specified for a script.
 
 ![jmx tomcat](img/jmx-tomcat.png)
