@@ -103,10 +103,10 @@ the __Export as ZIP__ button  or  __Export as JSON__ button.
      </auto-import>
      ```
 
-     Where path is a path to the data file, bean/class a processor. Bean = [bean name], class [class path].
+     Where path is a path to the data file, bean/class — a processor. Bean = [bean name], class = [class path].
    
 2. Add the `admin.autoImportConfig` property to `app.properties` and, additionally, specify the configuration file path.
-There is example of `app-properties` with the auto-import configuration:
+The example of `app-properties` with an auto-import configuration is given below:
 
     ```properties
     admin.autoImportConfig = +com/haulmont/addon/admintools/auto-import.xml
@@ -144,7 +144,7 @@ To create a custom processor, the next steps should be taken:
    
 2. If a processor is implemented as a java bean, then specify a component name and a path
 to the required file in a configuration file. If a processor is implemented as a class,
-then provide a path to the class
+then provide a path to the class.
    
      ```xml
      <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -190,13 +190,13 @@ com.haulmont.addon.admintools.processors.ReportsAutoImportProcessor - File com/e
 ```
 
 ## JPQL and SQL Console
-JPQL and SQL Console allow interacting with an application database by using JPQL or SQL. 
-These components are imported from **CUBA Platform Component - Runtime diagnose**
+JPQL and SQL Console allows interacting with an application database by using JPQL or SQL. 
+These components are imported from **CUBA Platform Component - Runtime diagnose**.
 See [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
 
 ## Groovy Console
-The groovy console allows you to interactivly inspect the running application. You enter a groovy script and execute it in an ad-hoc fashion.
-This component is imported from **CUBA Platform Component - Runtime diagnose**. 
+Groovy Console enables to interactively inspect the running application by entering a groovy script and executing it 
+in an ad-hoc fashion. This component is imported from **CUBA Platform Component - Runtime diagnose**. 
 See [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
 
 ## Load Config
