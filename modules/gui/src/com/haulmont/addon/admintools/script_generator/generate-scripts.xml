@@ -2,8 +2,6 @@
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://caption.generationModeScreen"
         class="com.haulmont.addon.admintools.script_generator.GenerateScripts">
-    <dialogMode height="auto"
-                width="auto"/>
     <layout expand="windowActions"
             spacing="true">
         <optionsGroup id="generationMode"/>

@@ -67,6 +67,8 @@ select e from example$Entity e
 After that, SQL scripts of the specified type are generated for the found entities. If there are no results found, then 
 the system shows a corresponding notification: 'No data found'.
 
+*Note: if you cancel the process, it won't be stopped on the middleware level*
+
 ## Auto Import
 
 The AutoImport subsystem is designed to preconfigure servers and transfer data among servers. The process is launched 

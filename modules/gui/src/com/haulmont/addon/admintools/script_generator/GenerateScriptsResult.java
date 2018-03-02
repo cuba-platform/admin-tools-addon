@@ -5,48 +5,49 @@ import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.AbstractWindow;
-import com.haulmont.cuba.gui.components.GroupBoxLayout;
-import com.haulmont.cuba.gui.components.LookupField;
-import com.haulmont.cuba.gui.components.SourceCodeEditor;
+import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.executors.BackgroundTask;
+import com.haulmont.cuba.gui.executors.BackgroundTaskWrapper;
+import com.haulmont.cuba.gui.executors.TaskLifeCycle;
+import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
+import com.haulmont.cuba.gui.export.ExportDisplay;
 
 import javax.inject.Inject;
 import java.util.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
+
 public class GenerateScriptsResult extends AbstractWindow {
 
     @Inject
-    private SourceCodeEditor resultScript;
-
+    protected SourceCodeEditor resultScript;
     @Inject
-    private DataManager dataManager;
-
+    protected DataManager dataManager;
     @Inject
-    private SourceCodeEditor query;
+    protected SourceCodeEditor query;
+    @Inject
+    protected Metadata metadata;
+    @Inject
+    protected LookupField entitiesMetaClasses;
+    @Inject
+    protected LookupField entityViews;
+    @Inject
+    protected GroupBoxLayout querySettings;
+    @Inject
+    protected LookupField generateOptions;
+    @Inject
+    protected EntityViewSqlGenerationService sqlGenerationService;
+    @Inject
+    protected ExportDisplay exportDisplay;
+    @Inject
+    protected ProgressBar executeProgressBar;
 
     @WindowParam(name = "generationMode")
-    private Enum generationMode;
-
-    @Inject
-    private Metadata metadata;
-
-    @Inject
-    private LookupField entitiesMetaClasses;
-
-    @Inject
-    private LookupField entityViews;
-
-    @Inject
-    private GroupBoxLayout querySettings;
-
+    protected Enum generationMode;
     @WindowParam(name = "selectedEntities")
-    private Collection<Entity> selectedEntities;
-
-    @Inject
-    private LookupField generateOptions;
-
-    @Inject
-    private EntityViewSqlGenerationService sqlGenerationService;
+    protected Collection<Entity> selectedEntities;
+    protected BackgroundTaskWrapper<Integer, Set<String>> connectionTaskWrapper;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -63,6 +64,49 @@ public class GenerateScriptsResult extends AbstractWindow {
             initEntityTypeField();
             querySettings.setVisible(true);
         }
+
+        BackgroundTask<Integer, Set<String>> connectionTask = new BackgroundTask<Integer, Set<String>>(60, getFrame()) {
+            @Override
+            public Set<String> run(TaskLifeCycle<Integer> taskLifeCycle) throws Exception {
+                return getSQLScript();
+            }
+
+            @Override
+            public void canceled() {
+                executeProgressBar.setIndeterminate(false);
+            }
+
+            @Override
+            public boolean handleTimeoutException() {
+                executeProgressBar.setIndeterminate(false);
+                return true;
+            }
+
+            @Override
+            public void done(Set<String> result) {
+                if (validateAll()) {
+                    if (result == null || result.isEmpty()) {
+                        showNotification(getMessage("message.noDataFound"), NotificationType.HUMANIZED);
+                        return;
+                    }
+                    resultScript.setValue("");
+
+                    StringBuilder sb = new StringBuilder();
+                    result.forEach(s ->
+                            sb.append(s).append("\n")
+                    );
+                    resultScript.setValue(sb.toString());
+                }
+                executeProgressBar.setIndeterminate(false);
+            }
+        };
+        connectionTaskWrapper = new BackgroundTaskWrapper<>(connectionTask);
+    }
+
+    @Override
+    protected boolean preClose(String actionId) {
+        connectionTaskWrapper.cancel();
+        return super.preClose(actionId);
     }
 
     public void windowClose() {
@@ -70,26 +114,29 @@ public class GenerateScriptsResult extends AbstractWindow {
     }
 
     public void execute() {
-        if (validateAll()) {
-            Set<String> result = getSQLScript();
+        executeProgressBar.setIndeterminate(true);
+        connectionTaskWrapper.restart();
+    }
 
-            if (result == null || result.isEmpty()) {
-                showNotification(getMessage("message.noDataFound"), NotificationType.HUMANIZED);
-                return;
-            }
+    public void cancel(){
+        connectionTaskWrapper.cancel();
+    }
 
-            resultScript.setValue("");
 
-            StringBuilder sb = new StringBuilder();
-            result.forEach(s ->
-                    sb.append(s).append("\n")
-            );
+    public void downloadResult() {
+        String script = resultScript.getRawValue();
 
-            resultScript.setValue(sb.toString());
+        if (isNotBlank(script)) {
+            byte[] bytes = script.getBytes(UTF_8);
+            exportDisplay.show(new ByteArrayDataProvider(bytes), "result.sql");
         }
     }
 
-    private Set<String> getSQLScript() {
+    public void clear() {
+        resultScript.setValue("");
+    }
+
+    protected Set<String> getSQLScript() {
         Set<String> result = new HashSet<>();
 
         Collection<Entity> entitiesForDownload;
@@ -110,12 +157,12 @@ public class GenerateScriptsResult extends AbstractWindow {
                 entitiesForDownload.forEach(entity ->
                         result.addAll(sqlGenerationService.generateUpdateScript(entity, entityViews.getValue()))
                 );
-            } else if(ScriptGenerationOptions.INSERT_UPDATE.equals(generateOption)) {
+            } else if (ScriptGenerationOptions.INSERT_UPDATE.equals(generateOption)) {
                 entitiesForDownload.forEach(entity -> {
                     result.addAll(sqlGenerationService.generateInsertScript(entity, entityViews.getValue()));
                     result.addAll(sqlGenerationService.generateUpdateScript(entity, entityViews.getValue()));
                 });
-            } else if(ScriptGenerationOptions.SELECT.equals(generateOption)){
+            } else if (ScriptGenerationOptions.SELECT.equals(generateOption)) {
                 entitiesForDownload.forEach(entity ->
                         result.addAll(sqlGenerationService.generateSelectScript(entity, entityViews.getValue()))
                 );
@@ -125,7 +172,7 @@ public class GenerateScriptsResult extends AbstractWindow {
         return result;
     }
 
-    private Collection<Entity> getQueryResult(String query) {
+    protected Collection<Entity> getQueryResult(String query) {
         MetaClass metaClass = entitiesMetaClasses.getValue();
         if (metaClass == null) {
             return null;
@@ -140,7 +187,7 @@ public class GenerateScriptsResult extends AbstractWindow {
         return dataManager.loadList(loadContext);
     }
 
-    private void initEntityTypeField() {
+    protected void initEntityTypeField() {
         Map metaClasses = new LinkedHashMap<>();
 
         metadata.getTools().getAllPersistentMetaClasses().forEach(metaClass ->
@@ -157,11 +204,11 @@ public class GenerateScriptsResult extends AbstractWindow {
         });
     }
 
-    private void setSimpleQuery(String entityMetaClass) {
+    protected void setSimpleQuery(String entityMetaClass) {
         query.setValue(String.format("select e from %s e", entityMetaClass));
     }
 
-    private void setEntityViewsLookup() {
+    protected void setEntityViewsLookup() {
         List<String> views = new LinkedList<>();
         views.add(View.MINIMAL);
         views.add(View.LOCAL);

@@ -5,7 +5,7 @@
     </menu>
     <item id="generateScripts"
           insertAfter="jmxConsole"
-          openType="DIALOG"
+          openType="NEW_TAB"
           screen="admintools$generateScriptsResult"/>
     <item id="loadConfig"
           insertAfter="generateScripts"

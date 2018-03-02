@@ -12,7 +12,7 @@ public enum ScriptGenerationOptions implements EnumClass<Integer> {
     INSERT_UPDATE(30),
     SELECT(40);
 
-    private Integer id;
+    protected Integer id;
 
     ScriptGenerationOptions(Integer value) {
         this.id = value;

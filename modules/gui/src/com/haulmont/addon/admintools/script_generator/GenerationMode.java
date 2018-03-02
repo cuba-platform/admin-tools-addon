@@ -10,7 +10,7 @@ public enum GenerationMode implements EnumClass<Integer> {
     SELECTED_ENTITIES(10),
     CUSTOM_QUERY(20);
 
-    private Integer id;
+    protected Integer id;
 
     GenerationMode(Integer value) {
         this.id = value;

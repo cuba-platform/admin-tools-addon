@@ -12,14 +12,14 @@ import java.util.Map;
 
 public class GenerateScripts extends AbstractWindow {
 
-    private static final String PARAMETER_SELECTED_ENTITIES = "selectedEntities";
-    private static final String GENERATION_MODE = "generationMode";
+    protected static final String PARAMETER_SELECTED_ENTITIES = "selectedEntities";
+    protected static final String GENERATION_MODE = "generationMode";
 
     @WindowParam(name = PARAMETER_SELECTED_ENTITIES)
-    private Collection selectedEntities;
+    protected Collection selectedEntities;
 
     @Inject
-    private OptionsGroup generationMode;
+    protected OptionsGroup generationMode;
 
     @Override
     public void init(Map<String, Object> params) {
