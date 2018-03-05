@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption.generationModeScreen"
+        class="com.haulmont.addon.admintools.gui.script_generator.GenerateScripts">
+    <layout expand="windowActions"
+            spacing="true">
+        <optionsGroup id="generationMode"/>
+        <hbox id="windowActions" spacing="true">
+            <button id="windowCommit" invoke="windowCommit" caption="mainMsg://actions.Ok"/>
+            <button id="windowClose" invoke="windowClose" caption="mainMsg://actions.Cancel"/>
+        </hbox>
+    </layout>
+</window>

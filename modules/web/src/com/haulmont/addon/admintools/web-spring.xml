@@ -12,7 +12,7 @@
         <property name="serverSelector" ref="cuba_ServerSelector"/>
         <property name="remoteServices">
             <map>
-                <entry key="admintools_EntityViewSqlGenerationService" value="com.haulmont.addon.admintools.app.EntityViewSqlGenerationService"/>
+                <entry key="admintools_EntityViewSqlGenerationService" value="com.haulmont.addon.admintools.global.script_generator.EntityViewSqlGenerationService"/>
             </map>
         </property>
     </bean>

@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
-    <!-- Application properties config files -->
+    <!-- Application properties auto_import files -->
     <context-param>
         <param-name>appPropertiesConfig</param-name>
         <param-value>classpath:com/haulmont/addon/admintools/app.properties
             /WEB-INF/local.app.properties
             "file:${catalina.base}/conf/cuba-at-core/local.app.properties"</param-value>
     </context-param>
-    <!--Application components-->
+    <!--Application component-->
     <context-param>
         <param-name>appComponents</param-name>
         <param-value>com.haulmont.cuba de.diedavids.cuba.runtimediagnose</param-value>

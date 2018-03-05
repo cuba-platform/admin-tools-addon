@@ -2,6 +2,6 @@
 <metadata xmlns="http://schemas.haulmont.com/cuba/metadata.xsd">
     <metadata-model namespace="cubaat"
                     root-package="com.haulmont.addon.admintools">
-        <class>com.haulmont.addon.admintools.entity.SshCredentials</class>
+        <class>com.haulmont.addon.admintools.global.ssh.SshCredentials</class>
     </metadata-model>
 </metadata>

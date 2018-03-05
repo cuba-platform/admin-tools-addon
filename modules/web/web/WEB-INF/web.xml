@@ -8,14 +8,14 @@
         <param-name>webResourcesTs</param-name>
         <param-value>${webResourcesTs}</param-value>
     </context-param>
-    <!-- Application properties config files -->
+    <!-- Application properties auto_import files -->
     <context-param>
         <param-name>appPropertiesConfig</param-name>
         <param-value>classpath:com/haulmont/addon/admintools/web-app.properties
             /WEB-INF/local.app.properties
             "file:${catalina.base}/conf/cuba-at/local.app.properties"</param-value>
     </context-param>
-    <!--Application components-->
+    <!--Application component-->
     <context-param>
         <param-name>appComponents</param-name>
         <param-value>com.haulmont.cuba de.diedavids.cuba.runtimediagnose</param-value>

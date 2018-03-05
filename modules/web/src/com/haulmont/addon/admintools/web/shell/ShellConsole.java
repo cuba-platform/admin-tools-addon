@@ -1,8 +1,8 @@
 package com.haulmont.addon.admintools.web.shell;
 
-import com.haulmont.addon.admintools.console.ConsoleBean;
-import com.haulmont.addon.admintools.console.ConsolePrecondition;
-import com.haulmont.addon.admintools.console.ConsoleTool;
+import com.haulmont.addon.admintools.global.console.ConsoleBean;
+import com.haulmont.addon.admintools.global.console.ConsolePrecondition;
+import com.haulmont.addon.admintools.global.console.ConsoleTool;
 import com.haulmont.addon.admintools.web.utils.NonBlockingIOUtils;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;

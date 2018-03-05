@@ -165,28 +165,28 @@ See logging information in the `app.log` file.
 ##### Successful import
 
 ```
-com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/autoimporttest/Roles.zip by bean autoimport_RolesAutoImportProcessor
+com.haulmont.addon.admintools.core.auto_import.listeners.AutoImportListener - Importing file com/company/autoimporttest/Roles.zip by bean autoimport_RolesAutoImportProcessor
 ...
-com.haulmont.addon.admintools.processors.DefaultAutoImportProcessor - Successful importing file com/company/autoimporttest/Roles.zip
+com.haulmont.addon.admintools.core.auto_import.processors.DefaultAutoImportProcessor - Successful importing file com/company/autoimporttest/Roles.zip
 ```
 
 ##### Incorrect name of a processor
 
 ```
-com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/example/Groups.zip by bean autoimport_InvalidAutoImportProcessor
+com.haulmont.addon.admintools.core.auto_import.listeners.AutoImportListener - Importing file com/company/example/Groups.zip by bean autoimport_InvalidAutoImportProcessor
 ...
-com.haulmont.addon.admintools.listeners.AutoImportListener - org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'autoimport_InvalidAutoImportProcessor' available
+com.haulmont.addon.admintools.core.auto_import.listeners.AutoImportListener - org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'autoimport_InvalidAutoImportProcessor' available
 ```
 
 ```
-com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/company/example/Groups.zip by class com.example.InvalidAutoImportProcessor ... com.haulmont.addon.admintools.listeners.AutoImportListener - java.lang.ClassNotFoundException: com.example.InvalidAutoImportProcessor
+com.haulmont.addon.admintools.core.auto_import.listeners.AutoImportListener - Importing file com/company/example/Groups.zip by class com.example.InvalidAutoImportProcessor ... AutoImportListener - java.lang.ClassNotFoundException: com.example.InvalidAutoImportProcessor
 ```
 
 ##### Uploaded archive is not found
 
 ```
-com.haulmont.addon.admintools.listeners.AutoImportListener - Importing file com/example/invalid.zip by bean autoimport_ReportsAutoImportProcessor
-com.haulmont.addon.admintools.processors.ReportsAutoImportProcessor - File com/example/invalid.zip not found.
+com.haulmont.addon.admintools.core.auto_import.listeners.AutoImportListener - Importing file com/example/invalid.zip by bean autoimport_ReportsAutoImportProcessor
+com.haulmont.addon.admintools.core.auto_import.processors.ReportsAutoImportProcessor - File com/example/invalid.zip not found.
 ```
 
 ## JPQL and SQL Console

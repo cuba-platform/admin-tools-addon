@@ -20,7 +20,7 @@ public class AdminToolsTestContainer extends TestContainer {
                 // "com.haulmont.charts",
                 // "com.haulmont.fts",
                 // "com.haulmont.reports"
-                // and custom app components if any
+                // and custom script_generator component if any
         ));
         appPropertiesFiles = Arrays.asList(
                 // List the files defined in your web.xml

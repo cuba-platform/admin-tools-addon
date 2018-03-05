@@ -1,8 +1,8 @@
 package com.haulmont.addon.admintools.web.ssh;
 
-import com.haulmont.addon.admintools.entity.SshCredentials;
-import com.haulmont.addon.admintools.gui.components.EnterReactivePasswordField;
-import com.haulmont.addon.admintools.gui.components.XtermJs;
+import com.haulmont.addon.admintools.global.ssh.SshCredentials;
+import com.haulmont.addon.admintools.gui.xterm.components.EnterReactivePasswordField;
+import com.haulmont.addon.admintools.gui.xterm.components.XtermJs;
 import com.haulmont.addon.admintools.web.utils.NonBlockingIOUtils;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.*;

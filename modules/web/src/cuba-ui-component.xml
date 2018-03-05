@@ -2,12 +2,12 @@
 <components xmlns="http://schemas.haulmont.com/cuba/components.xsd">
     <component>
         <name>xterm-js</name>
-        <componentLoader>com.haulmont.addon.admintools.gui.xml.layout.loaders.XtermJsLoader</componentLoader>
-        <class>com.haulmont.addon.admintools.web.gui.components.WebXtermJs</class>
+        <componentLoader>com.haulmont.addon.admintools.gui.xterm.XtermJsLoader</componentLoader>
+        <class>com.haulmont.addon.admintools.web.xterm.component.WebXtermJs</class>
     </component>
     <component>
         <name>enterReactivePasswordField</name>
         <componentLoader>com.haulmont.cuba.gui.xml.layout.loaders.PasswordFieldLoader</componentLoader>
-        <class>com.haulmont.addon.admintools.web.gui.components.WebEnterReactivePasswordField</class>
+        <class>com.haulmont.addon.admintools.web.xterm.component.WebEnterReactivePasswordField</class>
     </component>
 </components>

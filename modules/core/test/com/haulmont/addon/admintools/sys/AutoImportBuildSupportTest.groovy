@@ -1,6 +1,7 @@
 package com.haulmont.addon.admintools.sys
 
 import com.haulmont.addon.admintools.AdminToolsTestContainer
+import com.haulmont.addon.admintools.global.auto_import.AutoImportBuildSupport
 import com.haulmont.cuba.core.global.AppBeans
 import com.haulmont.cuba.core.global.Resources
 import org.apache.commons.lang.StringUtils

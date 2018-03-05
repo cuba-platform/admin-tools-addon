@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="sshCredentialsDs"
                     allowCommit="false"
-                    class="com.haulmont.addon.admintools.entity.SshCredentials"/>
+                    class="com.haulmont.addon.admintools.global.ssh.SshCredentials"/>
     </dsContext>
     <timers>
         <timer id="updateConsole"
