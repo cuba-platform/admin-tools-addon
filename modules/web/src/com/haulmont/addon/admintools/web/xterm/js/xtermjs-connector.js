@@ -1,4 +1,4 @@
-com_haulmont_addon_admintools_web_toolkit_ui_xtermjs_XtermJsComponent = function() {
+com_haulmont_addon_admintools_web_xterm_js_XtermJsComponent = function() {
     var connector = this;
 
     Terminal.applyAddon(fit);
