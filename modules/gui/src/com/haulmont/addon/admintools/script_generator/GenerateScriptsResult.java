@@ -1,6 +1,7 @@
 package com.haulmont.addon.admintools.script_generator;
 
 import com.haulmont.addon.admintools.app.EntityViewSqlGenerationService;
+import com.haulmont.addon.admintools.app.ScriptGenerationOptions;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
@@ -15,6 +16,8 @@ import com.haulmont.cuba.gui.export.ExportDisplay;
 import javax.inject.Inject;
 import java.util.*;
 
+import static com.haulmont.addon.admintools.app.ScriptGenerationOptions.INSERT;
+import static com.haulmont.addon.admintools.script_generator.GenerationMode.CUSTOM_QUERY;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
@@ -54,13 +57,13 @@ public class GenerateScriptsResult extends AbstractWindow {
         super.init(params);
 
         generateOptions.setOptionsEnum(ScriptGenerationOptions.class);
-        generateOptions.setValue(ScriptGenerationOptions.INSERT);
+        generateOptions.setValue(INSERT);
 
         if (generationMode == null) {
-            generationMode = GenerationMode.CUSTOM_QUERY;
+            generationMode = CUSTOM_QUERY;
         }
 
-        if (generationMode.equals(GenerationMode.CUSTOM_QUERY)) {
+        if (generationMode.equals(CUSTOM_QUERY)) {
             initEntityTypeField();
             querySettings.setVisible(true);
         }
@@ -85,17 +88,7 @@ public class GenerateScriptsResult extends AbstractWindow {
             @Override
             public void done(Set<String> result) {
                 if (validateAll()) {
-                    if (result == null || result.isEmpty()) {
-                        showNotification(getMessage("message.noDataFound"), NotificationType.HUMANIZED);
-                        return;
-                    }
-                    resultScript.setValue("");
-
-                    StringBuilder sb = new StringBuilder();
-                    result.forEach(s ->
-                            sb.append(s).append("\n")
-                    );
-                    resultScript.setValue(sb.toString());
+                    printResult(result);
                 }
                 executeProgressBar.setIndeterminate(false);
             }
@@ -118,7 +111,7 @@ public class GenerateScriptsResult extends AbstractWindow {
         connectionTaskWrapper.restart();
     }
 
-    public void cancel(){
+    public void cancel() {
         connectionTaskWrapper.cancel();
     }
 
@@ -139,40 +132,36 @@ public class GenerateScriptsResult extends AbstractWindow {
     protected Set<String> getSQLScript() {
         Set<String> result = new HashSet<>();
 
-        Collection<Entity> entitiesForDownload;
-        if (generationMode.equals(GenerationMode.CUSTOM_QUERY)) {
+        List<Entity> entitiesForDownload;
+        if (generationMode.equals(CUSTOM_QUERY)) {
             entitiesForDownload = getQueryResult(query.getValue());
         } else {
-            entitiesForDownload = this.selectedEntities;
+            entitiesForDownload = new ArrayList<>(this.selectedEntities);
         }
 
         if (entitiesForDownload != null) {
-            Enum<ScriptGenerationOptions> generateOption = generateOptions.getValue();
-
-            if (ScriptGenerationOptions.INSERT.equals(generateOption)) {
-                entitiesForDownload.forEach(entity ->
-                        result.addAll(sqlGenerationService.generateInsertScript(entity, entityViews.getValue()))
-                );
-            } else if (ScriptGenerationOptions.UPDATE.equals(generateOption)) {
-                entitiesForDownload.forEach(entity ->
-                        result.addAll(sqlGenerationService.generateUpdateScript(entity, entityViews.getValue()))
-                );
-            } else if (ScriptGenerationOptions.INSERT_UPDATE.equals(generateOption)) {
-                entitiesForDownload.forEach(entity -> {
-                    result.addAll(sqlGenerationService.generateInsertScript(entity, entityViews.getValue()));
-                    result.addAll(sqlGenerationService.generateUpdateScript(entity, entityViews.getValue()));
-                });
-            } else if (ScriptGenerationOptions.SELECT.equals(generateOption)) {
-                entitiesForDownload.forEach(entity ->
-                        result.addAll(sqlGenerationService.generateSelectScript(entity, entityViews.getValue()))
-                );
+            for (Entity entity : entitiesForDownload) {
+                result.addAll(sqlGenerationService.generateScript(entity, entityViews.getValue(), generateOptions.getValue()));
             }
         }
-
         return result;
     }
 
-    protected Collection<Entity> getQueryResult(String query) {
+    protected void printResult(Set<String> result) {
+        if (result == null || result.isEmpty()) {
+            showNotification(getMessage("message.noDataFound"), NotificationType.HUMANIZED);
+            return;
+        }
+        resultScript.setValue("");
+
+        StringBuilder sb = new StringBuilder();
+        for (String s : result) {
+            sb.append(s).append("\n");
+        }
+        resultScript.setValue(sb.toString());
+    }
+
+    protected List<Entity> getQueryResult(String query) {
         MetaClass metaClass = entitiesMetaClasses.getValue();
         if (metaClass == null) {
             return null;
@@ -180,7 +169,7 @@ public class GenerateScriptsResult extends AbstractWindow {
 
         String view = entityViews.getValue();
 
-        LoadContext loadContext = new LoadContext<>(metaClass);
+        LoadContext<Entity> loadContext = new LoadContext<>(metaClass);
         loadContext.setView(view);
         loadContext.setQueryString(query);
 
@@ -188,11 +177,11 @@ public class GenerateScriptsResult extends AbstractWindow {
     }
 
     protected void initEntityTypeField() {
-        Map metaClasses = new LinkedHashMap<>();
+        Map<String, MetaClass> metaClasses = new LinkedHashMap<>();
 
-        metadata.getTools().getAllPersistentMetaClasses().forEach(metaClass ->
-                metaClasses.put(metaClass.getName(), metaClass)
-        );
+        for (MetaClass metaClass : metadata.getTools().getAllPersistentMetaClasses()) {
+            metaClasses.put(metaClass.getName(), metaClass);
+        }
         entitiesMetaClasses.setOptionsMap(metaClasses);
 
         entitiesMetaClasses.addValueChangeListener(e -> {

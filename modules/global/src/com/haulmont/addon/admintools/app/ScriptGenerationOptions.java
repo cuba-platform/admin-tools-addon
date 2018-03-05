@@ -1,9 +1,7 @@
-package com.haulmont.addon.admintools.script_generator;
+package com.haulmont.addon.admintools.app;
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass;
-
 import javax.annotation.Nullable;
-
 
 public enum ScriptGenerationOptions implements EnumClass<Integer> {
 

@@ -8,9 +8,5 @@ public interface EntityViewSqlGenerationService {
 
     String NAME = "admintools_EntityViewSqlGenerationService";
 
-    Set<String> generateInsertScript(Entity entity, String viewName);
-
-    Set<String> generateUpdateScript(Entity entity, String viewName);
-
-    Set<String> generateSelectScript(Entity entity, String viewName);
+    Set<String> generateScript(Entity entity, String viewName, ScriptGenerationOptions scriptType);
 }

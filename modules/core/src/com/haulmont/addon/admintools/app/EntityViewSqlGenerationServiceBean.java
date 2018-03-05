@@ -7,6 +7,7 @@ import com.haulmont.cuba.core.app.EntitySqlGenerationService;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.core.global.ViewProperty;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -16,9 +17,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static com.haulmont.addon.admintools.app.EntityViewSqlGenerationServiceBean.ScriptType.INSERT;
-import static com.haulmont.addon.admintools.app.EntityViewSqlGenerationServiceBean.ScriptType.SELECT;
-import static com.haulmont.addon.admintools.app.EntityViewSqlGenerationServiceBean.ScriptType.UPDATE;
 import static com.haulmont.chile.core.model.MetaProperty.Type.ASSOCIATION;
 import static com.haulmont.chile.core.model.MetaProperty.Type.COMPOSITION;
 import static com.haulmont.chile.core.model.Range.Cardinality.*;
@@ -35,8 +33,6 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
     @Inject
     protected Metadata metadata;
 
-    protected enum ScriptType {INSERT, UPDATE, SELECT}
-
     protected String INSERT_TEMPLATE = "insert into %s \n(%s, %s) \nvalues ('%s', '%s');\n";
     protected String UPDATE_TEMPLATE = "update %s \nset %s, %s \nwhere %s='%s';\n";
     protected String SELECT_TEMPLATE = "select e.$s e.$s from %s e";
@@ -44,21 +40,7 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
     protected Set<String> scripts = new HashSet<>();
 
     @Override
-    public Set<String> generateInsertScript(Entity entity, String viewName) {
-        return generateScript(entity, viewName, INSERT);
-    }
-
-    @Override
-    public Set<String> generateUpdateScript(Entity entity, String viewName) {
-        return generateScript(entity, viewName, UPDATE);
-    }
-
-    @Override
-    public Set<String> generateSelectScript(Entity entity, String viewName) {
-        return generateScript(entity, viewName, SELECT);
-    }
-
-    protected Set<String> generateScript(Entity entity, String viewName, ScriptType scriptType) {
+    public Set<String> generateScript(Entity entity, String viewName, ScriptGenerationOptions scriptType) {
         scripts.clear();
         View rootView = metadata.getViewRepository().getView(entity.getMetaClass(), viewName);
         generateScript(entity, rootView, scriptType);
@@ -66,47 +48,36 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
         return scripts;
     }
 
-    protected void generateScript(Entity entity, View view, ScriptType scriptType) {
+    protected void generateScript(Entity entity, View view, ScriptGenerationOptions scriptType) {
         MetaClass metaClass = entity.getMetaClass();
 
-        metaClass.getProperties().forEach(metaProperty -> {
+        for (MetaProperty metaProperty : metaClass.getProperties()) {
             if (isViewNotContainsProperty(view, metaProperty)) {
-                return;
+                continue;
             }
 
             if (isAssociationProperty(metaProperty)) {
+                ViewProperty viewProperty = view.getProperty(metaProperty.getName());
 
-                if (isEmbedded(metaProperty)) {
-                    return;
+                if (isEmbedded(metaProperty) || viewProperty == null) {
+                    continue;
                 }
+
+                View refView = viewProperty.getView();
 
                 if (isReferenceProperty(metaProperty)) {
-                    Entity refEntity = entity.getValue(metaProperty.getName());
-                    View refView = view.getProperty(metaProperty.getName()).getView();
-
-                    if (refEntity != null) {
-                        generateScript(refEntity, refView, scriptType);
-                    }
+                    processReferenceProperty(entity, metaProperty, refView, scriptType);
                 } else if (isCollectionProperty(metaProperty)) {
-                    Collection<Entity> refEntities = entity.getValue(metaProperty.getName());
-                    View refView = view.getProperty(metaProperty.getName()).getView();
-
-                    if (isNotEmpty(refEntities)) {
-                        refEntities.forEach(refEntity -> generateScript(refEntity, refView, scriptType));
-
-                        if (isManyToManyProperty(metaProperty)) {
-                            generateBundleTableScript(entity, refEntities, metaProperty, scriptType);
-                        }
-                    }
+                    processCollectionProperty(entity, metaProperty, refView, scriptType);
                 }
             }
-
-        });
+        }
 
         scripts.add(generateScript(entity, scriptType));
     }
 
-    protected void generateBundleTableScript(Entity entity, Collection<Entity> refEntities, MetaProperty metaProperty, ScriptType scriptType) {
+
+    protected void generateBundleTableScript(Entity entity, Collection<Entity> refEntities, MetaProperty metaProperty, ScriptGenerationOptions scriptType) {
         JoinTable annotation = metaProperty.getAnnotatedElement().getAnnotation(JoinTable.class);
         String tableName = annotation.name();
         String joinColumnName = annotation.joinColumns()[0].name();
@@ -117,26 +88,35 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
                 scripts.add(format(SELECT_TEMPLATE, joinColumnName, inverseJoinColumnName, tableName));
                 break;
             case INSERT:
-                refEntities.forEach(refEntity -> scripts.add(
-                        format(INSERT_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId())
-                ));
+                for (Entity refEntity : refEntities) {
+                    scripts.add(format(INSERT_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
+                }
                 break;
             case UPDATE:
-                refEntities.forEach(refEntity -> scripts.add(
-                        format(UPDATE_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId())
-                ));
+                for (Entity refEntity : refEntities) {
+                    scripts.add(format(UPDATE_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
+                }
                 break;
+            case INSERT_UPDATE:
+                for (Entity refEntity : refEntities) {
+                    scripts.add(format(INSERT_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
+                    scripts.add(format(UPDATE_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
+                }
             default:
                 break;
         }
     }
 
-    protected String generateScript(Entity entity, ScriptType scriptType) {
+    protected String generateScript(Entity entity, ScriptGenerationOptions scriptType) {
         switch (scriptType) {
             case INSERT:
                 return sqlGenerationService.generateInsertScript(entity);
             case UPDATE:
                 return sqlGenerationService.generateUpdateScript(entity);
+            case INSERT_UPDATE:
+                return sqlGenerationService.generateInsertScript(entity) +
+                        "\n" +
+                        sqlGenerationService.generateUpdateScript(entity);
             case SELECT:
                 return sqlGenerationService.generateSelectScript(entity);
             default:
@@ -177,6 +157,28 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
         }
 
         return false;
+    }
+
+    protected void processReferenceProperty(Entity entity, MetaProperty metaProperty, View refView, ScriptGenerationOptions scriptType) {
+        Entity refEntity = entity.getValue(metaProperty.getName());
+
+        if (refEntity != null) {
+            generateScript(refEntity, refView, scriptType);
+        }
+    }
+
+    protected void processCollectionProperty(Entity entity, MetaProperty metaProperty, View refView, ScriptGenerationOptions scriptType) {
+        Collection<Entity> refEntities = entity.getValue(metaProperty.getName());
+
+        if (isNotEmpty(refEntities)) {
+            for (Entity refEntity : refEntities) {
+                generateScript(refEntity, refView, scriptType);
+            }
+
+            if (isManyToManyProperty(metaProperty)) {
+                generateBundleTableScript(entity, refEntities, metaProperty, scriptType);
+            }
+        }
     }
 
 
