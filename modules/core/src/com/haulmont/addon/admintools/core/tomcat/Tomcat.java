@@ -1,11 +1,10 @@
 package com.haulmont.addon.admintools.core.tomcat;
 
 import com.haulmont.addon.admintools.global.console.ConsoleBean;
-import com.haulmont.addon.admintools.global.console.ConsoleTool;
+import com.haulmont.addon.admintools.global.console.ConsoleTools;
 import com.haulmont.cuba.core.global.Resources;
 import com.haulmont.cuba.core.sys.AppContext;
 import com.haulmont.cuba.security.app.Authenticated;
-import org.apache.commons.lang.SystemUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -21,7 +20,6 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.apache.commons.lang.SystemUtils.*;
 
 @Component("cuba-at_TomcatMBean")
 public class Tomcat implements TomcatMBean {
@@ -29,7 +27,7 @@ public class Tomcat implements TomcatMBean {
     @Inject
     protected ConsoleBean consoleBean;
     @Inject
-    protected ConsoleTool consoleTool;
+    protected ConsoleTools consoleTools;
 
     @Inject
     protected Resources resources;
@@ -45,18 +43,18 @@ public class Tomcat implements TomcatMBean {
         }
 
         File script = Paths.get(TOMCAT_DIR, relativePath).toFile();
-        List<String> parsedArgs = consoleTool.parseArgs(arguments != null ? arguments : "");
+        List<String> parsedArgs = consoleTools.parseArgs(arguments != null ? arguments : "");
         consoleBean.execute(script, parsedArgs);
     }
 
     @Authenticated
     @Override
     public void reboot() throws IOException, InterruptedException {
-        if (SystemUtils.IS_OS_WINDOWS) {
+        if (consoleTools.isOsWindows()) {
             executeBat("restart.bat");
-        } else if (IS_OS_LINUX || IS_OS_MAC || IS_OS_MAC_OSX) {
+        } else if (consoleTools.isOsUnix()) {
             String script = getScript("restart.sh");
-            List<String> parsedArgs = consoleTool.parseArgs(format("\"%s\" <&- &", TOMCAT_DIR));
+            List<String> parsedArgs = consoleTools.parseArgs(format("\"%s\" <&- &", TOMCAT_DIR));
             consoleBean.execute(script, parsedArgs).waitFor(60, SECONDS);
         }
     }
@@ -64,9 +62,9 @@ public class Tomcat implements TomcatMBean {
     @Authenticated
     @Override
     public void shutdown() throws IOException, InterruptedException {
-        if (SystemUtils.IS_OS_WINDOWS) {
+        if (consoleTools.isOsWindows()) {
             executeBat("shutdown.bat");
-        } else if (IS_OS_LINUX || IS_OS_MAC || IS_OS_MAC_OSX) {
+        } else if (consoleTools.isOsUnix()) {
             File script = Paths.get(TOMCAT_DIR, "/bin/shutdown.sh").toFile();
             consoleBean.execute(script, emptyList()).waitFor(60, SECONDS);
         }

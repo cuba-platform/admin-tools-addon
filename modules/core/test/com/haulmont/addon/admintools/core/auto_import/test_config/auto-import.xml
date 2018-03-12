@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<auto-import>
+    <auto-import-file path="com/company/example/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
+    <auto-import-file path="com/company/example/Groups.json" class="com.company.example.SomeProcessor"/>
+</auto-import>

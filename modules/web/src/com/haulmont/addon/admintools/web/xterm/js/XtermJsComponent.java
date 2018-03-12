@@ -1,6 +1,6 @@
 package com.haulmont.addon.admintools.web.xterm.js;
 
-import com.haulmont.addon.admintools.gui.xterm.components.XtermJs.RowsCountListener;
+import com.haulmont.addon.admintools.gui.xterm.components.XtermJs.TerminalSizeListener;
 import com.haulmont.addon.admintools.gui.xterm.components.XtermJs.DataListener;
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.annotations.StyleSheet;
@@ -13,7 +13,7 @@ public class XtermJsComponent extends AbstractJavaScriptComponent {
     private static final long serialVersionUID = -3510903164972910396L;
 
     protected DataListener dataListener;
-    protected RowsCountListener rowsCountListener;
+    protected TerminalSizeListener terminalSizeListener;
 
     public XtermJsComponent() {
         addFunction("data", arguments -> {
@@ -21,9 +21,9 @@ public class XtermJsComponent extends AbstractJavaScriptComponent {
                 dataListener.data(arguments.getString(0));
             }
         });
-        addFunction("rows", arguments -> {
-            if (rowsCountListener != null) {
-                rowsCountListener.changeRowsCount((int) arguments.getNumber(0));
+        addFunction("size", arguments -> {
+            if (terminalSizeListener != null) {
+                terminalSizeListener.changeSize((int) arguments.getNumber(0), (int) arguments.getNumber(1));
             }
         });
     }
@@ -48,12 +48,12 @@ public class XtermJsComponent extends AbstractJavaScriptComponent {
         this.dataListener = listener;
     }
 
-    public RowsCountListener getRowsCountListener() {
-        return rowsCountListener;
+    public TerminalSizeListener getTerminalSizeListener() {
+        return terminalSizeListener;
     }
 
-    public void setRowsCountListener(RowsCountListener listener) {
-        this.rowsCountListener = listener;
+    public void setTerminalSizeListener(TerminalSizeListener listener) {
+        this.terminalSizeListener = listener;
     }
 
     @Override

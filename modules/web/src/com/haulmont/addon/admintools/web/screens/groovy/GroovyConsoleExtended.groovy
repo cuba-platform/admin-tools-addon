@@ -6,6 +6,10 @@ import de.diedavids.cuba.runtimediagnose.web.screens.groovy.GroovyConsole
 
 import javax.inject.Inject
 
+/**
+ * {@code GroovyConsoleExtended} overrides class {@link GroovyConsole}. There is fixed bug with a download zip,
+ * if console result contains 'null'
+ */
 class GroovyConsoleExtended extends GroovyConsole {
     @Inject
     DiagnoseExecutionFactory diagnoseExecutionFactory

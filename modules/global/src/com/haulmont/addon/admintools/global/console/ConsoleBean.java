@@ -13,16 +13,34 @@ import java.util.List;
 
 import static org.apache.commons.io.FilenameUtils.getName;
 
+/**
+ * This class delegate executing scripts to the associated OS
+ */
 @Component("admintools_ConsoleBean")
 public class ConsoleBean {
 
     @Inject
-    protected ConsolePrecondition precondition;
+    protected ConsoleTools consoleTools;
 
+    /**
+     * Generate temp file with text {@code script} and try execute it in a terminal.
+     *
+     * @param script is text of needed script
+     * @param arguments emulates args in command console
+     * @return process of executing script
+     * @throws IOException  if an I/O error occurs
+     */
     public Process execute(String script, List<String> arguments) throws IOException {
         return internalExecute(generateFile(script), arguments);
     }
 
+    /**
+     * Try execute {@code script} in a terminal
+     *
+     * @param arguments emulates args in command console
+     * @return process of executing script
+     * @throws IOException  if an I/O error occurs
+     */
     public Process execute(File script, List<String> arguments) throws IOException {
         return internalExecute(script, arguments);
     }
@@ -31,7 +49,7 @@ public class ConsoleBean {
     protected File generateFile(String script) throws IOException {
         String extension = "";
 
-        if (precondition.isOsWindows()) {
+        if (consoleTools.isOsWindows()) {
             extension = ".bat";
         }
 
@@ -69,9 +87,9 @@ public class ConsoleBean {
         String scriptName = getName(script.getAbsolutePath());
 
         List<String> commands = new ArrayList<>();
-        if (precondition.isOsUnix()) {
+        if (consoleTools.isOsUnix()) {
             commands.add("./" + scriptName);
-        } else if (precondition.isOsWindows()) {
+        } else if (consoleTools.isOsWindows()) {
             commands.addAll(Arrays.asList("cmd", "/c", "start", scriptName));
         } else {
             commands.add(scriptName); // we doesn't care about user if it uses esoteric OS

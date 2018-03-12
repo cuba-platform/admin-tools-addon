@@ -15,14 +15,18 @@ import de.diedavids.cuba.runtimediagnose.diagnose.DiagnoseType
 
 import javax.inject.Inject
 
-class ExtendedDbDiagnoseServiceBean extends DbDiagnoseServiceBean{
+/**
+ * {@code ExtendedDbDiagnoseServiceBean} overrides class {@link DbDiagnoseServiceBean} and deletes {@link DbQueryParser}
+ * from one. It is necessary for cases, where the parser marks the key words as wrong. For example, in the jpql
+ * 'select g from sec$Group g' word 'Group' is marked as key word and the parser throws
+ * {@link net.sf.jsqlparser.JSQLParserException}
+ */
+class ExtendedDbDiagnoseServiceBean extends DbDiagnoseServiceBean {
 
     @Inject
     protected Persistence persistence
     @Inject
     protected SqlSelectResultFactory selectResultFactory
-    @Inject
-    protected DbQueryParser dbQueryParser
     @Inject
     protected TimeSource timeSource
     @Inject
@@ -32,7 +36,9 @@ class ExtendedDbDiagnoseServiceBean extends DbDiagnoseServiceBean{
     @Inject
     protected DiagnoseExecutionFactory diagnoseExecutionFactory
 
-    //deleted analyse query
+    /*
+     * deleted analyse query
+     */
     @Override
     DbQueryResult runSqlDiagnose(String queryString, DiagnoseType diagnoseType) {
         DiagnoseExecution diagnoseExecution = createAdHocDiagnose(queryString, diagnoseType)
@@ -50,7 +56,9 @@ class ExtendedDbDiagnoseServiceBean extends DbDiagnoseServiceBean{
         dbQueryResult
     }
 
-    //deleted argument 'Statements queryStatements'
+    /**
+     * deleted argument 'Statements queryStatements'
+     */
     protected DbQueryResult getQueryResult(DiagnoseType diagnoseType, String queryStatement) {
         DbQueryResult sqlSelectResult
         switch (diagnoseType) {
@@ -67,7 +75,9 @@ class ExtendedDbDiagnoseServiceBean extends DbDiagnoseServiceBean{
         sqlSelectResult
     }
 
-    //deleted argument 'Statements queryStatements'
+    /**
+     * deleted argument 'Statements queryStatements'
+     */
     protected DbQueryResult executeJpqlStatement(String queryStatement) {
         persistence.callInTransaction {
             Query q = persistence.entityManager.createQuery(queryStatement)
@@ -80,20 +90,26 @@ class ExtendedDbDiagnoseServiceBean extends DbDiagnoseServiceBean{
             }
         }
     }
-    //added
+    /**
+     * added
+     */
     protected static boolean containsDataManipulation(String queryStatement) {
         String[] manipulationOperations = ['insert', 'update', 'delete']
         return Arrays.stream(manipulationOperations).anyMatch({ op -> queryStatement.contains(op) })
     }
 
-    //private modifier
+    /**
+     * private modifier in the parent class
+     */
     protected DiagnoseExecution createAdHocDiagnose(String sqlStatement, DiagnoseType diagnoseType) {
         def diagnoseExecution = diagnoseExecutionFactory.createAdHocDiagnoseExecution(sqlStatement, diagnoseType)
         setDiagnoseExecutionMetadata(diagnoseExecution)
         diagnoseExecution
     }
 
-    //private modifier
+    /**
+     * private modifier in the parent class
+     */
     protected void setDiagnoseExecutionMetadata(DiagnoseExecution diagnoseExecution) {
         diagnoseExecution.executionTimestamp = timeSource.currentTimestamp()
         diagnoseExecution.executionUser = userSessionSource.userSession.currentOrSubstitutedUser.login

@@ -1,6 +1,5 @@
 package com.haulmont.addon.admintools.core.auto_import.processors;
 
-import com.google.common.io.Files;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -20,8 +19,13 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import static com.google.common.io.Files.getFileExtension;
 import static java.lang.String.format;
 
+/**
+ * This class imports Entities from a json file or a zip with json files and
+ * adds them to a database. The order of json files in zip is random.
+ */
 @Component("admintools_DefaultAutoImportProcessor")
 public class DefaultAutoImportProcessor implements AutoImportProcessor {
 
@@ -34,11 +38,14 @@ public class DefaultAutoImportProcessor implements AutoImportProcessor {
     @Inject
     protected EntityImportViewBuilderAPI viewBuilder;
 
+    /**
+     * @param filePath is a classpath to a file
+     * @throws Exception
+     */
     @Override
     public void processFile(String filePath) throws Exception {
         File file = resources.getResource(filePath).getFile();
-        String fileExtension = Files.getFileExtension(filePath);
-        FileType fileType = FileType.getEnum(fileExtension);
+        FileType fileType = FileType.getEnum(getFileExtension(filePath));
 
         switch (fileType) {
             case ZIP:

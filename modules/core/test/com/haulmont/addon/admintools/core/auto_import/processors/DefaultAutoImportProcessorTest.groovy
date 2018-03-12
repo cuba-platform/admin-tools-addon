@@ -7,6 +7,7 @@ import com.haulmont.addon.admintools.core.auto_import.processors.DefaultAutoImpo
 import com.haulmont.cuba.core.global.AppBeans
 import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.LoadContext
+import com.haulmont.cuba.security.entity.Group
 import com.haulmont.cuba.security.entity.User
 import org.junit.ClassRule
 import spock.lang.Shared
@@ -21,11 +22,11 @@ class DefaultAutoImportProcessorTest extends Specification {
     AutoImportProcessor delegate
     DataManager dataManager
 
-    final String ERROR_PATH = 'com/haulmont/addon/admintools/processors/files/ErrorPath.json'
-    final String FILE_WITH_ERROR_EXTENSION = 'com/haulmont/addon/admintools/processors/files/ErrorExtension.txt'
-    final String INCORRECT_JSON = 'com/haulmont/addon/admintools/processors/files/Incorrect.json'
-    final String CORRECT_JSON = 'com/haulmont/addon/admintools/processors/files/Users.json'
-    final String CORRECT_ZIP = 'com/haulmont/addon/admintools/processors/files/GroupAndUsers.zip'
+    final String ERROR_PATH = 'com/haulmont/addon/admintools/core/auto_import/processors/files/ErrorPath.json'
+    final String FILE_WITH_ERROR_EXTENSION = 'com/haulmont/addon/admintools/core/auto_import/processors/files/ErrorExtension.txt'
+    final String INCORRECT_JSON = 'com/haulmont/addon/admintools/core/auto_import/processors/files/Incorrect.json'
+    final String CORRECT_JSON = 'com/haulmont/addon/admintools/core/auto_import/processors/files/Group.json'
+    final String CORRECT_ZIP = 'com/haulmont/addon/admintools/core/auto_import/processors/files/GroupAndUsers.zip'
 
     void setup() {
         delegate = AppBeans.get(DefaultAutoImportProcessor)
@@ -57,21 +58,20 @@ class DefaultAutoImportProcessorTest extends Specification {
         thrown(RuntimeException)
     }
 
-    def "import correct Json file. User1 and User2 should be in DB"() {
+    def "import correct Json file. Group should be in DB"() {
         given:
-        LoadContext<User> userLoadContext = LoadContext
-                .create(User.class)
-                .setQuery(LoadContext.createQuery('select u from sec$User u'))
+        String groupId = '9162f700-ba68-92c8-160d-7330603a7b44'
+        LoadContext<Group> groupLoadContext = LoadContext
+                .create(Group.class)
+                .setQuery(LoadContext.createQuery('select g from sec$Group g'))
                 .setView('_local')
-
-        def isDbConstrainsUsersFromJson = { users -> users.stream().map({ user -> user.login }).collect().containsAll(['User1', 'User2']) }
 
         when:
         delegate.processFile(CORRECT_JSON)
 
         then:
-        List<User> users = dataManager.loadList(userLoadContext)
-        isDbConstrainsUsersFromJson(users)
+        List<Group> groups = dataManager.loadList(groupLoadContext)
+        groups.stream().anyMatch({ g -> g.id.toString() == groupId })
     }
 
     def "import correct zip. Group and users should be in db"() {
@@ -79,8 +79,8 @@ class DefaultAutoImportProcessorTest extends Specification {
         LoadContext<User> usersLoadContext = LoadContext
                 .create(User.class)
                 .setQuery(
-                    LoadContext.createQuery('select u from sec$User u where u.id in :ids')
-                        .setParameter('ids', ['a46ce38f-bed9-f0c2-5972-ad067e9f8275','b83180fe-7ef7-ec74-af1d-b508b6bd22f2']))
+                LoadContext.createQuery('select u from sec$User u where u.id in :ids')
+                        .setParameter('ids', ['a46ce38f-bed9-f0c2-5972-ad067e9f8275', 'b83180fe-7ef7-ec74-af1d-b508b6bd22f2']))
                 .setView('user.edit')
 
         def isDbConstrainsUsersFromJson = { users -> users.stream().map({ user -> user.login }).collect().containsAll(['User1', 'User2']) }

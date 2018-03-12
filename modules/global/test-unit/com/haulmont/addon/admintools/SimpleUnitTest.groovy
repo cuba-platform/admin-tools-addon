@@ -1,3 +1,5 @@
+package com.haulmont.addon.admintools
+
 import spock.lang.Specification
 
 class SimpleUnitTest extends Specification {

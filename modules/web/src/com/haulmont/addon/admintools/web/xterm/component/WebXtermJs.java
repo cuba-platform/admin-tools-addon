@@ -36,12 +36,12 @@ public class WebXtermJs extends WebAbstractComponent<XtermJsComponent> implement
     }
 
     @Override
-    public void setRowsCountListener(RowsCountListener listener) {
-        component.setRowsCountListener(listener);
+    public void setSizeListener(TerminalSizeListener listener) {
+        component.setTerminalSizeListener(listener);
     }
 
     @Override
-    public RowsCountListener getRowsCountListener() {
-        return component.getRowsCountListener();
+    public TerminalSizeListener getSizeListener() {
+        return component.getTerminalSizeListener();
     }
 }

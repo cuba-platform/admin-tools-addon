@@ -8,7 +8,7 @@ com_haulmont_addon_admintools_web_xterm_js_XtermJsComponent = function() {
     term.open(connector.getElement());
 
     term.on('data', function (data) {
-        connector.rows(term.rows);
+        connector.size(term.cols, term.rows);
         connector.data(data);
     });
 
@@ -22,6 +22,6 @@ com_haulmont_addon_admintools_web_xterm_js_XtermJsComponent = function() {
 
     connector.fit = function () {
         term.fit();
-        connector.rows(term.rows);
+        connector.size(term.cols, term.rows);
     }
 };

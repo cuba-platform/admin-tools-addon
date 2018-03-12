@@ -12,6 +12,12 @@ import java.sql.Timestamp
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 
+/**
+ * {@code ExtendedSqlSelectResultFactoryBean} overrides class {@link SqlSelectResultFactoryBean}. There are added
+ * cases if in the method {@link #createFromRows} rows have type Array or simple object. It can be if jpql was
+ * with aliases like, 'select u.id, u.login from sec$User u' or 'select u.id from sec$User u' respectively.
+ * See comments 'Admin-tools added' and 'Admin-tools end'
+ */
 class ExtendedSqlSelectResultFactoryBean extends SqlSelectResultFactoryBean {
 
     @Inject
@@ -37,7 +43,7 @@ class ExtendedSqlSelectResultFactoryBean extends SqlSelectResultFactoryBean {
             ((Map) queryValue).keySet().each { result.addColumn(it.toString()) }
             rows.each { result.addEntity(createKeyValueEntity((Map) it)) }
 
-        //Admin-tools added
+            //Admin-tools added
         } else if (queryValue.getClass().isArray()) {
             int columnsCount = (queryValue as Object[]).size()
             List<String> columns = IntStream.range(0, columnsCount).mapToObj({ i -> "${COLUMN} ${i}" }).collect(Collectors.toList())

@@ -27,9 +27,9 @@ public interface XtermJs extends Component {
 
     DataListener getDataListener();
 
-    void setRowsCountListener(RowsCountListener listener);
+    void setSizeListener(TerminalSizeListener listener);
 
-    RowsCountListener getRowsCountListener();
+    TerminalSizeListener getSizeListener();
 
     /**
      * Interface which listen manual commands {@code data} for the terminal
@@ -41,7 +41,7 @@ public interface XtermJs extends Component {
     /**
      * Interface which listen rows count changes {@code data} for the terminal
      */
-    interface RowsCountListener {
-        void changeRowsCount(int rows);
+    interface TerminalSizeListener {
+        void changeSize(int cols, int rows);
     }
 }

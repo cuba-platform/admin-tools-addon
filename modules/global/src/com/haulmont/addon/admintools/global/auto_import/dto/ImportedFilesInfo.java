@@ -8,15 +8,18 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class ImportFileObjects implements Map<String, ImportDataObject> {
+/**
+ * The map of imported files in the format 'path to file' - 'status info'
+ */
+public class ImportedFilesInfo implements Map<String, ImportStatusInfo> {
 
-    protected Map<String, ImportDataObject> delegate;
+    protected Map<String, ImportStatusInfo> delegate;
 
-    public ImportFileObjects() {
+    public ImportedFilesInfo() {
         this.delegate = new HashMap<>();
     }
 
-    public ImportFileObjects(Map<String, ImportDataObject> delegate) {
+    public ImportedFilesInfo(Map<String, ImportStatusInfo> delegate) {
         this.delegate = delegate;
     }
 
@@ -42,22 +45,22 @@ public class ImportFileObjects implements Map<String, ImportDataObject> {
     }
 
     @Override
-    public ImportDataObject get(Object key) {
+    public ImportStatusInfo get(Object key) {
         return delegate.get(key);
     }
 
     @Override
-    public ImportDataObject put(String key, ImportDataObject value) {
+    public ImportStatusInfo put(String key, ImportStatusInfo value) {
         return delegate.put(key, value);
     }
 
     @Override
-    public ImportDataObject remove(Object key) {
+    public ImportStatusInfo remove(Object key) {
         return delegate.remove(key);
     }
 
     @Override
-    public void putAll(Map<? extends String, ? extends ImportDataObject> m) {
+    public void putAll(Map<? extends String, ? extends ImportStatusInfo> m) {
         delegate.putAll(m);
     }
 
@@ -72,12 +75,12 @@ public class ImportFileObjects implements Map<String, ImportDataObject> {
     }
 
     @Override
-    public Collection<ImportDataObject> values() {
+    public Collection<ImportStatusInfo> values() {
         return delegate.values();
     }
 
     @Override
-    public Set<Entry<String, ImportDataObject>> entrySet() {
+    public Set<Entry<String, ImportStatusInfo>> entrySet() {
         return delegate.entrySet();
     }
 
@@ -92,22 +95,22 @@ public class ImportFileObjects implements Map<String, ImportDataObject> {
     }
 
     @Override
-    public ImportDataObject getOrDefault(Object key, ImportDataObject defaultValue) {
+    public ImportStatusInfo getOrDefault(Object key, ImportStatusInfo defaultValue) {
         return delegate.getOrDefault(key, defaultValue);
     }
 
     @Override
-    public void forEach(BiConsumer<? super String, ? super ImportDataObject> action) {
+    public void forEach(BiConsumer<? super String, ? super ImportStatusInfo> action) {
         delegate.forEach(action);
     }
 
     @Override
-    public void replaceAll(BiFunction<? super String, ? super ImportDataObject, ? extends ImportDataObject> function) {
+    public void replaceAll(BiFunction<? super String, ? super ImportStatusInfo, ? extends ImportStatusInfo> function) {
         delegate.replaceAll(function);
     }
 
     @Override
-    public ImportDataObject putIfAbsent(String key, ImportDataObject value) {
+    public ImportStatusInfo putIfAbsent(String key, ImportStatusInfo value) {
         return delegate.putIfAbsent(key, value);
     }
 
@@ -117,32 +120,32 @@ public class ImportFileObjects implements Map<String, ImportDataObject> {
     }
 
     @Override
-    public boolean replace(String key, ImportDataObject oldValue, ImportDataObject newValue) {
+    public boolean replace(String key, ImportStatusInfo oldValue, ImportStatusInfo newValue) {
         return delegate.replace(key, oldValue, newValue);
     }
 
     @Override
-    public ImportDataObject replace(String key, ImportDataObject value) {
+    public ImportStatusInfo replace(String key, ImportStatusInfo value) {
         return delegate.replace(key, value);
     }
 
     @Override
-    public ImportDataObject computeIfAbsent(String key, Function<? super String, ? extends ImportDataObject> mappingFunction) {
+    public ImportStatusInfo computeIfAbsent(String key, Function<? super String, ? extends ImportStatusInfo> mappingFunction) {
         return delegate.computeIfAbsent(key, mappingFunction);
     }
 
     @Override
-    public ImportDataObject computeIfPresent(String key, BiFunction<? super String, ? super ImportDataObject, ? extends ImportDataObject> remappingFunction) {
+    public ImportStatusInfo computeIfPresent(String key, BiFunction<? super String, ? super ImportStatusInfo, ? extends ImportStatusInfo> remappingFunction) {
         return delegate.computeIfPresent(key, remappingFunction);
     }
 
     @Override
-    public ImportDataObject compute(String key, BiFunction<? super String, ? super ImportDataObject, ? extends ImportDataObject> remappingFunction) {
+    public ImportStatusInfo compute(String key, BiFunction<? super String, ? super ImportStatusInfo, ? extends ImportStatusInfo> remappingFunction) {
         return delegate.compute(key, remappingFunction);
     }
 
     @Override
-    public ImportDataObject merge(String key, ImportDataObject value, BiFunction<? super ImportDataObject, ? super ImportDataObject, ? extends ImportDataObject> remappingFunction) {
+    public ImportStatusInfo merge(String key, ImportStatusInfo value, BiFunction<? super ImportStatusInfo, ? super ImportStatusInfo, ? extends ImportStatusInfo> remappingFunction) {
         return delegate.merge(key, value, remappingFunction);
     }
 }

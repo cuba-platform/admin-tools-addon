@@ -2,24 +2,28 @@ package com.haulmont.addon.admintools.global.console;
 
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static java.text.CharacterIterator.DONE;
+import static org.apache.commons.lang.SystemUtils.*;
 
+/**
+ * Utility class to provide functionality related with {@link ConsoleBean}
+ */
 @Component("admintools_ConsoleTool")
-public class ConsoleTool {
+public class ConsoleTools {
 
-    @Inject
-    protected ConsolePrecondition cprecond;
-
+    /**
+     * Tried parse arguments {@code line} like in a command console of a current OS
+     * @return prepared arguments for {@link ProcessBuilder}
+     */
     public List<String> parseArgs(String line) {
         List<String> args = new ArrayList<>();
 
-        if (cprecond.isOsUnix()) {
+        if (isOsUnix()) {
             StringCharacterIterator iterator = new StringCharacterIterator(line);
             StringBuilder argument = new StringBuilder();
             int doubleQuotesCount = 0;
@@ -65,5 +69,13 @@ public class ConsoleTool {
         }
 
         return args;
+    }
+
+    public boolean isOsUnix() {
+        return IS_OS_LINUX || IS_OS_MAC || IS_OS_MAC_OSX;
+    }
+
+    public boolean isOsWindows() {
+        return IS_OS_WINDOWS;
     }
 }

@@ -2,16 +2,16 @@ package com.haulmont.addon.admintools.global.auto_import.dto;
 
 import java.io.Serializable;
 
-public class ImportDataObject implements Serializable {
+public class ImportStatusInfo implements Serializable {
 
     protected String hex;
     protected ImportStatus importStatus;
 
     @SuppressWarnings("unused")
-    public ImportDataObject() {
+    public ImportStatusInfo() {
     }
 
-    public ImportDataObject(String hex, ImportStatus importStatus) {
+    public ImportStatusInfo(String hex, ImportStatus importStatus) {
         this.hex = hex;
         this.importStatus = importStatus;
     }

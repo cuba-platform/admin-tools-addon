@@ -14,6 +14,10 @@ import com.haulmont.cuba.core.entity.Entity;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * There is added a case for the ONE_TO_MANY property with the type ASSOCIATION,
+ * see comments 'admin-tools', line 91
+ */
 public class ExtendedEntityImportViewBuilder extends EntityImportViewBuilder {
 
     @Override

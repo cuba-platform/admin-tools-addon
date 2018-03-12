@@ -1,4 +1,4 @@
-package com.haulmont.addon.admintools.core.auto_import.listeners
+package com.haulmont.addon.admintools.core.auto_import
 
 import com.haulmont.addon.admintools.AdminToolsIntegrationTestSpecification
 import com.haulmont.cuba.core.entity.FileDescriptor

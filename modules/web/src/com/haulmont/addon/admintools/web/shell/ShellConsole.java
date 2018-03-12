@@ -1,8 +1,7 @@
 package com.haulmont.addon.admintools.web.shell;
 
 import com.haulmont.addon.admintools.global.console.ConsoleBean;
-import com.haulmont.addon.admintools.global.console.ConsolePrecondition;
-import com.haulmont.addon.admintools.global.console.ConsoleTool;
+import com.haulmont.addon.admintools.global.console.ConsoleTools;
 import com.haulmont.addon.admintools.web.utils.NonBlockingIOUtils;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
@@ -40,9 +39,7 @@ public class ShellConsole extends ConsoleWindow {
     @Inject
     protected ExportDisplay exportDisplay;
     @Inject
-    protected ConsoleTool consoleTool;
-    @Inject
-    protected ConsolePrecondition precondition;
+    protected ConsoleTools consoleTools;
 
     protected Process shellProcess;
     protected StringBuilder resultOutBuilder = new StringBuilder();
@@ -52,7 +49,7 @@ public class ShellConsole extends ConsoleWindow {
     public void init(Map<String, Object> params) {
         super.init(params);
 
-        if (!precondition.isOsUnix()) {
+        if (!consoleTools.isOsUnix()) {
             showNotification(getMessage("shellNotSupported"), ERROR);
         }
 
@@ -144,7 +141,7 @@ public class ShellConsole extends ConsoleWindow {
     }
 
     protected void executeScript() {
-        if (!precondition.isOsUnix()) {
+        if (!consoleTools.isOsUnix()) {
             showNotification(getMessage("shellNotSupported"), ERROR);
             return;
         }
@@ -153,7 +150,7 @@ public class ShellConsole extends ConsoleWindow {
 
         String script = isNotBlank(console.getValue()) ? console.getValue() : "";
         String arguments = isNotBlank(args.getValue()) ? args.getValue() : "";
-        List<String> parsedArgs = consoleTool.parseArgs(arguments);
+        List<String> parsedArgs = consoleTools.parseArgs(arguments);
 
         try {
             shellProcess = consoleBean.execute(script, parsedArgs);

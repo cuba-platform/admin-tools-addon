@@ -98,18 +98,18 @@ the __Export as ZIP__ button  or  __Export as JSON__ button.
      <auto-import>
          <!--default processor-->
          <auto-import-file path="com/company/example/Roles.zip" bean="admintools_DefaultAutoImportProcessor"/>
-         <auto-import-file path="com/company/example/Groups.json" bean="admintools_DefaultAutoImportProcessor"/>
+         <auto-import-file path="com/company/example/Groups.json" class="com.company.example.SomeProcessor"/>
         
      </auto-import>
      ```
 
      Where path is a path to the data file, bean/class — a processor. Bean = [bean name], class = [class path].
    
-2. Add the `admin.autoImportConfig` property to `app.properties` and, additionally, specify the configuration file path.
+2. Add the `admintools.autoImportConfig` property to `app.properties` and, additionally, specify the configuration file path.
 The example of `app-properties` with the auto-import configuration is given below:
 
     ```properties
-    admin.autoImportConfig = +com/haulmont/addon/admintools/auto-import.xml
+    admintools.autoImportConfig = +com/haulmont/addon/admintools/auto-import.xml
     ```
 
 ### Custom import processor
@@ -152,6 +152,8 @@ then provide a path to the class.
          ...
       
          <auto-import-file path="com/company/example/Reports.zip" bean="admintools_ReportsAutoImportProcessor"/>
+		 <auto-import-file path="com/company/example/Reports.json" class="com.company.example.ReportsAutoImportProcessor"/>
+          
          ...
      </auto-import>
      ```
@@ -165,7 +167,7 @@ See logging information in the `app.log` file.
 ##### Successful import
 
 ```
-com.haulmont.addon.admintools.core.auto_import.listeners.AutoImportListener - Importing file com/company/autoimporttest/Roles.zip by bean autoimport_RolesAutoImportProcessor
+com.haulmont.addon.admintools.core.auto_import.AutoImporterImpl - Importing file com/company/autoimporttest/Roles.zip by bean autoimport_RolesAutoImportProcessor
 ...
 com.haulmont.addon.admintools.core.auto_import.processors.DefaultAutoImportProcessor - Successful importing file com/company/autoimporttest/Roles.zip
 ```
@@ -173,31 +175,41 @@ com.haulmont.addon.admintools.core.auto_import.processors.DefaultAutoImportProce
 ##### Incorrect name of a processor
 
 ```
-com.haulmont.addon.admintools.core.auto_import.listeners.AutoImportListener - Importing file com/company/example/Groups.zip by bean autoimport_InvalidAutoImportProcessor
+com.haulmont.addon.admintools.core.auto_import.AutoImporterImpl - Importing file com/company/example/Groups.zip by bean autoimport_InvalidAutoImportProcessor
 ...
-com.haulmont.addon.admintools.core.auto_import.listeners.AutoImportListener - org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'autoimport_InvalidAutoImportProcessor' available
+com.haulmont.addon.admintools.core.auto_import.AutoImporterImpl - org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'autoimport_InvalidAutoImportProcessor' available
 ```
 
 ```
-com.haulmont.addon.admintools.core.auto_import.listeners.AutoImportListener - Importing file com/company/example/Groups.zip by class com.example.InvalidAutoImportProcessor ... AutoImportListener - java.lang.ClassNotFoundException: com.example.InvalidAutoImportProcessor
+com.haulmont.addon.admintools.core.auto_import.AutoImporterImpl - Importing file com/company/example/Groups.zip by class com.example.InvalidAutoImportProcessor ... AutoImportListener - java.lang.ClassNotFoundException: com.example.InvalidAutoImportProcessor
 ```
 
 ##### Uploaded archive is not found
 
 ```
-com.haulmont.addon.admintools.core.auto_import.listeners.AutoImportListener - Importing file com/example/invalid.zip by bean autoimport_ReportsAutoImportProcessor
+com.haulmont.addon.admintools.core.auto_import.AutoImporterImpl - Importing file com/example/invalid.zip by bean autoimport_ReportsAutoImportProcessor
 com.haulmont.addon.admintools.core.auto_import.processors.ReportsAutoImportProcessor - File com/example/invalid.zip not found.
 ```
+
+### Know issues
+- class com.haulmont.cuba.core.app.importexport.EntityImportViewBuilder by class ExtendedEntityImportViewBuilder
+for build json if ONE_TO_MANY meta property has type ASSOCIATION.
 
 ## JPQL and SQL Console
 JPQL and SQL Console allows interacting with an application database by using JPQL or SQL. 
 These components are imported from **CUBA Platform Component - Runtime diagnose**.
 See [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
 
+There are some extended classes, for more details see java doc:
+* com.haulmont.addon.admintools.core.db.ExtendedDbDiagnoseServiceBean
+* com.haulmont.addon.admintools.core.db.ExtendedSqlSelectResultFactoryBean
+
 ## Groovy Console
 Groovy Console enables to interactively inspect the running application by entering a groovy script and executing it 
-in an ad-hoc fashion. This component is imported from **CUBA Platform Component - Runtime diagnose**. 
+in an ad-hoc fashion. This component is imported from **CUBA Platform Component - Runtime diagnose**.
 See [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
+
+There is extended class com.haulmont.addon.admintools.core.db.GroovyConsoleExtended, for more details see java doc.
 
 ## Load Config
 Using the Load Config functionality it is possible upload configuration files and various scripts to a configuration 
