@@ -11,14 +11,14 @@ import com.haulmont.cuba.core.config.type.Factory;
 import com.haulmont.cuba.core.config.type.Stringify;
 
 /**
- * This configuration
- * See com.haulmont.addon.admintools.core.auto_import.listeners.AutoImportListenerDelegate
+ * This configuration contains json with file name, file hash and status of importing.
+ * See com.haulmont.addon.admintools.core.auto_import.AutoImporterImpl
  */
 @Source(type = SourceType.DATABASE)
 public interface ImportedFilesConfig extends Config {
 
     /**
-     * @return information about files imported by AutoImportListenerDelegate
+     * @return information about files imported by AutoImporterImpl
      */
     @Property("admintools.imported_files")
     @Factory(factory = AutoImportType.Factory.class)
@@ -27,7 +27,7 @@ public interface ImportedFilesConfig extends Config {
     ImportedFilesInfo getImportedFilesInfo();
 
     /**
-     * set information about files {@param filesInfo} imported by AutoImportListenerDelegate
+     * set information about files {@param filesInfo} imported by AutoImporterImpl
      */
     void setImportedFilesInfo(ImportedFilesInfo filesInfo);
 }

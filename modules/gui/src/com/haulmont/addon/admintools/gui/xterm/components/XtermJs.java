@@ -39,7 +39,7 @@ public interface XtermJs extends Component {
     }
 
     /**
-     * Interface which listen rows count changes {@code data} for the terminal
+     * Interface which listen columns and rows count changes {@code data} for the terminal
      */
     interface TerminalSizeListener {
         void changeSize(int cols, int rows);
