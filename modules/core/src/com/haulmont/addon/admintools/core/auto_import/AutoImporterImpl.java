@@ -56,6 +56,7 @@ public class AutoImporterImpl implements AutoImporter {
     protected Resources resources;
 
 
+    @Override
     public void startImport() {
         try {
             authentication.begin();
