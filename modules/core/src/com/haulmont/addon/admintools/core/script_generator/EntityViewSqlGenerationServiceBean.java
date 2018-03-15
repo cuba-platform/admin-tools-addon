@@ -61,7 +61,7 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
             if (isAssociationProperty(metaProperty)) {
                 ViewProperty viewProperty = view.getProperty(metaProperty.getName());
 
-                if (isEmbedded(metaProperty) || viewProperty == null) {
+                if (isEmbedded(metaProperty) || viewProperty == null || viewProperty.getView() == null) {
                     continue;
                 }
 
