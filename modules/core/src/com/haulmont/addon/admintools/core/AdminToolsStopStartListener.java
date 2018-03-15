@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 
+/**
+ * This class add himself to application context as listener that is executed when the application is started and stopped
+ */
 @Component("admintools_AdminToolsStopStartListener")
 public class AdminToolsStopStartListener implements AppContext.Listener {
 
