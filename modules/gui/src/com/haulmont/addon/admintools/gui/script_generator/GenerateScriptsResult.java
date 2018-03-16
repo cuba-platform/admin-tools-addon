@@ -4,7 +4,10 @@ import com.haulmont.addon.admintools.global.script_generator.EntityViewSqlGenera
 import com.haulmont.addon.admintools.global.script_generator.ScriptGenerationOptions;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.entity.Entity;
-import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.LoadContext;
+import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.executors.BackgroundTask;
@@ -80,6 +83,7 @@ public class GenerateScriptsResult extends AbstractWindow {
 
             @Override
             public boolean handleTimeoutException() {
+                showNotification(getMessage("timeout"), NotificationType.WARNING);
                 executeProgressBar.setIndeterminate(false);
                 return true;
             }
