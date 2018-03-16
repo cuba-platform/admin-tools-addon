@@ -7,8 +7,7 @@ public enum ScriptGenerationOptions implements EnumClass<Integer> {
 
     INSERT(10),
     UPDATE(20),
-    INSERT_UPDATE(30),
-    SELECT(40);
+    INSERT_UPDATE(30);
 
     protected Integer id;
 

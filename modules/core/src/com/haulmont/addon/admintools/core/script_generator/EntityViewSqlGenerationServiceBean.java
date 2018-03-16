@@ -37,7 +37,6 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
 
     protected String INSERT_TEMPLATE = "insert into %s \n(%s, %s) \nvalues ('%s', '%s');\n";
     protected String UPDATE_TEMPLATE = "update %s \nset %s, %s \nwhere %s='%s';\n";
-    protected String SELECT_TEMPLATE = "select e.$s e.$s from %s e";
 
     protected Set<String> scripts = new HashSet<>();
 
@@ -86,9 +85,6 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
         String inverseJoinColumnName = annotation.inverseJoinColumns()[0].name();
 
         switch (scriptType) {
-            case SELECT:
-                scripts.add(format(SELECT_TEMPLATE, joinColumnName, inverseJoinColumnName, tableName));
-                break;
             case INSERT:
                 for (Entity refEntity : refEntities) {
                     scripts.add(format(INSERT_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
@@ -119,8 +115,6 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
                 return sqlGenerationService.generateInsertScript(entity) +
                         "\n" +
                         sqlGenerationService.generateUpdateScript(entity);
-            case SELECT:
-                return sqlGenerationService.generateSelectScript(entity);
             default:
                 return "";
         }
