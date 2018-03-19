@@ -135,17 +135,26 @@ public class ImportedFilesInfo implements Map<String, ImportStatusInfo> {
     }
 
     @Override
-    public ImportStatusInfo computeIfPresent(String key, BiFunction<? super String, ? super ImportStatusInfo, ? extends ImportStatusInfo> remappingFunction) {
+    public ImportStatusInfo computeIfPresent(String key,
+                                             BiFunction<? super String,
+                                                     ? super ImportStatusInfo,
+                                                     ? extends ImportStatusInfo> remappingFunction) {
         return delegate.computeIfPresent(key, remappingFunction);
     }
 
     @Override
-    public ImportStatusInfo compute(String key, BiFunction<? super String, ? super ImportStatusInfo, ? extends ImportStatusInfo> remappingFunction) {
+    public ImportStatusInfo compute(String key,
+                                    BiFunction<? super String,
+                                            ? super ImportStatusInfo,
+                                            ? extends ImportStatusInfo> remappingFunction) {
         return delegate.compute(key, remappingFunction);
     }
 
     @Override
-    public ImportStatusInfo merge(String key, ImportStatusInfo value, BiFunction<? super ImportStatusInfo, ? super ImportStatusInfo, ? extends ImportStatusInfo> remappingFunction) {
+    public ImportStatusInfo merge(String key, ImportStatusInfo value,
+                                  BiFunction<? super ImportStatusInfo,
+                                          ? super ImportStatusInfo,
+                                          ? extends ImportStatusInfo> remappingFunction) {
         return delegate.merge(key, value, remappingFunction);
     }
 }

@@ -78,7 +78,11 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
     }
 
 
-    protected void generateBundleTableScript(Entity entity, Collection<Entity> refEntities, MetaProperty metaProperty, ScriptGenerationOptions scriptType) {
+    protected void generateBundleTableScript(Entity entity,
+                                             Collection<Entity> refEntities,
+                                             MetaProperty metaProperty,
+                                             ScriptGenerationOptions scriptType) {
+
         JoinTable annotation = metaProperty.getAnnotatedElement().getAnnotation(JoinTable.class);
         String tableName = annotation.name();
         String joinColumnName = annotation.joinColumns()[0].name();

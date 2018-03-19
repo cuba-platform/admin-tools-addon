@@ -52,7 +52,7 @@ public class AdminToolsTestContainer extends TestContainer {
         dbPassword = resourceElem.attributeValue("password");
     }
 
-    public static class Common extends AdminToolsTestContainer {
+    public final static class Common extends AdminToolsTestContainer {
 
         public static final AdminToolsTestContainer.Common INSTANCE = new AdminToolsTestContainer.Common();
 

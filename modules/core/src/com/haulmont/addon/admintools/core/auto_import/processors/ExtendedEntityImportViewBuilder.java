@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * There is added a case for the ONE_TO_MANY property with the type ASSOCIATION,
- * see comments 'admin-tools', line 92
+ * see comments 'admin-tools', line 99
  */
 @SuppressWarnings({"unchecked"})
 public class ExtendedEntityImportViewBuilder extends EntityImportViewBuilder {
@@ -43,7 +43,9 @@ public class ExtendedEntityImportViewBuilder extends EntityImportViewBuilder {
                                 throw new RuntimeException("JsonObject was expected for property " + propertyName);
                             }
                             if (security.isEntityAttrUpdatePermitted(metaClass, propertyName)) {
-                                EntityImportView propertyImportView = buildFromJsonObject(propertyJsonObject.getAsJsonObject(), propertyMetaClass);
+                                EntityImportView propertyImportView = buildFromJsonObject(
+                                        propertyJsonObject.getAsJsonObject(), propertyMetaClass
+                                );
                                 view.addEmbeddedProperty(propertyName, propertyImportView);
                             }
                         } else {
@@ -62,7 +64,8 @@ public class ExtendedEntityImportViewBuilder extends EntityImportViewBuilder {
                                         if (!propertyJsonObject.isJsonObject()) {
                                             throw new RuntimeException("JsonObject was expected for property " + propertyName);
                                         }
-                                        EntityImportView propertyImportView = buildFromJsonObject(propertyJsonObject.getAsJsonObject(), propertyMetaClass);
+                                        EntityImportView propertyImportView = buildFromJsonObject(propertyJsonObject.getAsJsonObject(),
+                                                propertyMetaClass);
                                         if (metaProperty.getRange().getCardinality() == Range.Cardinality.MANY_TO_ONE) {
                                             view.addManyToOneProperty(propertyName, propertyImportView);
                                         } else {
@@ -84,7 +87,11 @@ public class ExtendedEntityImportViewBuilder extends EntityImportViewBuilder {
                         switch (metaProperty.getRange().getCardinality()) {
                             case MANY_TO_MANY:
                                 if (security.isEntityAttrUpdatePermitted(metaClass, propertyName))
-                                    view.addManyToManyProperty(propertyName, ReferenceImportBehaviour.ERROR_ON_MISSING, CollectionImportPolicy.REMOVE_ABSENT_ITEMS);
+                                    view.addManyToManyProperty(
+                                            propertyName,
+                                            ReferenceImportBehaviour.ERROR_ON_MISSING,
+                                            CollectionImportPolicy.REMOVE_ABSENT_ITEMS
+                                    );
                                 break;
                             case ONE_TO_MANY:
                                 if (metaProperty.getType() == MetaProperty.Type.COMPOSITION ||
@@ -95,9 +102,12 @@ public class ExtendedEntityImportViewBuilder extends EntityImportViewBuilder {
                                     if (!compositionJsonArray.isJsonArray()) {
                                         throw new RuntimeException("JsonArray was expected for property " + propertyName);
                                     }
-                                    EntityImportView propertyImportView = buildFromJsonArray(compositionJsonArray.getAsJsonArray(), propertyMetaClass);
+                                    EntityImportView propertyImportView = buildFromJsonArray(compositionJsonArray.getAsJsonArray(),
+                                            propertyMetaClass);
                                     if (security.isEntityAttrUpdatePermitted(metaClass, propertyName))
-                                        view.addOneToManyProperty(propertyName, propertyImportView, CollectionImportPolicy.REMOVE_ABSENT_ITEMS);
+                                        view.addOneToManyProperty(propertyName,
+                                                propertyImportView,
+                                                CollectionImportPolicy.REMOVE_ABSENT_ITEMS);
                                 }
                                 break;
                         }

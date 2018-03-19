@@ -1,6 +1,5 @@
 package com.haulmont.addon.admintools.web.utils;
 
-import com.google.common.io.CharStreams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +20,7 @@ public class NonBlockingIOUtils {
     protected CharBuffer buf = CharBuffer.allocate(BUF_SIZE);
 
     /**
-     * Inspired by {@link CharStreams#copy(Readable, Appendable)}
+     * Inspired by {@link import com.google.common.io.CharStreams.CharStreams#copy(Readable, Appendable)}
      * Read all characters from the {@code input} and convert them to the String.
      * It does not close the {@code input}.
      */
@@ -40,7 +39,7 @@ public class NonBlockingIOUtils {
     }
 
     /**
-     * Inspired by {@link CharStreams#copy(Readable, Appendable)}
+     * Inspired by {@link import com.google.common.io.CharStreams.CharStreams#copy(Readable, Appendable)}
      * Read all characters from the {@code input} and convert them to the String.
      * It does not close the {@code input}.
      *
