@@ -35,8 +35,8 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
     @Inject
     protected Metadata metadata;
 
-    protected String INSERT_TEMPLATE = "insert into %s \n(%s, %s) \nvalues ('%s', '%s');\n";
-    protected String UPDATE_TEMPLATE = "update %s \nset %s, %s \nwhere %s='%s';\n";
+    protected String insertTemplate = "insert into %s \n(%s, %s) \nvalues ('%s', '%s');\n";
+    protected String updateTemplate = "update %s \nset %s, %s \nwhere %s='%s';\n";
 
     protected Set<String> scripts = new HashSet<>();
 
@@ -87,18 +87,18 @@ public class EntityViewSqlGenerationServiceBean implements EntityViewSqlGenerati
         switch (scriptType) {
             case INSERT:
                 for (Entity refEntity : refEntities) {
-                    scripts.add(format(INSERT_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
+                    scripts.add(format(insertTemplate, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
                 }
                 break;
             case UPDATE:
                 for (Entity refEntity : refEntities) {
-                    scripts.add(format(UPDATE_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
+                    scripts.add(format(updateTemplate, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
                 }
                 break;
             case INSERT_UPDATE:
                 for (Entity refEntity : refEntities) {
-                    scripts.add(format(INSERT_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
-                    scripts.add(format(UPDATE_TEMPLATE, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
+                    scripts.add(format(insertTemplate, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
+                    scripts.add(format(updateTemplate, tableName, joinColumnName, inverseJoinColumnName, entity.getId(), refEntity.getId()));
                 }
             default:
                 break;

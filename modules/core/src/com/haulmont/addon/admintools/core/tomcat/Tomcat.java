@@ -32,8 +32,8 @@ public class Tomcat implements TomcatMBean {
     @Inject
     protected Resources resources;
 
-    protected String SCRIPTS_FOLDER = "com/haulmont/addon/admintools/console-scripts/";
-    protected String TOMCAT_DIR = AppContext.getProperty("catalina.home");
+    protected String scriptsFolder = "com/haulmont/addon/admintools/console-scripts/";
+    protected String tomcatDir = AppContext.getProperty("catalina.home");
 
     @Authenticated
     @Override
@@ -42,7 +42,7 @@ public class Tomcat implements TomcatMBean {
             throw new IllegalArgumentException("Relative path can't be empty");
         }
 
-        File script = Paths.get(TOMCAT_DIR, relativePath).toFile();
+        File script = Paths.get(tomcatDir, relativePath).toFile();
         List<String> parsedArgs = consoleTools.parseArgs(arguments != null ? arguments : "");
         consoleBean.execute(script, parsedArgs);
     }
@@ -54,7 +54,7 @@ public class Tomcat implements TomcatMBean {
             executeBat("restart.bat");
         } else if (consoleTools.isOsUnix()) {
             String script = getScript("restart.sh");
-            List<String> parsedArgs = consoleTools.parseArgs(format("\"%s\" <&- &", TOMCAT_DIR));
+            List<String> parsedArgs = consoleTools.parseArgs(format("\"%s\" <&- &", tomcatDir));
             consoleBean.execute(script, parsedArgs).waitFor(60, SECONDS);
         }
     }
@@ -65,7 +65,7 @@ public class Tomcat implements TomcatMBean {
         if (consoleTools.isOsWindows()) {
             executeBat("shutdown.bat");
         } else if (consoleTools.isOsUnix()) {
-            File script = Paths.get(TOMCAT_DIR, "/bin/shutdown.sh").toFile();
+            File script = Paths.get(tomcatDir, "/bin/shutdown.sh").toFile();
             consoleBean.execute(script, emptyList()).waitFor(60, SECONDS);
         }
     }
@@ -73,13 +73,13 @@ public class Tomcat implements TomcatMBean {
     @Authenticated
     @Override
     public String getTomcatAbsolutePath() {
-        return TOMCAT_DIR;
+        return tomcatDir;
     }
 
     @Nonnull
     protected String getScript(String filename) throws FileNotFoundException {
         // resources.getResource().getFile() can't return file from jar
-        String script = resources.getResourceAsString("classpath:" + SCRIPTS_FOLDER + filename);
+        String script = resources.getResourceAsString("classpath:" + scriptsFolder + filename);
 
         if (script == null) {
             throw new FileNotFoundException(format("Script %s is not found", filename));
@@ -89,7 +89,7 @@ public class Tomcat implements TomcatMBean {
 
     protected void executeBat(String scriptName) throws IOException, InterruptedException {
         String script = getScript(scriptName);
-        consoleBean.execute(script, singletonList(TOMCAT_DIR)).waitFor(60, SECONDS);
+        consoleBean.execute(script, singletonList(tomcatDir)).waitFor(60, SECONDS);
     }
 
 }

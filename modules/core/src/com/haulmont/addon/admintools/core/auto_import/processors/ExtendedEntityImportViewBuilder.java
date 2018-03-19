@@ -16,8 +16,9 @@ import java.util.Map;
 
 /**
  * There is added a case for the ONE_TO_MANY property with the type ASSOCIATION,
- * see comments 'admin-tools', line 91
+ * see comments 'admin-tools', line 92
  */
+@SuppressWarnings({"unchecked"})
 public class ExtendedEntityImportViewBuilder extends EntityImportViewBuilder {
 
     @Override
@@ -89,7 +90,7 @@ public class ExtendedEntityImportViewBuilder extends EntityImportViewBuilder {
                                 if (metaProperty.getType() == MetaProperty.Type.COMPOSITION ||
                                         //admin-tools begin
                                         metaProperty.getType() == MetaProperty.Type.ASSOCIATION) {
-                                        //admin-tools end
+                                    //admin-tools end
                                     JsonElement compositionJsonArray = entry.getValue();
                                     if (!compositionJsonArray.isJsonArray()) {
                                         throw new RuntimeException("JsonArray was expected for property " + propertyName);
