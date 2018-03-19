@@ -11,7 +11,7 @@ The component comprises the following parts:
 
 ## Installation
 
-The process of the component installation consists of several steps and is described below.
+The process of the component installation comprises several steps, which are described below.
 
 1. Add the following maven repository `https://repo.cuba-platform.com/content/repositories/premium-snapshots`
 to the build.gradle file of your CUBA application:
@@ -34,13 +34,13 @@ to the build.gradle file of your CUBA application:
      }
      ```
 
-2. Select a version of the add-on which is compatible with the platform version used in your project:
+2. Select a version of the add-on, which is compatible with the platform version used in your project:
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
 | 6.8.1            | 0.1-SNAPSHOT   |
 
-Add a custom application component to your project:
+3. Add a custom application component to your project:
    
    * Artifact group: `com.haulmont.addon.admintools`
    * Artifact name: `cuba-at-global`
@@ -51,7 +51,7 @@ this [paragraph](#creating-an-auto-import-configuration-file)).
   
 ## SQL Scripts Generator
 
-This functionality of the Admin Tools component allows generating SQL scripts for selected entities of a project.
+This functionality of the Admin Tools component allows generating SQL scripts for selected project entities.
 
 ![generate-scripts-menu](img/gen_scripts_menu.png)
 
@@ -65,30 +65,30 @@ select e from example$Entity e
 ![generate-scripts-dialog](img/gen_scripts_dialog.png)
 
 After that, SQL scripts of the specified type are generated for the found entities. If there are no results found, then 
-the system shows a corresponding notification: 'No data found'. You can limit the number of loadable entities using 
-the field 'Entity Limit'
+the system shows a corresponding notification: 'No data found'. You can limit the number of entities to be loaded using 
+the 'Entity Limit' field.
 
-*Note: if you cancel the process, it won't be stopped on the middleware level*
+*Note:* if you cancel the process, it will not be stopped on the middleware level.
 
 ## Auto Import
 
 The AutoImport subsystem is designed to preconfigure servers and transfer data among servers. The process is launched 
 automatically during the server start/restart. 
 
-For importing data, specify a path to a zip-archive or a json file in a configuration file. If an archive with the same name has already
+For importing data, specify a path to a zip-archive or a json file in the configuration file. If an archive with the same name has already
  been processed, then it is not considered by the system and skipped.
  
 There are several options for exporting various entities:
 
 * To export access groups, open Menu: Administration > Access Groups. There, select the required groups in the table and click the 
-__Export as ZIP__ button  or  __Export as JSON__ button.
-(learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/groups.html)). 
+__Export as ZIP__  or __Export as JSON__ button.
+(learn more about this functionality [here](https://doc.cuba-platform.com/manual-6.8/groups.html)). 
 * To export user roles, open Menu: Administration > Roles. There, select the required roles and click 
-the __Export as ZIP__ button  or  __Export as JSON__ button.
-(learn more about this functionality [here﻿](https://doc.cuba-platform.com/manual-6.8/roles.html)). 
+the __Export as ZIP__ or __Export as JSON__ button.
+(learn more about this functionality [here](https://doc.cuba-platform.com/manual-6.8/roles.html)). 
 * To export any other entities, open Menu: Administration > Entity Inspector and specify an entity type in the corresponding field.
- Then select the required entities and click The __Export as ZIP__ button  or  __Export as JSON__ button. (learn more about this functionality 
-[here﻿](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
+ Then select the required entities and click The __Export as ZIP__ or __Export as JSON__ button. (learn more about this functionality 
+[here](https://doc.cuba-platform.com/manual-6.8/entity_inspector.html)). 
 
 #### Creating an auto-import configuration file
 
@@ -106,7 +106,7 @@ the __Export as ZIP__ button  or  __Export as JSON__ button.
 
      Where path is a path to the data file, bean/class — a processor. Bean = [bean name], class = [class path].
    
-2. Add the `admintools.autoImportConfig` property to `app.properties` and, additionally, specify the configuration file path.
+2. Add the `admintools.autoImportConfig` property to `app.properties` and specify the configuration file path.
 The example of `app-properties` with the auto-import configuration is given below:
 
     ```properties
@@ -144,7 +144,7 @@ To create a custom processor, the next steps should be taken:
      ```
    
 2. If a processor is implemented as a java bean, then specify a component name and a path
-to the required file in a configuration file. If a processor is implemented as a class,
+to the required file in the configuration file. If a processor is implemented as a class,
 then provide a path to the class.
    
      ```xml
@@ -163,7 +163,7 @@ then provide a path to the class.
 
 #### Logging
 
-See logging information in the `app.log` file.
+Logging information is available in the `app.log` file.
 
 ##### Successful import
 
@@ -192,30 +192,30 @@ com.haulmont.addon.admintools.core.auto_import.AutoImporterImpl - Importing file
 com.haulmont.addon.admintools.core.auto_import.processors.ReportsAutoImportProcessor - File com/example/invalid.zip not found.
 ```
 
-### Know issues
+### Known Issues
 - class com.haulmont.cuba.core.app.importexport.EntityImportViewBuilder by class ExtendedEntityImportViewBuilder
 for build json if ONE_TO_MANY meta property has type ASSOCIATION.
 
 ## JPQL and SQL Console
 JPQL and SQL Console allows interacting with an application database by using JPQL or SQL. 
 These components are imported from **CUBA Platform Component - Runtime diagnose**.
-See [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
+See the [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
 
 There are some extended classes, for more details see java doc:
 * com.haulmont.addon.admintools.core.db.ExtendedDbDiagnoseServiceBean
 * com.haulmont.addon.admintools.core.db.ExtendedSqlSelectResultFactoryBean
 
 ## Groovy Console
-Groovy Console enables to interactively inspect the running application by entering a groovy script and executing it 
+Groovy Console enables to interactively inspect a running application by entering a groovy script and executing it 
 in an ad-hoc fashion. This component is imported from **CUBA Platform Component - Runtime diagnose**.
-See [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
+See the [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
 
-Notes:
-* There is extended class com.haulmont.addon.admintools.core.db.GroovyConsoleExtended, for more details see java doc.
-* Added an ability for import scripts from zip files
+*Notes:*
+* There is the extended class com.haulmont.addon.admintools.core.db.GroovyConsoleExtended, for more details see java doc.
+* Added an ability to import scripts from zip files
 
 ## Load Config
-Using the Load Config functionality it is possible upload configuration files and various scripts to a configuration 
+Using the Load Config functionality it is possible to upload configuration files and various scripts to a configuration 
 directory right from the system UI without stopping the application. 
 
 ![Load-config-menu-item](img/load-config-menu-item.png)
