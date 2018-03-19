@@ -209,7 +209,9 @@ Groovy Console enables to interactively inspect the running application by enter
 in an ad-hoc fashion. This component is imported from **CUBA Platform Component - Runtime diagnose**.
 See [Runtime diagnose documentation](https://github.com/mariodavid/cuba-component-runtime-diagnose/blob/master/README.md).
 
-There is extended class com.haulmont.addon.admintools.core.db.GroovyConsoleExtended, for more details see java doc.
+Notes:
+* There is extended class com.haulmont.addon.admintools.core.db.GroovyConsoleExtended, for more details see java doc.
+* Added an ability for import scripts from zip files
 
 ## Load Config
 Using the Load Config functionality it is possible upload configuration files and various scripts to a configuration 
