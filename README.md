@@ -65,7 +65,8 @@ select e from example$Entity e
 ![generate-scripts-dialog](img/gen_scripts_dialog.png)
 
 After that, SQL scripts of the specified type are generated for the found entities. If there are no results found, then 
-the system shows a corresponding notification: 'No data found'.
+the system shows a corresponding notification: 'No data found'. You can limit the number of loadable entities using 
+the field 'Entity Limit'
 
 *Note: if you cancel the process, it won't be stopped on the middleware level*
 

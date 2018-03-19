@@ -20,7 +20,10 @@ import javax.inject.Inject;
 import java.util.*;
 
 import static com.haulmont.addon.admintools.global.script_generator.ScriptGenerationOptions.INSERT;
+import static com.haulmont.cuba.gui.components.Frame.NotificationType.HUMANIZED;
+import static com.haulmont.cuba.gui.components.Frame.NotificationType.WARNING;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Collections.emptyList;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class GenerateScriptsResult extends AbstractWindow {
@@ -45,6 +48,8 @@ public class GenerateScriptsResult extends AbstractWindow {
     protected EntityViewSqlGenerationService sqlGenerationService;
     @Inject
     protected ExportDisplay exportDisplay;
+    @Inject
+    protected TextField entityLimitField;
     @Inject
     protected ProgressBar executeProgressBar;
 
@@ -83,7 +88,7 @@ public class GenerateScriptsResult extends AbstractWindow {
 
             @Override
             public boolean handleTimeoutException() {
-                showNotification(getMessage("timeout"), NotificationType.WARNING);
+                showNotification(getMessage("timeout"), WARNING);
                 executeProgressBar.setIndeterminate(false);
                 return true;
             }
@@ -152,7 +157,7 @@ public class GenerateScriptsResult extends AbstractWindow {
 
     protected void printResult(Set<String> result) {
         if (result == null || result.isEmpty()) {
-            showNotification(getMessage("message.noDataFound"), NotificationType.HUMANIZED);
+            showNotification(getMessage("message.noDataFound"), HUMANIZED);
             return;
         }
         resultScript.setValue("");
@@ -174,7 +179,18 @@ public class GenerateScriptsResult extends AbstractWindow {
 
         LoadContext<Entity> loadContext = new LoadContext<>(metaClass);
         loadContext.setView(view);
-        loadContext.setQueryString(query);
+
+        Integer limit = entityLimitField.getValue();
+
+        if(limit != null && limit < 0){
+            return emptyList();
+        }
+
+        if (limit == null) {
+            loadContext.setQueryString(query);
+        } else {
+            loadContext.setQueryString(query).setMaxResults(limit);
+        }
 
         return dataManager.loadList(loadContext);
     }

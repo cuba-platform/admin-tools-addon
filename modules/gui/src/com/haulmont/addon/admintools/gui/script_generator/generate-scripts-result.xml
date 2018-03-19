@@ -41,6 +41,10 @@
                                  nullOptionVisible="false"
                                  textInputAllowed="false"
                                  width="300px"/>
+                    <label align="MIDDLE_CENTER"
+                           value="msg://entityLimit"/>
+                    <textField id="entityLimitField"
+                               datatype="int"/>
                     <progressBar id="executeProgressBar"
                                  align="MIDDLE_CENTER"/>
                 </hbox>
