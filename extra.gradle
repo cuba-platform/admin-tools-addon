@@ -113,6 +113,7 @@ configure([coreModule, webModule]){
 }
 
 def dbNameParam = 'cubaat'
+def dbTestNameParam = 'cubaat-test'
 
 configure(coreModule) {
 
@@ -132,9 +133,17 @@ configure(coreModule) {
         port = 9001
     }
 
+    task startTestDb(description: 'Starts local HSQLDB server', type: CubaHsqlStart) {
+        dbName = dbTestNameParam
+    }
+
+    task stopTestDb(description: 'Stops local HSQLDB server', type: CubaHsqlStop) {
+        dbName = dbTestNameParam
+    }
+
     task createTestDb(dependsOn: assembleDbScripts, description: 'Creates local HSQL database', type: CubaDbCreation) {
         dbms = 'hsql'
-        dbName = dbNameParam
+        dbName = dbTestNameParam
         dbUser = 'sa'
         dbPassword = ''
     }
