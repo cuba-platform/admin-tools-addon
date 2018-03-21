@@ -182,7 +182,7 @@ public class GenerateScriptsResult extends AbstractWindow {
 
         Integer limit = entityLimitField.getValue();
 
-        if(limit != null && limit < 0){
+        if(limit != null && limit <= 0){
             return emptyList();
         }
 

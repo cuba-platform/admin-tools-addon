@@ -7,4 +7,6 @@
             template="com/haulmont/addon/admintools/web/ssh/ssh-console.xml"/>
     <screen id="groovyConsole"
             template="com/haulmont/addon/admintools/web/screens/groovy/groovy-console-extended.xml"/>
+    <screen id="jpqlConsole"
+            template="com/haulmont/addon/admintools/web/screens/jpql/jpql-console-extended.xml"/>
 </screen-config>
