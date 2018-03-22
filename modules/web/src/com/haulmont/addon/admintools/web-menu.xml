@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
-    <menu id="application-cubaat"
-          insertBefore="administration">
+    <menu id="adminTools"
+          insertAfter="consoleMenu">
+        <item id="scriptGenerator"
+              openType="NEW_TAB"
+              screen="admintools$scriptGeneratorsResult"/>
+        <item id="configLoader"
+              openType="DIALOG"
+              screen="admintools$configLoader"/>
+        <item id="shellExecutor"
+              openType="NEW_TAB"
+              screen="shell-executor"/>
+        <item id="sshTerminal"
+              openType="NEW_TAB"
+              screen="ssh-terminal"/>
     </menu>
-    <item id="generateScripts"
-          insertAfter="jmxConsole"
-          openType="NEW_TAB"
-          screen="admintools$generateScriptsResult"/>
-    <item id="loadConfig"
-          insertAfter="generateScripts"
-          openType="DIALOG"
-          screen="admintools$loadConfig"/>
-    <item id="shell-console"
-          insertAfter="jpqlConsole"
-          openType="NEW_TAB"
-          screen="shell-console"/>
-    <item id="ssh-console"
-          insertAfter="shell-console"
-          openType="NEW_TAB"
-          screen="ssh-console"/>
 </menu-config>

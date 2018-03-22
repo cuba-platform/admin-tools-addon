@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
-    <screen id="admintools$generateScriptsDialog"
-            template="/com/haulmont/addon/admintools/gui/script_generator/generate-scripts.xml"/>
-    <screen id="admintools$generateScriptsResult"
-            template="/com/haulmont/addon/admintools/gui/script_generator/generate-scripts-result.xml"/>
-    <screen id="admintools$loadConfig"
-            template="/com/haulmont/addon/admintools/gui/load_config/load-config.xml"/>
+    <screen id="admintools$scriptGeneratorsDialog"
+            template="/com/haulmont/addon/admintools/gui/script_generator/script-generator.xml"/>
+    <screen id="admintools$scriptGeneratorsResult"
+            template="/com/haulmont/addon/admintools/gui/script_generator/script-generator-result.xml"/>
+    <screen id="admintools$configLoader"
+            template="/com/haulmont/addon/admintools/gui/config_loader/config-loader.xml"/>
 
 </screen-config>

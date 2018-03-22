@@ -13,7 +13,7 @@ import com.haulmont.cuba.gui.components.actions.ItemTrackingAction;
 import java.util.Set;
 
 
-public class GenerateScriptsAction extends ItemTrackingAction {
+public class ScriptGeneratorAction extends ItemTrackingAction {
 
     public static final String ACTION_ID = "generateScripts";
 
@@ -23,7 +23,7 @@ public class GenerateScriptsAction extends ItemTrackingAction {
      * The simplest constructor. The action has default name and opens the editor screen in THIS tab.
      * @param target    component containing this action
      */
-    public GenerateScriptsAction(ListComponent target) {
+    public ScriptGeneratorAction(ListComponent target) {
         this(target, WindowManager.OpenType.THIS_TAB, ACTION_ID);
     }
 
@@ -33,7 +33,7 @@ public class GenerateScriptsAction extends ItemTrackingAction {
      * @param openType  how to open the editor screen
      * @param id        action name
      */
-    public GenerateScriptsAction(ListComponent target, WindowManager.OpenType openType, String id) {
+    public ScriptGeneratorAction(ListComponent target, WindowManager.OpenType openType, String id) {
         super(id);
 
         this.target = target;

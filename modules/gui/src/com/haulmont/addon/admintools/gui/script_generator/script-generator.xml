@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://caption.generationModeScreen"
-        class="com.haulmont.addon.admintools.gui.script_generator.GenerateScripts">
+        class="com.haulmont.addon.admintools.gui.script_generator.ScriptGenerator">
     <layout expand="windowActions"
             spacing="true">
         <optionsGroup id="generationMode"/>

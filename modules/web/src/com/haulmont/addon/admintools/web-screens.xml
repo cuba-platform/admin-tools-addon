@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
     <include file="com/haulmont/addon/admintools/screens.xml"/>
-    <screen id="shell-console"
-            template="/com/haulmont/addon/admintools/web/shell/shell-console.xml"/>
-    <screen id="ssh-console"
-            template="com/haulmont/addon/admintools/web/ssh/ssh-console.xml"/>
+    <screen id="shell-executor"
+            template="/com/haulmont/addon/admintools/web/shell/shell-executor.xml"/>
+    <screen id="ssh-terminal"
+            template="com/haulmont/addon/admintools/web/ssh/ssh-terminal.xml"/>
     <screen id="groovyConsole"
             template="com/haulmont/addon/admintools/web/screens/groovy/groovy-console-extended.xml"/>
     <screen id="jpqlConsole"

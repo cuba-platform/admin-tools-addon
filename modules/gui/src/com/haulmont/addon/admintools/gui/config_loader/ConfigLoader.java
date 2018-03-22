@@ -1,4 +1,4 @@
-package com.haulmont.addon.admintools.gui.load_config;
+package com.haulmont.addon.admintools.gui.config_loader;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.Configuration;
@@ -17,7 +17,7 @@ import static java.lang.String.valueOf;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 import static org.apache.commons.lang.StringUtils.*;
 
-public class LoadConfig extends AbstractWindow {
+public class ConfigLoader extends AbstractWindow {
 
     @Inject
     protected Configuration configuration;

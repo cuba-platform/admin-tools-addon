@@ -23,12 +23,12 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-public class SshConsole extends AbstractWindow {
+public class SshTerminal extends AbstractWindow {
 
     public static final Integer DEFAULT_SSH_PORT = 22;
     public static final Integer CONNECTION_TIMEOUT_SECONDS = 22;
 
-    private Logger log = LoggerFactory.getLogger(SshConsole.class);
+    private Logger log = LoggerFactory.getLogger(SshTerminal.class);
 
     @Inject
     protected Metadata metadata;

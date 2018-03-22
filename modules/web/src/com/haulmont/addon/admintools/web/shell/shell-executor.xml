@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://header"
-        class="com.haulmont.addon.admintools.web.shell.ShellConsole"
+        class="com.haulmont.addon.admintools.web.shell.ShellExecutor"
         messagesPack="com.haulmont.addon.admintools.web.shell">
     <timers>
         <timer id="timer" delay="1000" repeating="true" autostart="false" onTimer="printResult"/>

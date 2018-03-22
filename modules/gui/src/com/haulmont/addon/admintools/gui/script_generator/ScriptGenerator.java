@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Map;
 
-public class GenerateScripts extends AbstractWindow {
+public class ScriptGenerator extends AbstractWindow {
 
     protected static final String PARAMETER_SELECTED_ENTITIES = "selectedEntities";
     protected static final String GENERATION_MODE = "generationMode";

@@ -18,7 +18,7 @@ import static com.haulmont.cuba.gui.components.Frame.NotificationType.ERROR;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-public class ShellConsole extends ConsoleWindow {
+public class ShellExecutor extends ConsoleWindow {
 
     @Inject
     protected ConsoleBean consoleBean;

@@ -26,7 +26,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-public class GenerateScriptsResult extends AbstractWindow {
+public class ScriptGeneratorResult extends AbstractWindow {
 
     @Inject
     protected SourceCodeEditor resultScript;

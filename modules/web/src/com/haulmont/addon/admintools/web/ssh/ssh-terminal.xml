@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://caption"
-        class="com.haulmont.addon.admintools.web.ssh.SshConsole"
+        class="com.haulmont.addon.admintools.web.ssh.SshTerminal"
         messagesPack="com.haulmont.addon.admintools.web.ssh"
         xmlns:at="http://schemas.haulmont.com/cubaat/0.1/ui-component.xsd">
     <dsContext>
