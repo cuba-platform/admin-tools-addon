@@ -1,10 +1,9 @@
-package com.haulmont.addon.admintools.core.tomcat;
+package com.haulmont.addon.admintools.global.tomcat;
 
 import com.haulmont.addon.admintools.global.console.ConsoleBean;
 import com.haulmont.addon.admintools.global.console.ConsoleTools;
 import com.haulmont.cuba.core.global.Resources;
 import com.haulmont.cuba.core.sys.AppContext;
-import com.haulmont.cuba.security.app.Authenticated;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -21,8 +20,8 @@ import static java.util.Collections.singletonList;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
-@Component("cuba-at_TomcatMBean")
-public class Tomcat implements TomcatMBean {
+@Component("admintools_Tomcat")
+public class Tomcat {
 
     @Inject
     protected ConsoleBean consoleBean;
@@ -35,8 +34,6 @@ public class Tomcat implements TomcatMBean {
     protected String scriptsFolder = "com/haulmont/addon/admintools/console-scripts/";
     protected String tomcatDir = AppContext.getProperty("catalina.home");
 
-    @Authenticated
-    @Override
     public void executeScript(String relativePath, String arguments) throws IOException {
         if (isBlank(relativePath)) {
             throw new IllegalArgumentException("Relative path can't be empty");
@@ -47,8 +44,6 @@ public class Tomcat implements TomcatMBean {
         consoleBean.execute(script, parsedArgs);
     }
 
-    @Authenticated
-    @Override
     public void reboot() throws IOException, InterruptedException {
         if (consoleTools.isOsWindows()) {
             executeBat("restart.bat");
@@ -59,8 +54,6 @@ public class Tomcat implements TomcatMBean {
         }
     }
 
-    @Authenticated
-    @Override
     public void shutdown() throws IOException, InterruptedException {
         if (consoleTools.isOsWindows()) {
             executeBat("shutdown.bat");
@@ -70,8 +63,6 @@ public class Tomcat implements TomcatMBean {
         }
     }
 
-    @Authenticated
-    @Override
     public String getTomcatAbsolutePath() {
         return tomcatDir;
     }
@@ -91,5 +82,4 @@ public class Tomcat implements TomcatMBean {
         String script = getScript(scriptName);
         consoleBean.execute(script, singletonList(tomcatDir)).waitFor(60, SECONDS);
     }
-
 }

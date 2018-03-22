@@ -7,8 +7,8 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 
 import java.io.IOException;
 
-@ManagedResource(description = "Operations for Tomcat container")
-public interface TomcatMBean {
+@ManagedResource(description = "Operations for Tomcat container on a core module")
+public interface TomcatCoreMBean {
 
     @ManagedOperation(description = "Execute script by path in tomcat directory")
     @ManagedOperationParameters({
