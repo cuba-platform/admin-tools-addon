@@ -269,7 +269,8 @@ the __Fit__ button, which allows managing the size of a terminal.
 ## JMX Tomcat
 JMX Tomcat is a managed bean, which allows operating with Tomcat. JMX Tomcat is supported on Windows and Unix OS.
 The bean can be accessed from Menu: Administration → JMX Console. Start searching by the object name 'Tomcat'
-and the domain 'cuba-at'.
+and the domain 'cuba-at'. There are two objects: TomcatCore for operating with a core module and TomcatWeb for 
+operating with web module.
 
 ![find jmx tomcat](img/find-jmx-tomcat.png) 
 
