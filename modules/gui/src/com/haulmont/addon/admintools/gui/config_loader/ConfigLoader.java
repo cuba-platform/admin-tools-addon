@@ -28,12 +28,12 @@ public class ConfigLoader extends AbstractWindow {
     @Inject
     protected Messages messages;
 
-    protected Path webConfigDir;
+    protected Path configDir;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        webConfigDir = Paths.get(configuration.getConfig(GlobalConfig.class).getConfDir());
+        configDir = Paths.get(configuration.getConfig(GlobalConfig.class).getConfDir()).getParent();
     }
 
     public void apply() {
@@ -45,7 +45,7 @@ public class ConfigLoader extends AbstractWindow {
             String pathFieldValue = parse(configPathField.getRawValue().trim());
 
             try {
-                Path filePath = webConfigDir.resolve(pathFieldValue);
+                Path filePath = configDir.resolve(pathFieldValue);
                 String fileName = fileDescriptor.getName();
                 File targetFile = new File(filePath.toString(), fileName);
 
