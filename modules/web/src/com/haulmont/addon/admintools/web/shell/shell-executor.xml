@@ -83,6 +83,9 @@
                         </buttonsPanel>
                     </hbox>
                 </hbox>
+                <hbox>
+                    <label value="msg://helpMessage"/>
+                </hbox>
                 <groupBox id="argumentsBox"
                           caption="msg://arguments"
                           collapsable="true"
