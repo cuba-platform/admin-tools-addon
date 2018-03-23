@@ -32,7 +32,7 @@ class GroovyConsoleExtended extends GroovyConsole {
     void init(Map<String, Object> params) {
         super.init(params)
         console.setValue(params.getOrDefault('script', ''))
-        uploadField.addFileUploadSucceedListener({ e -> setUploadListener() })
+        uploadField.addFileUploadSucceedListener({ e -> uploadFile() })
     }
 
     @Override
@@ -41,15 +41,20 @@ class GroovyConsoleExtended extends GroovyConsole {
         diagnoseFileDownloader.downloadFile(this, zipBytes)
     }
 
-    protected void setUploadListener() {
+    protected void uploadFile() {
         def extension = uploadField.fileDescriptor.extension
 
-        if ("zip" == extension) {
-            String groovyScript = getScriptFromZip(uploadField.getFileContent())
-            console.setValue("")
-            console.setValue(groovyScript)
-        } else {
+        if ("zip" != extension) {
             showNotification(getMessage("extensionError"))
+            return
+        }
+
+        try {
+            InputStream fileContent = uploadField.getFileContent()
+            String groovyScript = getScriptFromZip(fileContent)
+            console.setValue(groovyScript)
+        } finally {
+            closeQuietly(fileContent)
         }
     }
 
