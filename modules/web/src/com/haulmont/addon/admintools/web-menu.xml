@@ -5,14 +5,18 @@
         <item id="scriptGenerator"
               openType="NEW_TAB"
               screen="admintools$scriptGeneratorsResult"/>
-        <item id="configLoader"
-              openType="DIALOG"
-              screen="admintools$configLoader"/>
         <item id="shellExecutor"
               openType="NEW_TAB"
               screen="shell-executor"/>
         <item id="sshTerminal"
               openType="NEW_TAB"
               screen="ssh-terminal"/>
+        <item id="configLoader"
+              openType="DIALOG"
+              screen="admintools$configLoader"/>
+        <separator/>
+        <item id="consoleScriptLoader"
+              openType="NEW_TAB"
+              screen="console-script-loader"/>
     </menu>
 </menu-config>

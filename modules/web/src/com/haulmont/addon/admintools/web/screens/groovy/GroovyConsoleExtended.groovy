@@ -31,6 +31,7 @@ class GroovyConsoleExtended extends GroovyConsole {
     @Override
     void init(Map<String, Object> params) {
         super.init(params)
+        console.setValue(params.getOrDefault('script', ''))
         uploadField.addFileUploadSucceedListener({ e -> setUploadListener() })
     }
 

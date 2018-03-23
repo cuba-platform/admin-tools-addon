@@ -5,6 +5,8 @@
             template="/com/haulmont/addon/admintools/web/shell/shell-executor.xml"/>
     <screen id="ssh-terminal"
             template="com/haulmont/addon/admintools/web/ssh/ssh-terminal.xml"/>
+    <screen id="console-script-loader"
+            template="com/haulmont/addon/admintools/web/console_script_loader/console-script-loader.xml"/>
     <screen id="groovyConsole"
             template="com/haulmont/addon/admintools/web/screens/groovy/groovy-console-extended.xml"/>
     <screen id="jpqlConsole"
