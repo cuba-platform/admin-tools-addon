@@ -7,8 +7,12 @@
             template="com/haulmont/addon/admintools/web/ssh/ssh-terminal.xml"/>
     <screen id="console-script-loader"
             template="com/haulmont/addon/admintools/web/console_script_loader/console-script-loader.xml"/>
+    <screen id="console-frame"
+            template="com/haulmont/addon/admintools/web/screens/console/console-frame-extended.xml"/>
     <screen id="groovyConsole"
             template="com/haulmont/addon/admintools/web/screens/groovy/groovy-console-extended.xml"/>
     <screen id="jpqlConsole"
             template="com/haulmont/addon/admintools/web/screens/jpql/jpql-console-extended.xml"/>
+    <screen id="sqlConsole"
+            template="com/haulmont/addon/admintools/web/screens/sql/sql-console-extended.xml"/>
 </screen-config>

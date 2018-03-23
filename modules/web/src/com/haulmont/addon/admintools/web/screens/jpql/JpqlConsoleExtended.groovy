@@ -20,10 +20,7 @@ class JpqlConsoleExtended extends JpqlConsole {
 
     @Override
     void init(Map<String, Object> params) {
-        consoleFrame = openFrame(
-                consoleFrame,
-                'console-frame',
-                ParamsMap.of('diagnoseType', DiagnoseType.JPQL)
-        )
+        params.put('diagnoseType', DiagnoseType.JPQL)
+        openFrame(consoleFrame, 'console-frame', params)
     }
 }
