@@ -115,6 +115,13 @@ public class ScriptGeneratorResult extends AbstractWindow {
     }
 
     public void execute() {
+        Integer limit = entityLimitField.getValue();
+
+        if(limit != null && limit <= 0){
+            showNotification(getMessage("entityLimitWarning"), WARNING);
+            return;
+        }
+
         executeProgressBar.setIndeterminate(true);
         connectionTaskWrapper.restart();
     }
@@ -181,10 +188,6 @@ public class ScriptGeneratorResult extends AbstractWindow {
         loadContext.setView(view);
 
         Integer limit = entityLimitField.getValue();
-
-        if(limit != null && limit <= 0){
-            return emptyList();
-        }
 
         if (limit == null) {
             loadContext.setQueryString(query);
