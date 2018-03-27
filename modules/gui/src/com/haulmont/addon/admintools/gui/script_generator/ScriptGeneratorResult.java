@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import java.util.*;
 
 import static com.haulmont.addon.admintools.global.script_generator.ScriptGenerationOptions.INSERT;
+import static com.haulmont.cuba.gui.components.Frame.NotificationType.ERROR;
 import static com.haulmont.cuba.gui.components.Frame.NotificationType.HUMANIZED;
 import static com.haulmont.cuba.gui.components.Frame.NotificationType.WARNING;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -77,7 +78,7 @@ public class ScriptGeneratorResult extends AbstractWindow {
 
         BackgroundTask<Integer, Set<String>> connectionTask = new BackgroundTask<Integer, Set<String>>(60, getFrame()) {
             @Override
-            public Set<String> run(TaskLifeCycle<Integer> taskLifeCycle) throws Exception {
+            public Set<String> run(TaskLifeCycle<Integer> taskLifeCycle) {
                 return getSQLScript();
             }
 
@@ -87,9 +88,16 @@ public class ScriptGeneratorResult extends AbstractWindow {
             }
 
             @Override
-            public boolean handleTimeoutException() {
-                showNotification(getMessage("timeout"), WARNING);
+            public boolean handleException(Exception ex) {
                 executeProgressBar.setIndeterminate(false);
+                showNotification(ex.getMessage(), ERROR);
+                return true;
+            }
+
+            @Override
+            public boolean handleTimeoutException() {
+                executeProgressBar.setIndeterminate(false);
+                showNotification(getMessage("timeout"), WARNING);
                 return true;
             }
 
@@ -117,7 +125,7 @@ public class ScriptGeneratorResult extends AbstractWindow {
     public void execute() {
         Integer limit = entityLimitField.getValue();
 
-        if(limit != null && limit <= 0){
+        if (limit != null && limit <= 0) {
             showNotification(getMessage("entityLimitWarning"), WARNING);
             return;
         }
