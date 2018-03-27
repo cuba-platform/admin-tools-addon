@@ -5,6 +5,7 @@ The component comprises the following parts:
 * [Auto Import subsystem](#auto-import);
 * [JPQL and SQL console](#jpql-and-sql-console);
 * [Groovy console](#groovy-console);
+* [Console Script Loader](#console-script-loader);
 * [Shell Console](#shell-console);
 * [SSH Console](#ssh-console);
 * [JMX Tomcat](#jmx-tomcat).
@@ -213,6 +214,10 @@ See the [Runtime diagnose documentation](https://github.com/mariodavid/cuba-comp
 *Notes:*
 * There is the extended class com.haulmont.addon.admintools.core.db.GroovyConsoleExtended, for more details see java doc.
 * Added an ability to import scripts from zip files
+
+## Console Script Loader
+This component is used to import scripts in the Groovy, JPQL and SQL consoles. You can upload zip to this component and
+'Console Script Loader' will redirect you to corresponding console with a script in a text field.
 
 ## Load Config
 Using the Load Config functionality it is possible to upload configuration files and various scripts to a configuration 
