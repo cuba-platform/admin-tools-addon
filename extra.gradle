@@ -8,13 +8,6 @@ buildscript {
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
-        maven {
-            url 'https://repo.cuba-platform.com/content/repositories/premium-snapshots'
-            credentials {
-                username(rootProject['premiumRepoUser'])
-                password(rootProject['premiumRepoPass'])
-            }
-        }
     }
 
     dependencies {
