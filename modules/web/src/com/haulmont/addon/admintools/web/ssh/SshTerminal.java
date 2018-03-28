@@ -316,6 +316,12 @@ public class SshTerminal extends AbstractWindow {
 
         if(credential!=null){
             optionsList.setValue(null);
+            SshCredential formItem = sshCredentialDs.getItem();
+
+            if(formItem.equals(credential)){
+                sshCredentialDs.setItem(metadata.create(SshCredential.class));
+            }
+
             sshCredentialListDs.removeItem(credential);
             sshCredentialListDs.commit();
             sshCredentialListDs.refresh();
