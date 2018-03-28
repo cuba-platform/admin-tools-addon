@@ -19,7 +19,7 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 
 @Table(name = "CUBAAT_SSH_CREDENTIAL")
 @Entity(name = "cubaat$SshCredential")
-@NamePattern("%s (%s) - |hostname,port")
+@NamePattern("%s@%s|login,hostname")
 public class SshCredential extends StandardEntity {
     private static final long serialVersionUID = -8097580356590206782L;
 

@@ -283,4 +283,12 @@ public class SshTerminal extends AbstractWindow {
         terminal.fit();
     }
 
+    public void loadCredential() {
+    }
+
+    public void saveCredential() {
+    }
+
+    public void removeCredential() {
+    }
 }
