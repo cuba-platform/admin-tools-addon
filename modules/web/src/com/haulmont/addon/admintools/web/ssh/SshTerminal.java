@@ -9,6 +9,7 @@ import com.haulmont.cuba.core.global.FileLoader;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.executors.BackgroundTask;
 import com.haulmont.cuba.gui.executors.BackgroundTaskHandler;
@@ -26,15 +27,15 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.UUID;
 
+import static com.haulmont.cuba.gui.components.Frame.NotificationType.WARNING;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.IOUtils.toByteArray;
 
 public class SshTerminal extends AbstractWindow {
 
-    public static final Integer DEFAULT_SSH_PORT = 22;
     public static final Integer CONNECTION_TIMEOUT_SECONDS = 22;
 
     private Logger log = LoggerFactory.getLogger(SshTerminal.class);
@@ -46,7 +47,13 @@ public class SshTerminal extends AbstractWindow {
     @Inject
     protected Datasource<SshCredential> sshCredentialDs;
     @Inject
-    FileLoader fileLoader;
+    protected CollectionDatasource<SshCredential, UUID> sshCredentialListDs;
+    @Inject
+    protected FieldGroup fieldGroup;
+    @Inject
+    protected OptionsList optionsList;
+    @Inject
+    protected FileLoader fileLoader;
     @Inject
     protected ProgressBar terminalProgressBar;
     @Inject
@@ -69,7 +76,6 @@ public class SshTerminal extends AbstractWindow {
     @Override
     public void init(Map<String, Object> params) {
         SshCredential credentials = metadata.create(SshCredential.class);
-        credentials.setPort(DEFAULT_SSH_PORT);
         sshCredentialDs.setItem(credentials);
 
         connectionTask = new BackgroundTask<Integer, Void>(CONNECTION_TIMEOUT_SECONDS, getFrame()) {
@@ -284,11 +290,35 @@ public class SshTerminal extends AbstractWindow {
     }
 
     public void loadCredential() {
+        SshCredential credential = optionsList.getValue();
+
+        if(credential!=null){
+            sshCredentialDs.setItem(credential);
+            sshCredentialDs.refresh();
+        }
     }
 
     public void saveCredential() {
+        if(!fieldGroup.isValid()){
+            showNotification(getMessage("credetialsNotValid"), WARNING);
+            return;
+        }
+
+        SshCredential item = sshCredentialDs.getItem();
+        sshCredentialListDs.addItem(item);
+        sshCredentialListDs.commit();
+        sshCredentialListDs.refresh();
+        sshCredentialDs.setItem(metadata.create(SshCredential.class));
     }
 
     public void removeCredential() {
+        SshCredential credential = optionsList.getValue();
+
+        if(credential!=null){
+            optionsList.setValue(null);
+            sshCredentialListDs.removeItem(credential);
+            sshCredentialListDs.commit();
+            sshCredentialListDs.refresh();
+        }
     }
 }
