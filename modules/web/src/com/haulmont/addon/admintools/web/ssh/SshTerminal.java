@@ -308,6 +308,7 @@ public class SshTerminal extends AbstractWindow {
         sshCredentialListDs.addItem(item);
         sshCredentialListDs.commit();
         sshCredentialListDs.refresh();
+        optionsList.setValue(item);
         sshCredentialDs.setItem(metadata.create(SshCredential.class));
     }
 
