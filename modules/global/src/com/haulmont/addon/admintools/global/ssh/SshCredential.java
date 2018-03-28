@@ -1,21 +1,16 @@
 package com.haulmont.addon.admintools.global.ssh;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.chile.core.annotations.NumberFormat;
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import com.haulmont.cuba.core.entity.StandardEntity;
 
 @Table(name = "CUBAAT_SSH_CREDENTIAL")
 @Entity(name = "cubaat$SshCredential")
@@ -32,7 +27,7 @@ public class SshCredential extends StandardEntity {
     @NotNull
     @NumberFormat(pattern = "#")
     @Column(name = "PORT", nullable = false)
-    protected Integer port;
+    protected Integer port = 22;
 
     @NotNull
     @Column(name = "LOGIN", nullable = false)
