@@ -35,15 +35,16 @@
                     <field generator="generatePasswordField"
                            property="password"/>
                     <field property="privateKey"/>
+                    <field property="passphrase"/>
                 </column>
             </fieldGroup>
         </groupBox>
         <vbox id="terminalBox"
               expand="terminal"
               spacing="true">
-            <hbox width="100%"
+            <hbox expand="terminalProgressBar"
                   spacing="true"
-                  expand="terminalProgressBar">
+                  width="100%">
                 <buttonsPanel id="terminalBtn">
                     <button id="connectBtn"
                             caption="msg://connect"

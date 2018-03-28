@@ -21,6 +21,10 @@
                   value="+com/haulmont/addon/admintools/spring.xml"/>
         <property name="cuba.mainMessagePack"
                   value="+com.haulmont.addon.admintools.core"/>
+        <artifact classifier="db"
+                  configuration="dbscripts"
+                  ext="zip"
+                  name="cuba-at-core"/>
     </module>
     <module blocks="web,desktop"
             dependsOn="global"

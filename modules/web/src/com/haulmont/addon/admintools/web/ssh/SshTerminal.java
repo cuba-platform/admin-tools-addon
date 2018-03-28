@@ -29,6 +29,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.IOUtils.toByteArray;
 
 public class SshTerminal extends AbstractWindow {
@@ -211,7 +212,8 @@ public class SshTerminal extends AbstractWindow {
         if (privateKey != null) {
             try (InputStream inputStream = fileLoader.openStream(privateKey)) {
                 byte[] privateKeyBytes = toByteArray(inputStream);
-                jsch.addIdentity(credentials.getHostname(), privateKeyBytes, null, null);
+                byte[] passphraseBytes = credentials.getPassphrase() == null ? null : credentials.getPassphrase().getBytes();
+                jsch.addIdentity(credentials.getHostname(), privateKeyBytes, null, passphraseBytes);
             }
         }
 
@@ -273,7 +275,7 @@ public class SshTerminal extends AbstractWindow {
             return;
         }
 
-        terminal.write(ioUtils.toStringWithBarrier(mainIn, StandardCharsets.UTF_8, 100));
+        terminal.write(ioUtils.toStringWithBarrier(mainIn, UTF_8, 100));
     }
 
 

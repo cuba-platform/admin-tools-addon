@@ -46,6 +46,18 @@ public class SshCredential extends StandardEntity {
     @JoinColumn(name = "PRIVATE_KEY_ID")
     protected FileDescriptor privateKey;
 
+    @Column(name = "PASSPHRASE")
+    protected String passphrase;
+
+    public void setPassphrase(String passphrase) {
+        this.passphrase = passphrase;
+    }
+
+    public String getPassphrase() {
+        return passphrase;
+    }
+
+
     public void setHostname(String hostname) {
         this.hostname = hostname;
     }
