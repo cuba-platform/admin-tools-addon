@@ -5,9 +5,9 @@
         messagesPack="com.haulmont.addon.admintools.web.ssh"
         xmlns:at="http://schemas.haulmont.com/cubaat/0.1/ui-component.xsd">
     <dsContext>
-        <datasource id="sshCredentialsDs"
+        <datasource id="sshCredentialDs"
                     allowCommit="false"
-                    class="com.haulmont.addon.admintools.global.ssh.SshCredentials"/>
+                    class="com.haulmont.addon.admintools.global.ssh.SshCredential"/>
     </dsContext>
     <timers>
         <timer id="updateConsole"
@@ -26,7 +26,7 @@
                   collapsed="true"
                   spacing="true">
             <fieldGroup id="fieldGroup"
-                        datasource="sshCredentialsDs">
+                        datasource="sshCredentialDs">
                 <column width="250px">
                     <field caption="msg://host.caption"
                            generator="generateHostnameField"
@@ -34,6 +34,7 @@
                     <field property="login"/>
                     <field generator="generatePasswordField"
                            property="password"/>
+                    <field property="privateKey"/>
                 </column>
             </fieldGroup>
         </groupBox>

@@ -1,13 +1,19 @@
 package com.haulmont.addon.admintools.web.ssh;
 
-import com.haulmont.addon.admintools.global.ssh.SshCredentials;
+import com.haulmont.addon.admintools.global.ssh.SshCredential;
 import com.haulmont.addon.admintools.gui.xterm.components.EnterReactivePasswordField;
 import com.haulmont.addon.admintools.gui.xterm.components.XtermJs;
 import com.haulmont.addon.admintools.web.utils.NonBlockingIOUtils;
+import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.global.FileLoader;
+import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
-import com.haulmont.cuba.gui.executors.*;
+import com.haulmont.cuba.gui.executors.BackgroundTask;
+import com.haulmont.cuba.gui.executors.BackgroundTaskHandler;
+import com.haulmont.cuba.gui.executors.BackgroundWorker;
+import com.haulmont.cuba.gui.executors.TaskLifeCycle;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
@@ -23,6 +29,8 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import static org.apache.commons.io.IOUtils.toByteArray;
+
 public class SshTerminal extends AbstractWindow {
 
     public static final Integer DEFAULT_SSH_PORT = 22;
@@ -32,19 +40,16 @@ public class SshTerminal extends AbstractWindow {
 
     @Inject
     protected Metadata metadata;
-
     @Inject
     protected ComponentsFactory componentsFactory;
-
     @Inject
-    protected Datasource<SshCredentials> sshCredentialsDs;
-
+    protected Datasource<SshCredential> sshCredentialDs;
+    @Inject
+    FileLoader fileLoader;
     @Inject
     protected ProgressBar terminalProgressBar;
-
     @Inject
     protected XtermJs terminal;
-
     @Inject
     protected BackgroundWorker backgroundWorker;
 
@@ -57,18 +62,18 @@ public class SshTerminal extends AbstractWindow {
     protected NonBlockingIOUtils ioUtils = new NonBlockingIOUtils();
     protected BackgroundTask<Integer, Void> connectionTask;
     protected BackgroundTaskHandler connectionTaskHandler;
-    protected SshCredentials credentials;
+    protected SshCredential credentials;
     protected TextField hostnameField;
 
     @Override
     public void init(Map<String, Object> params) {
-        SshCredentials credentials = metadata.create(SshCredentials.class);
+        SshCredential credentials = metadata.create(SshCredential.class);
         credentials.setPort(DEFAULT_SSH_PORT);
-        sshCredentialsDs.setItem(credentials);
+        sshCredentialDs.setItem(credentials);
 
         connectionTask = new BackgroundTask<Integer, Void>(CONNECTION_TIMEOUT_SECONDS, getFrame()) {
             @Override
-            public Void run(TaskLifeCycle<Integer> taskLifeCycle) throws JSchException, IOException {
+            public Void run(TaskLifeCycle<Integer> taskLifeCycle) throws JSchException, IOException, FileStorageException {
                 internalConnect();
                 if (connectionTaskHandler.isCancelled()) {
                     disconnectSsh();
@@ -87,13 +92,13 @@ public class SshTerminal extends AbstractWindow {
 
             @Override
             public void canceled() {
-                terminal.writeln(formatMessage("console.disconnected", sshCredentialsDs.getItem().getHostname()));
+                terminal.writeln(formatMessage("console.disconnected", sshCredentialDs.getItem().getHostname()));
                 terminalProgressBar.setIndeterminate(false);
             }
 
             @Override
             public boolean handleTimeoutException() {
-                terminal.writeln(formatMessage("console.disconnected.timeout", sshCredentialsDs.getItem().getHostname()));
+                terminal.writeln(formatMessage("console.disconnected.timeout", sshCredentialDs.getItem().getHostname()));
                 terminalProgressBar.setIndeterminate(false);
                 return true;
             }
@@ -117,21 +122,21 @@ public class SshTerminal extends AbstractWindow {
     protected boolean preClose(String actionId) {
         if (isBackgroundTaskExecuted()) {
             connectionTaskHandler.cancel();
-            showNotification(formatMessage("console.disconnected", sshCredentialsDs.getItem().getHostname()));
+            showNotification(formatMessage("console.disconnected", sshCredentialDs.getItem().getHostname()));
         } else {
             if (isMainChannelOpen()) {
                 mainChannel.disconnect();
             }
             if (isSessionOpen()) {
                 session.disconnect();
-                showNotification(formatMessage("console.disconnected", sshCredentialsDs.getItem().getHostname()));
+                showNotification(formatMessage("console.disconnected", sshCredentialDs.getItem().getHostname()));
             }
         }
         return super.preClose(actionId);
     }
 
     protected void terminalDataListener(String data) {
-        if (! isMainChannelOpen()) {
+        if (!isMainChannelOpen()) {
             return;
         }
 
@@ -158,7 +163,7 @@ public class SshTerminal extends AbstractWindow {
     }
 
     public void connect() {
-        if (! validateAll() || isBackgroundTaskExecuted()) {
+        if (!validateAll() || isBackgroundTaskExecuted()) {
             return;
         }
 
@@ -180,17 +185,15 @@ public class SshTerminal extends AbstractWindow {
     }
 
     protected void executeConnectionProgressTask() {
-        credentials = sshCredentialsDs.getItem();
+        credentials = sshCredentialDs.getItem();
         terminalProgressBar.setIndeterminate(true);
         connectionTaskHandler = backgroundWorker.handle(connectionTask);
         connectionTaskHandler.execute();
         terminal.writeln(formatMessage("console.connected", credentials.getHostname()));
     }
 
-    protected void internalConnect() throws JSchException, IOException {
-        session = jsch.getSession(credentials.getLogin(), credentials.getHostname(), credentials.getPort());
-        session.setPassword(credentials.getPassword());
-        session.setConfig("StrictHostKeyChecking", "no");
+    protected void internalConnect() throws JSchException, IOException, FileStorageException {
+        session = getSession();
         session.connect();
 
         mainChannel = (ChannelShell) session.openChannel("shell");
@@ -200,6 +203,26 @@ public class SshTerminal extends AbstractWindow {
 
         mainOut = new PrintStream(mainChannel.getOutputStream());
         mainIn = mainChannel.getInputStream();
+    }
+
+    protected Session getSession() throws JSchException, IOException, FileStorageException {
+        FileDescriptor privateKey = credentials.getPrivateKey();
+
+        if (privateKey != null) {
+            try (InputStream inputStream = fileLoader.openStream(privateKey)) {
+                byte[] privateKeyBytes = toByteArray(inputStream);
+                jsch.addIdentity(credentials.getHostname(), privateKeyBytes, null, null);
+            }
+        }
+
+        Session session = jsch.getSession(credentials.getLogin(), credentials.getHostname(), credentials.getPort());
+
+        if (privateKey == null) {
+            session.setPassword(credentials.getPassword());
+        }
+
+        session.setConfig("StrictHostKeyChecking", "no");
+        return session;
     }
 
     public Component generateHostnameField(Datasource datasource, String fieldId) {
@@ -241,12 +264,12 @@ public class SshTerminal extends AbstractWindow {
         }
         if (isSessionOpen()) {
             session.disconnect();
-            terminal.writeln(formatMessage("console.disconnected", sshCredentialsDs.getItem().getHostname()));
+            terminal.writeln(formatMessage("console.disconnected", sshCredentialDs.getItem().getHostname()));
         }
     }
 
     public void onUpdateConsole(Timer source) throws IOException {
-        if (! isMainChannelOpen()) {
+        if (!isMainChannelOpen()) {
             return;
         }
 
