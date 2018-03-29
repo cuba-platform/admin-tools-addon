@@ -29,10 +29,10 @@ class JpqlSuggesterHelper {
         def wordBeforeCursor = getLastWord(text.substring(0, senderCursorPosition))
 
         if (wordBeforeCursor.contains('.')) {
-            tryGetAttributeNames(wordBeforeCursor, sender, text, senderCursorPosition)
+            return tryGetAttributeNames(wordBeforeCursor, sender, text, senderCursorPosition)
         }
 
-        getEntitiesNames(wordBeforeCursor, sender, senderCursorPosition)
+        return getEntitiesNames(wordBeforeCursor, sender, senderCursorPosition)
     }
 
     protected List<Suggestion> tryGetAttributeNames(String wordBeforeCursor, SourceCodeEditor sender, String text, int senderCursorPosition) {
@@ -55,7 +55,7 @@ class JpqlSuggesterHelper {
 
         int startPosition = senderCursorPosition - 2 < 0 ? 0 : senderCursorPosition - 2
 
-        Stream.concat(persistentClasses.stream(), embeddableClasses.stream())
+        return Stream.concat(persistentClasses.stream(), embeddableClasses.stream())
                 .filter({ metaClass ->
                     startsWithIgnoreCase(metaClass.name, wordBeforeCursor)
                 })
