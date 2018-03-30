@@ -9,13 +9,6 @@ buildscript {
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
-        maven {
-            url 'https://repo.cuba-platform.com/content/repositories/premium-snapshots'
-            credentials {
-                username(rootProject['premiumRepoUser'])
-                password(rootProject['premiumRepoPass'])
-            }
-        }
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
@@ -53,7 +46,7 @@ cuba {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.diedavids.cuba.runtimediagnose:runtime-diagnose-global:0.4.2-SNAPSHOT")
+    appComponent("de.diedavids.cuba.runtimediagnose:runtime-diagnose-global:0.5.0-SNAPSHOT")
 
 }
 
