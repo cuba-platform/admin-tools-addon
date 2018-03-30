@@ -20,11 +20,8 @@ import javax.inject.Inject;
 import java.util.*;
 
 import static com.haulmont.addon.admintools.global.script_generator.ScriptGenerationOptions.INSERT;
-import static com.haulmont.cuba.gui.components.Frame.NotificationType.ERROR;
-import static com.haulmont.cuba.gui.components.Frame.NotificationType.HUMANIZED;
-import static com.haulmont.cuba.gui.components.Frame.NotificationType.WARNING;
+import static com.haulmont.cuba.gui.components.Frame.NotificationType.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Collections.emptyList;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 public class ScriptGeneratorResult extends AbstractWindow {

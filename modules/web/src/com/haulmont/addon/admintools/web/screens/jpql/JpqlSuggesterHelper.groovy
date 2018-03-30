@@ -16,7 +16,7 @@ import java.util.stream.Collectors
 import java.util.stream.Stream
 
 import static java.util.Collections.emptyList
-import static org.apache.commons.lang.StringUtils.startsWithIgnoreCase
+import static org.apache.commons.lang.StringUtils.containsIgnoreCase
 import static org.apache.commons.lang.StringUtils.substringBefore
 
 @Component('admintools_JpqlSuggesterHelper')
@@ -53,15 +53,15 @@ class JpqlSuggesterHelper {
         Collection<MetaClass> persistentClasses = metadata.getTools().getAllPersistentMetaClasses()
         Collection<MetaClass> embeddableClasses = metadata.getTools().getAllEmbeddableMetaClasses()
 
-        int startPosition = senderCursorPosition - 2 < 0 ? 0 : senderCursorPosition - 2
+        int position = senderCursorPosition - wordBeforeCursor.length()
 
         return Stream.concat(persistentClasses.stream(), embeddableClasses.stream())
                 .filter({ metaClass ->
-                    startsWithIgnoreCase(metaClass.name, wordBeforeCursor)
+                    containsIgnoreCase(metaClass.name, wordBeforeCursor)
                 })
                 .map({ metaClass ->
                     String className = metaClass.name
-                    new Suggestion(sender as AutoCompleteSupport, className, className, '', startPosition, senderCursorPosition)
+                    new Suggestion(sender as AutoCompleteSupport, className, className, className, position, position)
                 })
                 .collect(Collectors.toList() as Collector<? super Object, Object, Object>) as List<Suggestion>
     }
