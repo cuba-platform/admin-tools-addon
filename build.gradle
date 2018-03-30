@@ -37,11 +37,6 @@ cuba {
     ide {
         vcs = 'Git'
     }
-    uploadRepository {
-        url='http://repository.haulmont.com:8587/nexus/content/repositories/snapshots'
-        user = haulmontNexusLogin
-        password = haulmontNexusPassword
-    }
 }
 
 dependencies {

@@ -14,7 +14,7 @@ The component comprises the following parts:
 
 The process of the component installation comprises several steps, which are described below.
 
-1. Add the following maven repository `https://repo.cuba-platform.com/content/repositories/premium-snapshots`
+1. Add the following maven repository `https://repo.cuba-platform.com/content/groups/work`
 to the build.gradle file of your CUBA application:
    
      ```groovy
@@ -27,7 +27,7 @@ to the build.gradle file of your CUBA application:
            // ...
             
            maven {
-              url  "https://repo.cuba-platform.com/content/repositories/premium-snapshots"
+              url  "https://repo.cuba-platform.com/content/groups/work"
            }
         }
             
@@ -39,7 +39,7 @@ to the build.gradle file of your CUBA application:
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
-| 6.8.1            | 0.1-SNAPSHOT   |
+| 6.8.x            | 0.1-SNAPSHOT   |
 
 3. Add a custom application component to your project:
    
