@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import com.haulmont.chile.core.annotations.MetaProperty;
 
 @Table(name = "CUBAAT_SSH_CREDENTIAL")
 @Entity(name = "cubaat$SshCredential")
@@ -36,7 +37,8 @@ public class SshCredential extends StandardEntity {
     @Column(name = "LOGIN", nullable = false)
     protected String login;
 
-    @Column(name = "PASSWORD")
+    @Transient
+    @MetaProperty
     protected String password;
 
     @OnDelete(DeletePolicy.CASCADE)
@@ -44,7 +46,8 @@ public class SshCredential extends StandardEntity {
     @JoinColumn(name = "PRIVATE_KEY_ID")
     protected FileDescriptor privateKey;
 
-    @Column(name = "PASSPHRASE")
+    @Transient
+    @MetaProperty
     protected String passphrase;
 
     public void setIsForEveryoneUsers(Boolean isForEveryoneUsers) {
