@@ -15,13 +15,16 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 
 @Table(name = "CUBAAT_SSH_CREDENTIAL")
 @Entity(name = "cubaat$SshCredential")
-@NamePattern("%s@%s|login,hostname")
+@NamePattern("%s|sessionName")
 public class SshCredential extends StandardEntity {
     private static final long serialVersionUID = -8097580356590206782L;
 
     @NotNull
     @Column(name = "HOSTNAME", nullable = false)
     protected String hostname;
+
+    @Column(name = "SESSION_NAME")
+    protected String sessionName;
 
     @Column(name = "IS_FOR_EVERYONE_USERS")
     protected Boolean isForEveryoneUsers;
@@ -58,6 +61,21 @@ public class SshCredential extends StandardEntity {
         return isForEveryoneUsers;
     }
 
+    public String getSessionName() {
+        return sessionName;
+    }
+
+    public void setSessionName(String sessionName) {
+        this.sessionName = sessionName;
+    }
+
+    public Boolean getForEveryoneUsers() {
+        return isForEveryoneUsers;
+    }
+
+    public void setForEveryoneUsers(Boolean forEveryoneUsers) {
+        isForEveryoneUsers = forEveryoneUsers;
+    }
 
     public void setPassphrase(String passphrase) {
         this.passphrase = passphrase;

@@ -60,13 +60,23 @@
                     </column>
                 </fieldGroup>
                 <vbox id="credentials"
-                      margin="true"
                       spacing="true"
                       width="550px">
+                    <hbox id="hboxSessionName"
+                          spacing="true">
+                        <label id="sessionNameLabel"
+                               align="TOP_CENTER"
+                               value="msg://sessionName"
+                               width="100px"/>
+                        <textField id="sessionNameField"
+                                   width="300px"/>
+                    </hbox>
                     <hbox id="hboxSessions"
                           spacing="true">
                         <label id="savedSessionLabel"
-                               value="msg://savedSessions"/>
+                               align="TOP_CENTER"
+                               value="msg://savedSessions"
+                               width="100px"/>
                         <optionsList id="optionsList"
                                      height="160px"
                                      nullOptionVisible="false"

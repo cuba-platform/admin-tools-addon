@@ -31,8 +31,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.haulmont.cuba.gui.components.Frame.NotificationType.WARNING;
+import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.IOUtils.toByteArray;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 public class SshTerminal extends AbstractWindow {
 
@@ -50,6 +52,8 @@ public class SshTerminal extends AbstractWindow {
     protected CollectionDatasource<SshCredential, UUID> sshCredentialListDs;
     @Inject
     protected FieldGroup fieldGroup;
+    @Inject
+    protected TextField sessionNameField;
     @Inject
     protected OptionsList optionsList;
     @Inject
@@ -305,6 +309,14 @@ public class SshTerminal extends AbstractWindow {
         }
 
         SshCredential item = sshCredentialDs.getItem();
+
+        String sessionName = sessionNameField.getRawValue();
+        if(isBlank(sessionName)){
+            item.setSessionName(format("%s@%s", item.getLogin(), item.getHostname()));
+        } else {
+            item.setSessionName(sessionName);
+        }
+
         sshCredentialListDs.addItem(item);
         sshCredentialListDs.commit();
         sshCredentialListDs.refresh();
