@@ -41,23 +41,25 @@ public class ConfigLoader extends AbstractWindow {
 
         if (fileDescriptor == null) {
             showNotification(getMessage("fileNotUploaded"));
-        } else {
-            String pathFieldValue = parse(configPathField.getRawValue().trim());
-
-            try {
-                Path filePath = configDir.resolve(pathFieldValue);
-                String fileName = fileDescriptor.getName();
-                File targetFile = new File(filePath.toString(), fileName);
-
-                if (targetFile.exists()) {
-                    confirmOverwriteFile(fileName, targetFile);
-                } else {
-                    createNewFile(targetFile);
-                }
-            } catch (InvalidPathException e) {
-                showNotification(formatMessage(getMessage("pathValidMessage"), pathFieldValue));
-            }
+            return;
         }
+
+        String pathFieldValue = parse(configPathField.getRawValue().trim());
+
+        try {
+            Path filePath = configDir.resolve(pathFieldValue);
+            String fileName = fileDescriptor.getName();
+            File targetFile = new File(filePath.toString(), fileName);
+
+            if (targetFile.exists()) {
+                confirmOverwriteFile(fileName, targetFile);
+            } else {
+                createNewFile(targetFile);
+            }
+        } catch (InvalidPathException e) {
+            showNotification(formatMessage(getMessage("pathValidMessage"), pathFieldValue));
+        }
+
     }
 
     public void cancel() {

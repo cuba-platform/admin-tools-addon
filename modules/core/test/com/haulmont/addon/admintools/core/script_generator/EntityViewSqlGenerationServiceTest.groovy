@@ -135,18 +135,6 @@ class EntityViewSqlGenerationServiceTest extends Specification {
 
     }
 
-    def "check generate select scripts for user 'admin' with view '_local'"() {
-        when:
-        Set<String> scripts = delegate.generateScript(localAdmin, localView, ScriptGenerationOptions.SELECT)
-
-
-        then:
-        scripts.size() == 1
-        String script = scripts.getAt(0)
-        containsAllWords(script, 'select', 'from SEC_USER')
-        containsAllWords(script, localViewColumns)
-    }
-
     static boolean containsAllWords(String word, String... keywords) {
         for (String k : keywords) {
             if (!word.contains(k)) {
