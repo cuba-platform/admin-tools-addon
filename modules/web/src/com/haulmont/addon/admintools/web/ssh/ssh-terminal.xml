@@ -7,13 +7,13 @@
     <dsContext>
         <datasource id="sshCredentialDs"
                     allowCommit="false"
-                    view="withPrivateKey"
-                    class="com.haulmont.addon.admintools.global.ssh.SshCredential"/>
+                    class="com.haulmont.addon.admintools.global.ssh.SshCredential"
+                    view="withPrivateKey"/>
         <collectionDatasource id="sshCredentialListDs"
-                              view="withPrivateKey"
-                              class="com.haulmont.addon.admintools.global.ssh.SshCredential">
+                              class="com.haulmont.addon.admintools.global.ssh.SshCredential"
+                              view="withPrivateKey">
             <query>
-                <![CDATA[select s from cubaat$SshCredential s]]>
+                <![CDATA[select s from cubaat$SshCredential s where s.isForEveryoneUsers=true or s.createdBy = :session$userLogin]]>
             </query>
         </collectionDatasource>
     </dsContext>
@@ -25,9 +25,15 @@
                repeating="true"/>
     </timers>
     <actions>
-        <action id="loadCredential" caption="msg://loadCredential" invoke="loadCredential"/>
-        <action id="saveCredential" caption="msg://saveCredential" invoke="saveCredential"/>
-        <action id="removeCredential" caption="msg://removeCredential" invoke="removeCredential"/>
+        <action id="loadCredential"
+                caption="msg://loadCredential"
+                invoke="loadCredential"/>
+        <action id="saveCredential"
+                caption="msg://saveCredential"
+                invoke="saveCredential"/>
+        <action id="removeCredential"
+                caption="msg://removeCredential"
+                invoke="removeCredential"/>
     </actions>
     <dialogMode height="600"
                 width="800"/>
@@ -38,7 +44,7 @@
                   collapsable="true"
                   collapsed="true"
                   spacing="true">
-            <split orientation="horizontal" width="100%" maxSplitPosition="350px">
+            <hbox spacing="true">
                 <fieldGroup id="fieldGroup"
                             datasource="sshCredentialDs">
                     <column width="250px">
@@ -50,25 +56,38 @@
                                property="password"/>
                         <field property="privateKey"/>
                         <field property="passphrase"/>
+                        <field property="isForEveryoneUsers"/>
                     </column>
                 </fieldGroup>
-                <vbox id="credentials" margin="true" spacing="true" width="550px">
-                    <hbox id="hboxSessions" spacing="true">
-                        <label id="savedSessionLabel" value="msg://savedSessions"/>
+                <vbox id="credentials"
+                      margin="true"
+                      spacing="true"
+                      width="550px">
+                    <hbox id="hboxSessions"
+                          spacing="true">
+                        <label id="savedSessionLabel"
+                               value="msg://savedSessions"/>
                         <optionsList id="optionsList"
-                                     optionsDatasource="sshCredentialListDs"
+                                     height="160px"
                                      nullOptionVisible="false"
-                                     width="300px"
-                                     height="160px"/>
-                        <vbox id="sessionsButtons" spacing="true">
-                            <button id="loadCredentialBtn" action="loadCredential"/>
-                            <button id="saveCredentialBtn" action="saveCredential"/>
-                            <button id="removeCredentialBtn" action="removeCredential"/>
+                                     optionsDatasource="sshCredentialListDs"
+                                     width="300px"/>
+                        <vbox id="sessionsButtons"
+                              spacing="true"
+                              width="80px">
+                            <button id="loadCredentialBtn"
+                                    action="loadCredential"
+                                    width="80px"/>
+                            <button id="saveCredentialBtn"
+                                    action="saveCredential"
+                                    width="80px"/>
+                            <button id="removeCredentialBtn"
+                                    action="removeCredential"
+                                    width="80px"/>
                         </vbox>
                     </hbox>
-
                 </vbox>
-            </split>
+            </hbox>
         </groupBox>
         <vbox id="terminalBox"
               expand="terminal"

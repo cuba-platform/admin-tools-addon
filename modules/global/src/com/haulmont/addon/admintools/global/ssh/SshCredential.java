@@ -22,6 +22,9 @@ public class SshCredential extends StandardEntity {
     @Column(name = "HOSTNAME", nullable = false)
     protected String hostname;
 
+    @Column(name = "IS_FOR_EVERYONE_USERS")
+    protected Boolean isForEveryoneUsers;
+
     @Max(message = "{msg://com.haulmont.addon.admintools.entity/max-port-validation}", value = 65535)
     @Min(message = "{msg://com.haulmont.addon.admintools.entity/min-port-validation}", value = 1)
     @NotNull
@@ -43,6 +46,15 @@ public class SshCredential extends StandardEntity {
 
     @Column(name = "PASSPHRASE")
     protected String passphrase;
+
+    public void setIsForEveryoneUsers(Boolean isForEveryoneUsers) {
+        this.isForEveryoneUsers = isForEveryoneUsers;
+    }
+
+    public Boolean getIsForEveryoneUsers() {
+        return isForEveryoneUsers;
+    }
+
 
     public void setPassphrase(String passphrase) {
         this.passphrase = passphrase;
