@@ -62,7 +62,7 @@ public class ConsoleScriptLoader extends AbstractWindow {
                 }
             }
         } catch (Exception e) {
-            showNotification(getMessage("errorZipReading"), ERROR);
+            showNotification(e.getLocalizedMessage(), ERROR);
         }
     }
 

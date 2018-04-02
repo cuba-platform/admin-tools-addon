@@ -92,7 +92,7 @@ public class ConfigLoader extends AbstractWindow {
         InputStream loadedFile = uploadField.getFileContent();
 
         if (loadedFile == null) {
-            showNotification(getMessage("uploadFailed"), NotificationType.ERROR);
+            showNotification(getMessage("fileIsEmpty"), NotificationType.ERROR);
             return;
         }
 
@@ -105,7 +105,7 @@ public class ConfigLoader extends AbstractWindow {
                 messages.clearCache();
             }
         } catch (IOException e) {
-            showNotification(getMessage("uploadFailed"), NotificationType.ERROR);
+            showNotification(e.getLocalizedMessage(), NotificationType.ERROR);
         }
     }
 

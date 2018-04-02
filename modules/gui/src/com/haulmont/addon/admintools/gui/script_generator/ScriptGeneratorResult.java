@@ -87,7 +87,7 @@ public class ScriptGeneratorResult extends AbstractWindow {
             @Override
             public boolean handleException(Exception ex) {
                 executeProgressBar.setIndeterminate(false);
-                showNotification(ex.getMessage(), ERROR);
+                showNotification(ex.getLocalizedMessage(), ERROR);
                 return true;
             }
 
