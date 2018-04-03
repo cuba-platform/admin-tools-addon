@@ -2,6 +2,8 @@
 
 # CUBA Platform Component - Admin Tools
 
+This application component can be used to extend the capabilities of a [CUBA.Platform](https://www.cuba-platform.com/) application for interactive runtime application diagnose.
+
 The component comprises the following parts:
 * [Generator of SQL scripts](#sql-scripts-generator);
 * [Auto Import subsystem](#auto-import);
