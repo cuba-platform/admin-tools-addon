@@ -299,6 +299,7 @@ public class SshTerminal extends AbstractWindow {
         if(credential!=null){
             sshCredentialDs.setItem(credential);
             sshCredentialDs.refresh();
+            sessionNameField.setValue(credential.getSessionName());
         }
     }
 
@@ -317,7 +318,12 @@ public class SshTerminal extends AbstractWindow {
             item.setSessionName(sessionName);
         }
 
-        sshCredentialListDs.addItem(item);
+       if(sshCredentialListDs.containsItem(item.getUuid())){
+           sshCredentialListDs.modifyItem(item);
+       } else {
+           sshCredentialListDs.addItem(item);
+       }
+
         sshCredentialListDs.commit();
         sshCredentialListDs.refresh();
         optionsList.setValue(item);
