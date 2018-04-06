@@ -23,7 +23,8 @@ public class SshCredential extends StandardEntity {
     @Column(name = "HOSTNAME", nullable = false)
     protected String hostname;
 
-    @Column(name = "SESSION_NAME")
+    @NotNull
+    @Column(name = "SESSION_NAME", nullable = false)
     protected String sessionName;
 
     @Column(name = "IS_FOR_EVERYONE_USERS")

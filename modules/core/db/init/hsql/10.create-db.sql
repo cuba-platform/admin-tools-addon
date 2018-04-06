@@ -10,7 +10,7 @@ create table CUBAAT_SSH_CREDENTIAL (
     DELETED_BY varchar(50),
     --
     HOSTNAME varchar(255) not null,
-    SESSION_NAME varchar(255),
+    SESSION_NAME varchar(255) not null,
     IS_FOR_EVERYONE_USERS boolean,
     PORT integer not null,
     LOGIN varchar(255) not null,

@@ -24,17 +24,6 @@
                onTimer="onUpdateConsole"
                repeating="true"/>
     </timers>
-    <actions>
-        <action id="loadCredential"
-                caption="msg://loadCredential"
-                invoke="loadCredential"/>
-        <action id="saveCredential"
-                caption="msg://saveCredential"
-                invoke="saveCredential"/>
-        <action id="removeCredential"
-                caption="msg://removeCredential"
-                invoke="removeCredential"/>
-    </actions>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="terminalBox"
@@ -48,6 +37,9 @@
                 <fieldGroup id="fieldGroup"
                             datasource="sshCredentialDs">
                     <column width="250px">
+                        <field property="sessionName"
+                               caption="msg://sessionName"
+                               required="false"/>
                         <field caption="msg://host.caption"
                                generator="generateHostnameField"
                                property="hostname"/>
@@ -62,15 +54,6 @@
                 <vbox id="credentials"
                       spacing="true"
                       width="550px">
-                    <hbox id="hboxSessionName"
-                          spacing="true">
-                        <label id="sessionNameLabel"
-                               align="TOP_CENTER"
-                               value="msg://sessionName"
-                               width="100px"/>
-                        <textField id="sessionNameField"
-                                   width="300px"/>
-                    </hbox>
                     <hbox id="hboxSessions"
                           spacing="true">
                         <label id="savedSessionLabel"
@@ -78,21 +61,24 @@
                                value="msg://savedSessions"
                                width="100px"/>
                         <optionsList id="optionsList"
-                                     height="160px"
                                      nullOptionVisible="false"
                                      optionsDatasource="sshCredentialListDs"
-                                     width="300px"/>
+                                     width="300px"
+                                     height="240px"/>
                         <vbox id="sessionsButtons"
                               spacing="true"
                               width="80px">
                             <button id="loadCredentialBtn"
-                                    action="loadCredential"
+                                    caption="msg://loadCredential"
+                                    invoke="onLoadCredentialBtnClick"
                                     width="80px"/>
                             <button id="saveCredentialBtn"
-                                    action="saveCredential"
+                                    caption="msg://saveCredential"
+                                    invoke="onSaveCredentialBtnClick"
                                     width="80px"/>
                             <button id="removeCredentialBtn"
-                                    action="removeCredential"
+                                    caption="msg://removeCredential"
+                                    invoke="onRemoveCredentialBtnClick"
                                     width="80px"/>
                         </vbox>
                     </hbox>

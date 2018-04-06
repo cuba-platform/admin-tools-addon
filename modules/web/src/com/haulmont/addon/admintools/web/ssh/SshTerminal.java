@@ -53,8 +53,6 @@ public class SshTerminal extends AbstractWindow {
     @Inject
     protected FieldGroup fieldGroup;
     @Inject
-    protected TextField sessionNameField;
-    @Inject
     protected OptionsList optionsList;
     @Inject
     protected FileLoader fileLoader;
@@ -293,36 +291,37 @@ public class SshTerminal extends AbstractWindow {
         terminal.fit();
     }
 
-    public void loadCredential() {
+    public void onLoadCredentialBtnClick() {
         SshCredential credential = optionsList.getValue();
 
-        if(credential!=null){
+        if (credential != null) {
             sshCredentialDs.setItem(credential);
             sshCredentialDs.refresh();
-            sessionNameField.setValue(credential.getSessionName());
         }
     }
 
-    public void saveCredential() {
-        if(!fieldGroup.isValid()){
+    public void onSaveCredentialBtnClick() {
+        if (!fieldGroup.isValid()) {
             showNotification(getMessage("credetialsNotValid"), WARNING);
             return;
         }
 
         SshCredential item = sshCredentialDs.getItem();
 
-        String sessionName = sessionNameField.getRawValue();
-        if(isBlank(sessionName)){
+        if (isBlank(item.getSessionName())) {
             item.setSessionName(format("%s@%s", item.getLogin(), item.getHostname()));
-        } else {
-            item.setSessionName(sessionName);
         }
 
-       if(sshCredentialListDs.containsItem(item.getUuid())){
-           sshCredentialListDs.modifyItem(item);
-       } else {
-           sshCredentialListDs.addItem(item);
-       }
+        if (isSessionNameDuplicated(item)) {
+            showNotification(formatMessage("sessionNameDuplicated", item.getSessionName()), WARNING);
+            return;
+        }
+
+        if (sshCredentialListDs.containsItem(item.getUuid())) {
+            sshCredentialListDs.modifyItem(item);
+        } else {
+            sshCredentialListDs.addItem(item);
+        }
 
         sshCredentialListDs.commit();
         sshCredentialListDs.refresh();
@@ -330,14 +329,14 @@ public class SshTerminal extends AbstractWindow {
         sshCredentialDs.setItem(metadata.create(SshCredential.class));
     }
 
-    public void removeCredential() {
+    public void onRemoveCredentialBtnClick() {
         SshCredential credential = optionsList.getValue();
 
-        if(credential!=null){
+        if (credential != null) {
             optionsList.setValue(null);
             SshCredential formItem = sshCredentialDs.getItem();
 
-            if(formItem.equals(credential)){
+            if (formItem.equals(credential)) {
                 sshCredentialDs.setItem(metadata.create(SshCredential.class));
             }
 
@@ -345,5 +344,14 @@ public class SshTerminal extends AbstractWindow {
             sshCredentialListDs.commit();
             sshCredentialListDs.refresh();
         }
+    }
+
+    protected boolean isSessionNameDuplicated(SshCredential item) {
+        return sshCredentialListDs.getItems()
+                .stream()
+                .anyMatch(cred ->
+                        cred.getSessionName().equals(item.getSessionName()) &&
+                        !cred.getUuid().equals(item.getUuid())
+                );
     }
 }
