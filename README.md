@@ -43,7 +43,7 @@ to the build.gradle file of your CUBA application:
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
-| 6.8.x            | 0.1-SNAPSHOT   |
+| 6.8.x            | 1.0.1   |
 
 3. Add a custom application component to your project:
    
