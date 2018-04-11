@@ -2,7 +2,10 @@ package com.haulmont.addon.admintools.web.screens.console
 
 import com.haulmont.cuba.gui.WindowParam
 import com.haulmont.cuba.gui.components.FileUploadField
+import com.haulmont.cuba.gui.components.HBoxLayout
 import com.haulmont.cuba.gui.components.SourceCodeEditor
+import com.haulmont.cuba.gui.components.VBoxLayout
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.runtimediagnose.diagnose.DiagnoseType
 import de.diedavids.cuba.runtimediagnose.web.screens.console.ConsoleFrame
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
@@ -21,20 +24,35 @@ import static org.apache.commons.lang.StringUtils.isNotBlank
 
 class ConsoleFrameExtended extends ConsoleFrame {
     @Inject
-    SourceCodeEditor console
+    protected SourceCodeEditor console
     @Inject
-    FileUploadField uploadField
+    protected VBoxLayout consoleVBox
+    @Inject
+    protected ComponentsFactory componentsFactory;
+
     @WindowParam(name = 'diagnoseType')
     protected DiagnoseType diagnoseType
+
+    protected FileUploadField uploadField
 
     @Override
     void init(Map<String, Object> params) {
         super.init(params)
 
+        uploadField = componentsFactory.createComponent(FileUploadField.class)
+        uploadField.mode = FileUploadField.FileStoragePutMode.MANUAL
+        uploadField.setUploadButtonIcon('icons/upload.png')
+        uploadField.setUploadButtonCaption(getMessage('uploadDiagnoseRequestFile'))
+        uploadField.addFileUploadSucceedListener({ e -> uploadFile() })
+
+        HBoxLayout hbox1 = consoleVBox.getComponentNN(0)
+        HBoxLayout hbox2 = hbox1.getComponentNN(0)
+        hbox2.setSpacing(true)
+        hbox2.add(uploadField)
+
         console.setValue(params.getOrDefault('script', ''))
         this.setHeightFull()
         this.setWidthFull()
-        uploadField.addFileUploadSucceedListener({ e -> uploadFile() })
     }
 
     protected void uploadFile() {

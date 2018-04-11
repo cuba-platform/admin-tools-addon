@@ -2,19 +2,6 @@
         xmlns:ext="http://schemas.haulmont.com/cuba/window-ext.xsd"
         class="com.haulmont.addon.admintools.web.screens.console.ConsoleFrameExtended"
         extends="/de/diedavids/cuba/runtimediagnose/web/screens/console/console-frame.xml">
-    <actions>
-        <action id=""/>
-    </actions>
     <layout>
-        <split id="consoleResultSplitter">
-            <vbox id="consoleVBox">
-                <hbox id="extendedBox" spacing="true" width="100%" ext:index="1">
-                    <upload id="uploadField"
-                            fileStoragePutMode="MANUAL"
-                            uploadButtonIcon="icons/upload.png"
-                            uploadButtonCaption="msg://uploadDiagnoseRequestFile"/>
-                </hbox>
-            </vbox>
-        </split>
     </layout>
 </window>
