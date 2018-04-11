@@ -3,15 +3,5 @@
         class="com.haulmont.addon.admintools.web.screens.groovy.GroovyConsoleExtended"
         extends="/de/diedavids/cuba/runtimediagnose/web/screens/groovy/groovy-console.xml">
     <layout>
-        <split id="consoleResultSplitter">
-            <vbox id="consoleVBox">
-                <hbox id="extendedBox" spacing="true" width="100%" ext:index="1">
-                    <upload id="uploadField"
-                            fileStoragePutMode="MANUAL"
-                            uploadButtonIcon="icons/upload.png"
-                            uploadButtonCaption="msg://uploadDiagnoseRequestFile"/>
-                </hbox>
-            </vbox>
-        </split>
     </layout>
 </window>

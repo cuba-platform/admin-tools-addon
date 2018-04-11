@@ -1,7 +1,10 @@
 package com.haulmont.addon.admintools.web.screens.groovy
 
 import com.haulmont.cuba.gui.components.FileUploadField
+import com.haulmont.cuba.gui.components.HBoxLayout
 import com.haulmont.cuba.gui.components.SourceCodeEditor
+import com.haulmont.cuba.gui.components.VBoxLayout
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.runtimediagnose.diagnose.DiagnoseExecutionFactory
 import de.diedavids.cuba.runtimediagnose.web.screens.diagnose.DiagnoseFileDownloader
 import de.diedavids.cuba.runtimediagnose.web.screens.groovy.GroovyConsole
@@ -24,15 +27,30 @@ class GroovyConsoleExtended extends GroovyConsole {
     @Inject
     protected DiagnoseFileDownloader diagnoseFileDownloader
     @Inject
-    protected FileUploadField uploadField
+    protected VBoxLayout consoleVBox
+    @Inject
+    protected ComponentsFactory componentsFactory;
     @Inject
     protected SourceCodeEditor console
+
+    protected FileUploadField uploadField
 
     @Override
     void init(Map<String, Object> params) {
         super.init(params)
-        console.setValue(params.getOrDefault('script', ''))
+
+        uploadField = componentsFactory.createComponent(FileUploadField.class)
+        uploadField.mode = FileUploadField.FileStoragePutMode.MANUAL
+        uploadField.setUploadButtonIcon('icons/upload.png')
+        uploadField.setUploadButtonCaption(getMessage('uploadDiagnoseRequestFile'))
         uploadField.addFileUploadSucceedListener({ e -> uploadFile() })
+
+        HBoxLayout hbox1 = consoleVBox.getComponentNN(0)
+        HBoxLayout hbox2 = hbox1.getComponentNN(0)
+        hbox2.setSpacing(true)
+        hbox2.add(uploadField)
+
+        console.setValue(params.getOrDefault('script', ''))
     }
 
     @Override
@@ -49,8 +67,8 @@ class GroovyConsoleExtended extends GroovyConsole {
             return
         }
 
+        InputStream fileContent = uploadField.getFileContent()
         try {
-            InputStream fileContent = uploadField.getFileContent()
             String groovyScript = getScriptFromZip(fileContent)
             console.setValue(groovyScript)
         } finally {
