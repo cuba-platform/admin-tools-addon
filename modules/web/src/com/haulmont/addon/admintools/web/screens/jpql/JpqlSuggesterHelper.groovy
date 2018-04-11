@@ -57,6 +57,7 @@ class JpqlSuggesterHelper {
 
         return Stream.concat(persistentClasses.stream(), embeddableClasses.stream())
                 .filter({ metaClass ->
+                    wordBeforeCursor.isAllWhitespace() ||
                     containsIgnoreCase(metaClass.name, wordBeforeCursor)
                 })
                 .map({ metaClass ->
@@ -92,6 +93,10 @@ class JpqlSuggesterHelper {
     }
 
     protected static String getLastWord(String text) {
+        if(text.endsWith(' ')){
+            return ' '
+        }
+
         def split = text.split('\\s')
 
         if (split.size() > 0) {
