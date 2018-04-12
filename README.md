@@ -12,11 +12,12 @@ The component consists of the following parts:
 * [Config Loader](#config-loader);
 * [Console Script Loader](#console-script-loader);
 * [Auto Import Subsystem](#auto-import-subsystem);
-* [Tomcat JMX](#tomcat-jmx).
+* [Tomcat JMX Bean](#tomcat-jmx-bean).
 
 ## Installation
 
-The component binaries are available in both `https://repo.cuba-platform.com/content/groups/work` and `https://dl.bintray.com/cuba-platform/main` repositories. Edit your project properties in Studio and add the following custom component in the *App components* panel:
+The component binaries are available in both `https://repo.cuba-platform.com/content/groups/work` and `https://dl.bintray.com/cuba-platform/main` repositories. 
+Edit your project properties in Studio and add the following custom component in the *App components* panel:
 
 ```
 com.haulmont.addon.admintools:cuba-at-global:{add-on version}
@@ -26,10 +27,33 @@ Where `{add-on version}` should match the platform version used in your project.
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
-| 6.8.x            | 1.0.1   |
+| 6.8.x            | 1.0.1          |
 
+## Enabling and Disabling Components
+Each component can be enabled or disabled. It can be turned on or off explicitly or by using a corresponding application
+property. By default all components are enabled, except [Auto Import Subsystem](#auto-import-subsystem).
 
-## Runtime Diagnosis Components
+You can turn on *Auto Import Subsystem* in the middleware block, writing the next property in the file 'app.properties':
+
+```
+admintools.autoImport.enabled = true
+```
+
+Other components you can enable/disable in the client block,  writing  next properties in the file 'web-app.properties':
+```
+admintools.groovyConsole.enabled = false
+admintools.sqlConsole.enabled = false
+admintools.jpqlConsole.enabled = false
+admintools.diagnoseExecutionLog.enabled = false
+
+admintools.scriptGenerator.enabled = false
+admintools.shellExecutor.enabled = false
+admintools.sshTerminal.enabled = false
+admintools.configLoader.enabled = false
+admintools.consoleScriptLoader.enabled = false
+```
+
+## Runtime Diagnose Components
 Components *Groovy Console*, *JPQL Console*, *SQL Console* and *Diagnose Execution Logs* are imported 
 from the [Runtime Diagnose Component](https://github.com/mariodavid/cuba-component-runtime-diagnose).
 
@@ -60,7 +84,8 @@ the *Entity Limit* field.
 *Note:* if you cancel the process, it will not be stopped on the middleware.
 
 ## Shell Executor
-Shell Executor is designed for running shell scripts. It allows you to run various OS commands right from the application UI. Note that this functionality is available only on Unix-like systems.
+Shell Executor is designed for running shell scripts. It allows you to run various OS commands right from the application UI. 
+Note that this functionality is available only on Unix-like systems.
 
 ![shell_console_menu_item](img/shell-executor-menu-item.png)
 
@@ -78,7 +103,8 @@ SSH Terminal is designed for working with remote servers right from the applicat
  ![ssh_console_menu_item](img/ssh-terminal_menu_item.png)
  
 Before connecting to a remote server, it is required to specify credentials and a hostname in the corresponding section.
-As an alternative, use a private key and a passphrase for a connection instead of a password. After that, use action buttons to connect to a server. The toolbar of *SSH Console* contains also the __Fit__ button, which allows a user to change the size of the terminal.
+As an alternative, use a private key and a passphrase for a connection instead of a password. After that, use action buttons to connect to a server. 
+The toolbar of *SSH Console* contains also the __Fit__ button, which allows a user to change the size of the terminal.
 
 Connection parameters can be stored in the database (except the password and the passphrase). For saving, removing and loading
 connection parameters, use corresponding buttons. By default, connection parameters are saved only for the current user 
@@ -232,7 +258,8 @@ to build JSON if ONE_TO_MANY meta property has type ASSOCIATION.
 ## Tomcat JMX Bean
 Tomcat JMX is a management bean which allows you to execute operations on Tomcat server currently running the application.
 It is supported on Windows and Unix-like operating systems. The bean can be accessed from *Administration → JMX Console* screen. 
-Start searching by the object name 'Tomcat' and the domain 'cuba-at' and you will find the *TomcatWeb* MBean. If the middleware block is running on the same Tomcat, you will see also the *TomcatCore* MBean. In this case, you can use either of them.
+Start searching by the object name 'Tomcat' and the domain 'cuba-at' and you will find the *TomcatWeb* MBean. 
+If the middleware block is running on the same Tomcat, you will see also the *TomcatCore* MBean. In this case, you can use either of them.
 
 ![find tomcat jmx](img/find-tomcat-jmx.png) 
 

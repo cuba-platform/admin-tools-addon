@@ -11,14 +11,20 @@ import javax.inject.Inject;
 /**
  * This class runs inner components, when the application is started
  */
-@Component("admintools_AdminToolsStarter")
-public class AdminToolsStarter {
+@Component("admintools_AdminToolsCoreStarter")
+public class AdminToolsCoreStarter {
+
+    public static final String AUTO_IMPORT_ENABLED_PROPERTY = "admintools.autoImport.enabled";
 
     @Inject
     protected AutoImporter autoImporter;
 
     @EventListener
     public void applicationStarted(AppContextStartedEvent event) {
-        autoImporter.startImport();
+        String autoImportEnabled = AppContext.getProperty(AUTO_IMPORT_ENABLED_PROPERTY);
+
+        if (Boolean.valueOf(autoImportEnabled)) {
+            autoImporter.startImport();
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.haulmont.addon.admintools.global.ssh;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.chile.core.annotations.NumberFormat;
+import com.haulmont.cuba.core.config.defaults.Default;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -35,7 +36,7 @@ public class SshCredentials extends StandardEntity {
     @NotNull
     @NumberFormat(pattern = "#")
     @Column(name = "PORT", nullable = false)
-    protected Integer port = 22;
+    protected Integer port;
 
     @NotNull
     @Column(name = "LOGIN", nullable = false)
@@ -99,6 +100,7 @@ public class SshCredentials extends StandardEntity {
         this.port = port;
     }
 
+    @Default("22")
     public Integer getPort() {
         return port;
     }

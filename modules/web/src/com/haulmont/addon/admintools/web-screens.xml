@@ -15,4 +15,6 @@
             template="com/haulmont/addon/admintools/web/screens/jpql/jpql-console-extended.xml"/>
     <screen id="sqlConsole"
             template="com/haulmont/addon/admintools/web/screens/sql/sql-console-extended.xml"/>
+    <screen id="mainWindow"
+            template="com/haulmont/addon/admintools/web/admin-tools-main-window.xml"/>
 </screen-config>
