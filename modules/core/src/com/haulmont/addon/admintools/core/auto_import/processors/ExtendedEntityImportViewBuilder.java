@@ -10,6 +10,7 @@ import com.haulmont.cuba.core.app.importexport.EntityImportView;
 import com.haulmont.cuba.core.app.importexport.EntityImportViewBuilder;
 import com.haulmont.cuba.core.app.importexport.ReferenceImportBehaviour;
 import com.haulmont.cuba.core.entity.Entity;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
  * There is added a case for the ONE_TO_MANY property with the type ASSOCIATION,
  * see comments 'admin-tools', line 99
  */
+@Component("admintools_ExtendedEntityImportViewBuilder")
 @SuppressWarnings({"unchecked"})
 public class ExtendedEntityImportViewBuilder extends EntityImportViewBuilder {
 

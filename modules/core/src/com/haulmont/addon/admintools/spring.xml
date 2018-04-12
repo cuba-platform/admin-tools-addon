@@ -18,7 +18,6 @@
         </property>
     </bean>
 
-    <bean id="cuba_EntityImportViewBuilderAPI" class="com.haulmont.addon.admintools.core.auto_import.processors.ExtendedEntityImportViewBuilder"/>
     <bean id="ddcrd_SqlConsoleService" class="com.haulmont.addon.admintools.core.db.ExtendedDbDiagnoseServiceBean"/>
     <bean id="ddcrd_SqlSelectResultFactory" class="com.haulmont.addon.admintools.core.db.ExtendedSqlSelectResultFactoryBean"/>
 

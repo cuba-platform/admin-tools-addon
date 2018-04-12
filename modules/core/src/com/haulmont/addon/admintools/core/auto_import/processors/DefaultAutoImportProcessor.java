@@ -11,6 +11,7 @@ import com.haulmont.cuba.core.app.importexport.EntityImportView;
 import com.haulmont.cuba.core.app.importexport.EntityImportViewBuilderAPI;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.Resources;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -36,6 +37,7 @@ public class DefaultAutoImportProcessor implements AutoImportProcessor {
     @Inject
     protected Metadata metadata;
     @Inject
+    @Qualifier("admintools_ExtendedEntityImportViewBuilder")
     protected EntityImportViewBuilderAPI viewBuilder;
 
     /**
