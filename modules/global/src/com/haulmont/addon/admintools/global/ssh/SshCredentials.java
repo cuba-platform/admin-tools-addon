@@ -13,10 +13,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import com.haulmont.chile.core.annotations.MetaProperty;
 
-@Table(name = "CUBAAT_SSH_CREDENTIAL")
-@Entity(name = "cubaat$SshCredential")
+@Table(name = "CUBAAT_SSH_CREDENTIALS")
+@Entity(name = "cubaat$SshCredentials")
 @NamePattern("%s|sessionName")
-public class SshCredential extends StandardEntity {
+public class SshCredentials extends StandardEntity {
     private static final long serialVersionUID = -8097580356590206782L;
 
     @NotNull
@@ -27,8 +27,8 @@ public class SshCredential extends StandardEntity {
     @Column(name = "SESSION_NAME", nullable = false)
     protected String sessionName;
 
-    @Column(name = "IS_FOR_EVERYONE_USERS")
-    protected Boolean isForEveryoneUsers;
+    @Column(name = "IS_FOR_EVERYONE")
+    protected Boolean isForEveryone;
 
     @Max(message = "{msg://com.haulmont.addon.admintools.entity/max-port-validation}", value = 65535)
     @Min(message = "{msg://com.haulmont.addon.admintools.entity/min-port-validation}", value = 1)
@@ -54,12 +54,12 @@ public class SshCredential extends StandardEntity {
     @MetaProperty
     protected String passphrase;
 
-    public void setIsForEveryoneUsers(Boolean isForEveryoneUsers) {
-        this.isForEveryoneUsers = isForEveryoneUsers;
+    public void setIsForEveryone(Boolean isForEveryone) {
+        this.isForEveryone = isForEveryone;
     }
 
-    public Boolean getIsForEveryoneUsers() {
-        return isForEveryoneUsers;
+    public Boolean getIsForEveryone() {
+        return isForEveryone;
     }
 
     public String getSessionName() {
@@ -71,11 +71,11 @@ public class SshCredential extends StandardEntity {
     }
 
     public Boolean getForEveryoneUsers() {
-        return isForEveryoneUsers;
+        return isForEveryone;
     }
 
     public void setForEveryoneUsers(Boolean forEveryoneUsers) {
-        isForEveryoneUsers = forEveryoneUsers;
+        isForEveryone = forEveryoneUsers;
     }
 
     public void setPassphrase(String passphrase) {

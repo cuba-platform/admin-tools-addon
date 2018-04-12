@@ -62,7 +62,7 @@ public class AutoImporterImpl implements AutoImporter {
             authentication.begin();
             importFiles();
         } catch (Exception e) {
-            log.error(e.getLocalizedMessage(), e);
+            log.error("Import error", e);
         } finally {
             authentication.end();
         }
@@ -85,7 +85,7 @@ public class AutoImporterImpl implements AutoImporter {
         try {
             newMd5Hex = calculateMd5Hex(filePath);
         } catch (IOException e) {
-            log.warn(e.getLocalizedMessage(), e);
+            log.error("Import error, when was calculated hash", e);
             return;
         }
 
@@ -102,8 +102,7 @@ public class AutoImporterImpl implements AutoImporter {
             log.info("File {} has been imported", filePath);
         } catch (Exception e) {
             importedObjects.put(filePath, new ImportStatusInfo(newMd5Hex, FAILURE));
-            log.warn("", e);
-            log.warn("Importing file {} has been failed", filePath);
+            log.error(format("Importing file %s has been failed", filePath), e);
         }
     }
 
@@ -113,7 +112,7 @@ public class AutoImporterImpl implements AutoImporter {
                 .flatMap(either -> Match(either).of(
                         Case($Right($()), descriptor -> Stream.of(descriptor)),
                         Case($Left($()), errMsg -> {
-                            log.warn(errMsg);
+                            log.error("Import error, when was filtered file descriptors " + errMsg);
                             return Stream.empty();
                         })
                 )).collect(Collectors.toList());

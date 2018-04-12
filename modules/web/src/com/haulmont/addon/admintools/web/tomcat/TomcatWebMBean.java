@@ -7,23 +7,23 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 
 import java.io.IOException;
 
-@ManagedResource(description = "Operations for Tomcat container on a web module")
+@ManagedResource(description = "Operations on Tomcat running the web client block")
 public interface TomcatWebMBean {
 
-    @ManagedOperation(description = "Execute script by path in tomcat directory")
+    @ManagedOperation(description = "Execute script by path in Tomcat directory")
     @ManagedOperationParameters({
-            @ManagedOperationParameter(name = "path", description = "Relative script path from tomcat dir"),
+            @ManagedOperationParameter(name = "path", description = "Relative script path from Tomcat dir"),
             @ManagedOperationParameter(name = "arguments", description = "Arguments for a script")
     })
     void executeScript(String relativePath, String arguments) throws IOException;
 
-    @ManagedOperation(description = "Reboot tomcat in the web module")
+    @ManagedOperation(description = "Reboot Tomcat in the web module")
     void reboot() throws IOException, InterruptedException;
 
-    @ManagedOperation(description = "Shutdown tomcat in the web module")
+    @ManagedOperation(description = "Shutdown Tomcat in the web module")
     void shutdown() throws IOException, InterruptedException;
 
-    @ManagedOperation(description = "Return an absolute path to the tomcat directory")
+    @ManagedOperation(description = "Return an absolute path to the Tomcat directory")
     String getTomcatAbsolutePath();
 
 }

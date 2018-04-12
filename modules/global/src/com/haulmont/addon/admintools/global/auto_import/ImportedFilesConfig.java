@@ -20,7 +20,7 @@ public interface ImportedFilesConfig extends Config {
     /**
      * @return information about files imported by AutoImporterImpl
      */
-    @Property("admintools.imported_files")
+    @Property("admintools.importedFiles")
     @Factory(factory = AutoImportType.Factory.class)
     @Stringify(stringify = AutoImportType.Stringify.class)
     @Default("{}")

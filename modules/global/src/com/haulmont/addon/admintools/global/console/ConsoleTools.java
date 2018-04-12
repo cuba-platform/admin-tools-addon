@@ -11,7 +11,7 @@ import static java.text.CharacterIterator.DONE;
 import static org.apache.commons.lang.SystemUtils.*;
 
 /**
- * Utility class to provide functionality related with {@link ConsoleBean}
+ * Utility class to provide functionality related to {@link ConsoleBean}
  */
 @Component("admintools_ConsoleTool")
 public class ConsoleTools {

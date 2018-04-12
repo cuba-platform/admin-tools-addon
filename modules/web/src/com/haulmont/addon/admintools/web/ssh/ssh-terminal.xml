@@ -7,10 +7,10 @@
     <dsContext>
         <datasource id="sshCredentialDs"
                     allowCommit="false"
-                    class="com.haulmont.addon.admintools.global.ssh.SshCredential"
+                    class="com.haulmont.addon.admintools.global.ssh.SshCredentials"
                     view="withPrivateKey"/>
         <collectionDatasource id="sshCredentialListDs"
-                              class="com.haulmont.addon.admintools.global.ssh.SshCredential"
+                              class="com.haulmont.addon.admintools.global.ssh.SshCredentials"
                               view="withPrivateKey">
             <query>
                 <![CDATA[select s from cubaat$SshCredential s where s.isForEveryoneUsers=true or s.createdBy = :session$userLogin]]>
@@ -48,7 +48,7 @@
                                property="password"/>
                         <field property="privateKey"/>
                         <field property="passphrase"/>
-                        <field property="isForEveryoneUsers"/>
+                        <field property="isForEveryone"/>
                     </column>
                 </fieldGroup>
                 <vbox id="credentials"

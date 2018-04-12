@@ -1,6 +1,6 @@
 package com.haulmont.addon.admintools.web.ssh;
 
-import com.haulmont.addon.admintools.global.ssh.SshCredential;
+import com.haulmont.addon.admintools.global.ssh.SshCredentials;
 import com.haulmont.addon.admintools.gui.xterm.components.EnterReactivePasswordField;
 import com.haulmont.addon.admintools.gui.xterm.components.XtermJs;
 import com.haulmont.addon.admintools.web.utils.NonBlockingIOUtils;
@@ -47,9 +47,9 @@ public class SshTerminal extends AbstractWindow {
     @Inject
     protected ComponentsFactory componentsFactory;
     @Inject
-    protected Datasource<SshCredential> sshCredentialDs;
+    protected Datasource<SshCredentials> sshCredentialDs;
     @Inject
-    protected CollectionDatasource<SshCredential, UUID> sshCredentialListDs;
+    protected CollectionDatasource<SshCredentials, UUID> sshCredentialListDs;
     @Inject
     protected FieldGroup fieldGroup;
     @Inject
@@ -72,12 +72,12 @@ public class SshTerminal extends AbstractWindow {
     protected NonBlockingIOUtils ioUtils = new NonBlockingIOUtils();
     protected BackgroundTask<Integer, Void> connectionTask;
     protected BackgroundTaskHandler connectionTaskHandler;
-    protected SshCredential credentials;
+    protected SshCredentials credentials;
     protected TextField hostnameField;
 
     @Override
     public void init(Map<String, Object> params) {
-        SshCredential credentials = metadata.create(SshCredential.class);
+        SshCredentials credentials = metadata.create(SshCredentials.class);
         sshCredentialDs.setItem(credentials);
 
         connectionTask = new BackgroundTask<Integer, Void>(CONNECTION_TIMEOUT_SECONDS, getFrame()) {
@@ -292,7 +292,7 @@ public class SshTerminal extends AbstractWindow {
     }
 
     public void onLoadCredentialBtnClick() {
-        SshCredential credential = optionsList.getValue();
+        SshCredentials credential = optionsList.getValue();
 
         if (credential != null) {
             sshCredentialDs.setItem(credential);
@@ -306,7 +306,7 @@ public class SshTerminal extends AbstractWindow {
             return;
         }
 
-        SshCredential item = sshCredentialDs.getItem();
+        SshCredentials item = sshCredentialDs.getItem();
 
         if (isBlank(item.getSessionName())) {
             item.setSessionName(format("%s@%s", item.getLogin(), item.getHostname()));
@@ -326,18 +326,18 @@ public class SshTerminal extends AbstractWindow {
         sshCredentialListDs.commit();
         sshCredentialListDs.refresh();
         optionsList.setValue(item);
-        sshCredentialDs.setItem(metadata.create(SshCredential.class));
+        sshCredentialDs.setItem(metadata.create(SshCredentials.class));
     }
 
     public void onRemoveCredentialBtnClick() {
-        SshCredential credential = optionsList.getValue();
+        SshCredentials credential = optionsList.getValue();
 
         if (credential != null) {
             optionsList.setValue(null);
-            SshCredential formItem = sshCredentialDs.getItem();
+            SshCredentials formItem = sshCredentialDs.getItem();
 
             if (formItem.equals(credential)) {
-                sshCredentialDs.setItem(metadata.create(SshCredential.class));
+                sshCredentialDs.setItem(metadata.create(SshCredentials.class));
             }
 
             sshCredentialListDs.removeItem(credential);
@@ -346,7 +346,7 @@ public class SshTerminal extends AbstractWindow {
         }
     }
 
-    protected boolean isSessionNameDuplicated(SshCredential item) {
+    protected boolean isSessionNameDuplicated(SshCredentials item) {
         return sshCredentialListDs.getItems()
                 .stream()
                 .anyMatch(cred ->
