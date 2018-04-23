@@ -27,7 +27,7 @@ Where `{add-on version}` should match the platform version used in your project.
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
-| 6.8.x            | 1.0.1          |
+| 6.8.x            | 1.0.2          |
 
 ## Enabling and Disabling Components
 Each component can be enabled or disabled. It can be turned on or off explicitly or by using a corresponding application
