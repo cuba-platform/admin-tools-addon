@@ -1,14 +1,14 @@
 package com.haulmont.addon.admintools.core.auto_import;
 
+import com.haulmont.addon.admintools.core.auto_import.processors.AutoImportProcessor;
+import com.haulmont.addon.admintools.global.auto_import.AutoImportXmlReader;
 import com.haulmont.addon.admintools.global.auto_import.ImportedFilesConfig;
 import com.haulmont.addon.admintools.global.auto_import.dto.AutoImportFileDescriptor;
 import com.haulmont.addon.admintools.global.auto_import.dto.ImportStatusInfo;
 import com.haulmont.addon.admintools.global.auto_import.dto.ImportedFilesInfo;
-import com.haulmont.addon.admintools.core.auto_import.processors.AutoImportProcessor;
-import com.haulmont.addon.admintools.global.auto_import.AutoImportXmlReader;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Resources;
-import com.haulmont.cuba.security.app.Authentication;
+import com.haulmont.cuba.security.app.Authenticated;
 import io.vavr.control.Either;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -26,9 +26,7 @@ import java.util.stream.Stream;
 
 import static com.haulmont.addon.admintools.global.auto_import.dto.ImportStatus.FAILURE;
 import static com.haulmont.addon.admintools.global.auto_import.dto.ImportStatus.SUCCESS;
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
+import static io.vavr.API.*;
 import static io.vavr.Patterns.$Left;
 import static io.vavr.Patterns.$Right;
 import static java.lang.String.format;
@@ -49,22 +47,17 @@ public class AutoImporterImpl implements AutoImporter {
     @Inject
     protected AutoImportXmlReader configReader;
     @Inject
-    protected Authentication authentication;
-    @Inject
     protected ImportedFilesConfig importedFilesConfig;
     @Inject
     protected Resources resources;
 
-
+    @Authenticated
     @Override
     public void startImport() {
         try {
-            authentication.begin();
             importFiles();
         } catch (Exception e) {
             log.error("Import error", e);
-        } finally {
-            authentication.end();
         }
     }
 

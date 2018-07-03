@@ -5,7 +5,6 @@ import com.haulmont.addon.admintools.global.auto_import.AutoImportXmlReader
 import com.haulmont.addon.admintools.global.auto_import.ImportedFilesConfig
 import com.haulmont.addon.admintools.global.auto_import.dto.AutoImportFileDescriptor
 import com.haulmont.addon.admintools.global.auto_import.dto.ImportedFilesInfo
-import com.haulmont.cuba.core.global.AppBeans
 import org.junit.ClassRule
 import org.slf4j.Logger
 import spock.lang.Shared
@@ -17,14 +16,14 @@ class AutoImporterImplTest extends Specification {
     @Shared
     AdminToolsTestContainer container = AdminToolsTestContainer.Common.INSTANCE
 
-    AutoImporterImpl autoImporter
+    AutoImporter autoImporter
 
     AutoImportXmlReader configReader
     ImportedFilesConfig importedFilesConfig
     Logger log
 
     void setup() {
-        autoImporter = AppBeans.get(AutoImporterImpl)
+        autoImporter = new AutoImporterImpl()
         configReader = Mock()
         importedFilesConfig = Mock()
         log = Mock()
@@ -46,7 +45,7 @@ class AutoImporterImplTest extends Specification {
         autoImporter.startImport()
 
         then:
-        1 * log.error(e.localizedMessage, e)
+        1 * log.error("Import error", e)
     }
 
     def "logging warning if path not exist"() {
