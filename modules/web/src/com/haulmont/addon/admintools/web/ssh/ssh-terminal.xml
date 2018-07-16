@@ -13,7 +13,7 @@
                               class="com.haulmont.addon.admintools.global.ssh.SshCredentials"
                               view="withPrivateKey">
             <query>
-                <![CDATA[select s from cubaat$SshCredential s where s.isForEveryoneUsers=true or s.createdBy = :session$userLogin]]>
+                <![CDATA[select s from cubaat$SshCredentials s where s.isForEveryoneUsers=true or s.createdBy = :session$userLogin]]>
             </query>
         </collectionDatasource>
     </dsContext>
