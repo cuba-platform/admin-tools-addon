@@ -12,6 +12,7 @@ import de.diedavids.cuba.runtimediagnose.diagnose.DiagnoseExecution
 import de.diedavids.cuba.runtimediagnose.diagnose.DiagnoseExecutionFactory
 import de.diedavids.cuba.runtimediagnose.diagnose.DiagnoseExecutionLogService
 import de.diedavids.cuba.runtimediagnose.diagnose.DiagnoseType
+import groovy.sql.Sql
 
 import javax.inject.Inject
 
@@ -39,6 +40,7 @@ class ExtendedDbDiagnoseServiceBean extends DbDiagnoseServiceBean {
     /*
      * deleted analyse query
      */
+
     @Override
     DbQueryResult runSqlDiagnose(String queryString, DiagnoseType diagnoseType) {
         DiagnoseExecution diagnoseExecution = createAdHocDiagnose(queryString, diagnoseType)
@@ -56,9 +58,25 @@ class ExtendedDbDiagnoseServiceBean extends DbDiagnoseServiceBean {
         dbQueryResult
     }
 
-    /**
-     * deleted argument 'Statements queryStatements'
-     */
+    @Override
+    protected DbQueryResult executeSqlStatement(Sql sql, String queryString) {
+        if (queryString != null) {
+            if (queryString.toLowerCase().startsWith("select ")) {
+                return super.executeSqlStatement(sql, queryString)
+            } else if (queryString.toLowerCase().startsWith("update ")) {
+                int result = sql.executeUpdate(queryString)
+                return selectResultFactory.createFromRows(Arrays.asList(result))
+            } else {
+                boolean result = sql.execute(queryString)
+                return selectResultFactory.createFromRows(Arrays.asList(result))
+            }
+        } else {
+            return null;
+        }
+    }
+/**
+ * deleted argument 'Statements queryStatements'
+ */
     protected DbQueryResult getQueryResult(DiagnoseType diagnoseType, String queryStatement) {
         DbQueryResult sqlSelectResult
         switch (diagnoseType) {
