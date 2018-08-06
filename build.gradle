@@ -1,5 +1,5 @@
 buildscript {
-    ext.cubaVersion = '6.9.1'
+    ext.cubaVersion = '6.9.3'
     repositories {
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
@@ -43,7 +43,7 @@ cuba {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.diedavids.cuba.runtimediagnose:runtime-diagnose-global:1.0.0")
+    appComponent("de.diedavids.cuba.runtimediagnose:runtime-diagnose-global:1.1.0")
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
