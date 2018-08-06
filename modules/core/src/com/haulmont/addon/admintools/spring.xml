@@ -8,4 +8,17 @@
     <!-- Annotation-based beans -->
     <context:component-scan base-package="com.haulmont.addon.admintools"/>
 
+    <bean id="admintools_MBeanExporter" lazy-init="false"
+          class="com.haulmont.cuba.core.sys.jmx.MBeanExporter">
+        <property name="beans">
+            <map>
+                <entry key="cuba-at:type=TomcatCore"
+                       value-ref="cuba-at_TomcatCoreMBean"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="ddcrd_SqlConsoleService" class="com.haulmont.addon.admintools.core.db.ExtendedDbDiagnoseServiceBean"/>
+    <bean id="ddcrd_SqlSelectResultFactory" class="com.haulmont.addon.admintools.core.db.ExtendedSqlSelectResultFactoryBean"/>
+
 </beans>

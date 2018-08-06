@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="com.haulmont.addon.admintools.web.console_script_loader.ConsoleScriptLoader">
+    <layout spacing="true">
+        <vbox id="vBox"
+              spacing="true">
+            <label id="descriptionLabel"
+                   value="msg://description"/>
+            <upload id="uploadField"
+                    dropZone="dropZone"
+                    showClearButton="true"
+                    showFileName="true"/>
+            <vbox id="dropZone"
+                  align="MIDDLE_LEFT"
+                  height="200px"
+                  spacing="true"
+                  stylename="dropzone-container"
+                  width="300px">
+                <label align="MIDDLE_CENTER"
+                       stylename="dropzone-description"
+                       value="msg://dropZoneDescription"/>
+            </vbox>
+            <hbox spacing="true">
+                <button id="apply"
+                        caption="mainMsg://actions.Apply"
+                        invoke="apply"/>
+                <button id="cancel"
+                        caption="mainMsg://actions.Cancel"
+                        invoke="cancel"/>
+            </hbox>
+        </vbox>
+    </layout>
+</window>

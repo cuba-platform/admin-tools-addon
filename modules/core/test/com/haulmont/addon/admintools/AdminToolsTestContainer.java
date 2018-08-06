@@ -9,18 +9,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CubaatTestContainer extends TestContainer {
+public class AdminToolsTestContainer extends TestContainer {
 
-    public CubaatTestContainer() {
+    public AdminToolsTestContainer() {
         super();
         appComponents = new ArrayList<>(Arrays.asList(
-                "com.haulmont.cuba"
+                "com.haulmont.cuba",
+                "de.diedavids.cuba.runtimediagnose"
                 // add CUBA premium add-ons here
                 // "com.haulmont.bpm",
                 // "com.haulmont.charts",
                 // "com.haulmont.fts",
-                // "com.haulmont.reports",
-                // and custom app components if any
+                // "com.haulmont.reports"
+                // and custom script_generator component if any
         ));
         appPropertiesFiles = Arrays.asList(
                 // List the files defined in your web.xml
@@ -46,14 +47,14 @@ public class CubaatTestContainer extends TestContainer {
         Element resourceElem = contextXmlDoc.getRootElement().element("Resource");
 
         dbDriver = resourceElem.attributeValue("driverClassName");
-        dbUrl = resourceElem.attributeValue("url");
+        dbUrl = "jdbc:hsqldb:hsql://localhost/cubaat-test";
         dbUser = resourceElem.attributeValue("username");
         dbPassword = resourceElem.attributeValue("password");
     }
 
-    public static class Common extends CubaatTestContainer {
+    public final static class Common extends AdminToolsTestContainer {
 
-        public static final CubaatTestContainer.Common INSTANCE = new CubaatTestContainer.Common();
+        public static final AdminToolsTestContainer.Common INSTANCE = new AdminToolsTestContainer.Common();
 
         private static volatile boolean initialized;
 

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="com.haulmont.addon.admintools.web.ssh.SshTerminal"
+        messagesPack="com.haulmont.addon.admintools.web.ssh"
+        xmlns:at="http://schemas.haulmont.com/cubaat/0.1/ui-component.xsd">
+    <dsContext>
+        <datasource id="sshCredentialDs"
+                    allowCommit="false"
+                    class="com.haulmont.addon.admintools.global.ssh.SshCredentials"
+                    view="withPrivateKey"/>
+        <collectionDatasource id="sshCredentialListDs"
+                              class="com.haulmont.addon.admintools.global.ssh.SshCredentials"
+                              view="withPrivateKey">
+            <query>
+                <![CDATA[select s from cubaat$SshCredentials s where s.isForEveryone = true or s.createdBy = :session$userLogin]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <timers>
+        <timer id="updateConsole"
+               autostart="true"
+               delay="300"
+               onTimer="onUpdateConsole"
+               repeating="true"/>
+    </timers>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="terminalBox"
+            spacing="true">
+        <groupBox id="fieldsBox"
+                  caption="msg://fieldBox.caption"
+                  collapsable="true"
+                  collapsed="true"
+                  spacing="true">
+            <hbox spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="sshCredentialDs">
+                    <column width="250px">
+                        <field property="sessionName"
+                               caption="msg://sessionName"
+                               required="false"/>
+                        <field caption="msg://host.caption"
+                               generator="generateHostnameField"
+                               property="hostname"/>
+                        <field property="login"/>
+                        <field generator="generatePasswordField"
+                               property="password"/>
+                        <field property="privateKey"/>
+                        <field property="passphrase"/>
+                        <field property="isForEveryone"/>
+                    </column>
+                </fieldGroup>
+                <vbox id="credentials"
+                      spacing="true"
+                      width="550px">
+                    <hbox id="hboxSessions"
+                          spacing="true">
+                        <label id="savedSessionLabel"
+                               align="TOP_CENTER"
+                               value="msg://savedSessions"
+                               width="100px"/>
+                        <optionsList id="optionsList"
+                                     nullOptionVisible="false"
+                                     optionsDatasource="sshCredentialListDs"
+                                     width="300px"
+                                     height="240px"/>
+                        <vbox id="sessionsButtons"
+                              spacing="true"
+                              width="80px">
+                            <button id="loadCredentialBtn"
+                                    caption="msg://loadCredential"
+                                    invoke="onLoadCredentialBtnClick"
+                                    width="80px"/>
+                            <button id="saveCredentialBtn"
+                                    caption="msg://saveCredential"
+                                    invoke="onSaveCredentialBtnClick"
+                                    width="80px"/>
+                            <button id="removeCredentialBtn"
+                                    caption="msg://removeCredential"
+                                    invoke="onRemoveCredentialBtnClick"
+                                    width="80px"/>
+                        </vbox>
+                    </hbox>
+                </vbox>
+            </hbox>
+        </groupBox>
+        <vbox id="terminalBox"
+              expand="terminal"
+              spacing="true">
+            <hbox expand="terminalProgressBar"
+                  spacing="true"
+                  width="100%">
+                <buttonsPanel id="terminalBtn">
+                    <button id="connectBtn"
+                            caption="msg://connect"
+                            invoke="connect"/>
+                    <button id="disconnectBtn"
+                            caption="msg://disconnect"
+                            invoke="disconnect"/>
+                    <button id="fitBtn"
+                            caption="msg://fit"
+                            invoke="onFitBtnClick"/>
+                </buttonsPanel>
+                <progressBar id="terminalProgressBar"
+                             align="MIDDLE_CENTER"/>
+            </hbox>
+            <at:xterm-js id="terminal"
+                         width="100%"/>
+        </vbox>
+    </layout>
+</window>

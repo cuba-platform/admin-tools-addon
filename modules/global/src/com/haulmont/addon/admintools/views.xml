@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-
+    <view class="com.haulmont.addon.admintools.global.ssh.SshCredentials"
+          extends="_local"
+          name="withPrivateKey">
+        <property name="privateKey"
+                  view="_minimal"/>
+    </view>
 </views>

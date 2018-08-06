@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption.scriptGeneratorResultScreen"
+        class="com.haulmont.addon.admintools.gui.script_generator.ScriptGeneratorResult">
+    <layout spacing="true">
+        <vbox id="editors"
+              expand="textFieldsBox"
+              width="100%"
+              height="100%"
+              spacing="true">
+            <hbox spacing="true">
+                <label align="MIDDLE_CENTER"
+                       value="Script Type"/>
+                <lookupField id="generateOptions"
+                             nullOptionVisible="false"
+                             textInputAllowed="false"/>
+                <button id="execute"
+                        align="BOTTOM_RIGHT"
+                        caption="msg://generate"
+                        invoke="execute"/>
+                <button id="cancel"
+                        align="BOTTOM_RIGHT"
+                        caption="msg://cancel"
+                        invoke="cancel"/>
+            </hbox>
+            <split id="textFieldsBox"
+                   orientation="vertical"
+                   width="100%"
+                   visible="true">
+                <groupBox id="querySettings"
+                          caption="msg://caption.query"
+                          expand="query"
+                          spacing="true"
+                          visible="false"
+                          width="100%"
+                          height="100%">
+                    <hbox spacing="true"
+                          expand="executeProgressBar"
+                          width="100%">
+                        <label align="MIDDLE_CENTER"
+                               value="Entity Type"/>
+                        <lookupField id="entitiesMetaClasses"
+                                     nullOptionVisible="false"
+                                     required="true"
+                                     requiredMessage="msg://alert.setEntityType"
+                                     width="300px"/>
+                        <label align="MIDDLE_CENTER"
+                               value="View"/>
+                        <lookupField id="entityViews"
+                                     nullOptionVisible="false"
+                                     textInputAllowed="false"
+                                     width="300px"/>
+                        <label align="MIDDLE_CENTER"
+                               value="msg://entityLimit"/>
+                        <textField id="entityLimitField"
+                                   datatype="int"/>
+                        <progressBar id="executeProgressBar"
+                                     align="MIDDLE_CENTER"/>
+                    </hbox>
+                    <sourceCodeEditor id="query"
+                                      mode="SQL"
+                                      required="true"
+                                      requiredMessage="msg://alert.enterQuery"
+                                      width="100%"/>
+                </groupBox>
+                <groupBox id="resultScriptGroup"
+                          caption="msg://caption.result"
+                          spacing="true"
+                          width="100%"
+                          height="100%"
+                          expand="resultScript">
+                    <hbox spacing="true">
+                        <button id="downloadResult"
+                                caption="msg://downloadResult"
+                                invoke="downloadResult"/>
+                        <button id="Clear"
+                                caption="msg://clear"
+                                invoke="clear"/>
+                    </hbox>
+                    <sourceCodeEditor id="resultScript"
+                                      editable="false"
+                                      mode="SQL"
+                                      width="100%"/>
+                </groupBox>
+            </split>
+            <hbox id="windowActions"
+                  align="BOTTOM_RIGHT"
+                  spacing="true">
+                <button id="windowClose"
+                        align="BOTTOM_RIGHT"
+                        caption="mainMsg://actions.Ok"
+                        invoke="windowClose"/>
+            </hbox>
+        </vbox>
+    </layout>
+</window>

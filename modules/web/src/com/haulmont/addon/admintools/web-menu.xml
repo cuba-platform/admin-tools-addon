@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
-    <menu id="application-cubaat" insertBefore="administration">
+    <menu id="adminTools"
+          insertAfter="consoleMenu">
+        <item id="scriptGenerator"
+              openType="NEW_TAB"
+              screen="admintools$scriptGeneratorsResult"/>
+        <item id="shellExecutor"
+              openType="NEW_TAB"
+              screen="shell-executor"/>
+        <item id="sshTerminal"
+              openType="NEW_TAB"
+              screen="ssh-terminal"/>
+        <item id="configLoader"
+              openType="DIALOG"
+              screen="admintools$configLoader"/>
+        <separator/>
+        <item id="consoleScriptLoader"
+              openType="NEW_TAB"
+              screen="console-script-loader"/>
     </menu>
 </menu-config>
