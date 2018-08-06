@@ -30,8 +30,8 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'com.haulmont.addon.admintools'
-        version = '1.0.1'
-        isSnapshot = false
+        version = '1.0'
+        isSnapshot = true
     }
     tomcat {
         dir = "$project.rootDir/deploy/tomcat"
