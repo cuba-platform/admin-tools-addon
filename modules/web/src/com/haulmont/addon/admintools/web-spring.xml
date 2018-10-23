@@ -12,7 +12,7 @@
           class="com.haulmont.cuba.core.sys.jmx.MBeanExporter">
         <property name="beans">
             <map>
-                <entry key="cuba-at:type=TomcatWeb"
+                <entry key="${cuba.webContextName}.cuba-at:type=TomcatWeb"
                        value-ref="cuba-at_TomcatWebMBean"/>
             </map>
         </property>
