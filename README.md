@@ -27,7 +27,8 @@ Where `{add-on version}` should match the platform version used in your project.
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
-| 6.9.x            | 1.1.1          |
+| 6.10.x            | 1.2.0          |
+| 6.9.x            | 1.1.2          |
 | 6.8.x            | 1.0.5          |
 
 ## Enabling and Disabling Components
