@@ -11,13 +11,14 @@ import com.haulmont.cuba.core.app.importexport.EntityImportView;
 import com.haulmont.cuba.core.app.importexport.EntityImportViewBuilderAPI;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.Resources;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.io.*;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static com.google.common.io.Files.getFileExtension;
@@ -46,30 +47,35 @@ public class DefaultAutoImportProcessor implements AutoImportProcessor {
      */
     @Override
     public void processFile(String filePath) throws Exception {
-        File file = resources.getResource(filePath).getFile();
         FileType fileType = FileType.getEnum(getFileExtension(filePath));
 
         switch (fileType) {
             case ZIP:
-                processZipFile(new ZipFile(file));
+                processZipFile(filePath);
                 break;
             case JSON:
-                processJsonFile(file);
+                processJsonFile(filePath);
                 break;
         }
     }
 
-    protected void processZipFile(ZipFile zipFile) throws IOException {
-        Enumeration<? extends ZipEntry> entries = zipFile.entries();
-        while (entries.hasMoreElements()) {
-            try (InputStream fileStream = zipFile.getInputStream(entries.nextElement())) {
-                processJsonStream(fileStream);
+    protected void processZipFile(String zipFile) throws IOException {
+        BufferedInputStream bis = new BufferedInputStream(resources.getResourceAsStream(zipFile));
+        ZipArchiveInputStream is = new ZipArchiveInputStream(bis);
+
+        try {
+            ZipArchiveEntry entry;
+            while ((entry = is.getNextZipEntry()) != null) {
+                final byte[] buffer = IOUtils.toByteArray(is);
+                processJsonStream(new ByteArrayInputStream(buffer));
             }
+        } finally {
+            is.close();
         }
     }
 
-    protected void processJsonFile(File jsonFile) throws IOException {
-        try (InputStream jsonStream = new FileInputStream(jsonFile)) {
+    protected void processJsonFile(String jsonFile) throws IOException {
+        try (InputStream jsonStream = resources.getResourceAsStream(jsonFile)) {
             processJsonStream(jsonStream);
         }
     }
