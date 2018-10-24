@@ -177,6 +177,7 @@ For example:
     ```properties
     admintools.autoImportConfig = +com/company/example/auto-import.xml
     ```
+3. Add `admintools.autoImport.enabled=true` property to `app.properties` file/
 
 ### Custom Import Processor
 
