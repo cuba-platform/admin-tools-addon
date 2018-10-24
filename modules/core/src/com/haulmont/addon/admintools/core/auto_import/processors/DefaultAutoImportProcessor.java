@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.io.*;
-import java.util.zip.ZipFile;
 
 import static com.google.common.io.Files.getFileExtension;
 import static java.lang.String.format;
@@ -48,7 +47,9 @@ public class DefaultAutoImportProcessor implements AutoImportProcessor {
     @Override
     public void processFile(String filePath) throws Exception {
         FileType fileType = FileType.getEnum(getFileExtension(filePath));
-
+        if (!resources.getResource(filePath).exists()) {
+            throw new FileNotFoundException(filePath);
+        }
         switch (fileType) {
             case ZIP:
                 processZipFile(filePath);
