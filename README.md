@@ -4,6 +4,8 @@
 
 This application component can be used to extend the capabilities of a [CUBA](https://www.cuba-platform.com) application with interactive runtime diagnosis and management tools.
 
+Sample application, using this component can be found here: https://github.com/cuba-platform/admin-tools-demo
+
 The component consists of the following parts:
 * [Runtime Diagnose Components](#runtime-diagnose-components);
 * [SQL Script Generator](#sql-script-generator);
@@ -27,8 +29,8 @@ Where `{add-on version}` should match the platform version used in your project.
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
-| 6.10.x            | 1.2.0          |
-| 6.9.x            | 1.1.2          |
+| 6.10.x            | 1.2.1          |
+| 6.9.x            | 1.1.3          |
 | 6.8.x            | 1.0.5          |
 
 ## Enabling and Disabling Components
