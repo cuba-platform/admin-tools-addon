@@ -7,7 +7,7 @@ import com.haulmont.cuba.gui.components.SourceCodeEditor
 import com.haulmont.cuba.gui.components.VBoxLayout
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.diedavids.cuba.runtimediagnose.diagnose.DiagnoseType
-import de.diedavids.cuba.runtimediagnose.web.screens.console.ConsoleFrame
+import de.diedavids.cuba.runtimediagnose.web.screens.console.ConsoleWindow
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
 
@@ -20,9 +20,9 @@ import static java.nio.charset.StandardCharsets.UTF_8
 import static org.apache.commons.io.FilenameUtils.getExtension
 import static org.apache.commons.io.IOUtils.closeQuietly
 import static org.apache.commons.io.IOUtils.toString
-import static org.apache.commons.lang.StringUtils.isNotBlank
+import static org.apache.commons.lang3.StringUtils.isNotBlank
 
-class ConsoleFrameExtended extends ConsoleFrame {
+class ConsoleFrameExtended extends ConsoleWindow {
     @Inject
     protected SourceCodeEditor console
     @Inject

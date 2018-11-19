@@ -16,14 +16,14 @@ import java.util.Map;
 
 import static com.haulmont.cuba.gui.components.Frame.NotificationType.ERROR;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class ShellExecutor extends ConsoleWindow {
 
     @Inject
     protected ConsoleBean consoleBean;
     @Inject
-    protected TextField args;
+    protected TextField<String> args;
     @Inject
     protected Action runSqlConsoleAction;
     @Inject

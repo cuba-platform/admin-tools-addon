@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.text.CharacterIterator.DONE;
-import static org.apache.commons.lang.SystemUtils.*;
+import static org.apache.commons.lang3.SystemUtils.*;
 
 /**
  * Utility class to provide functionality related to {@link ConsoleBean}

@@ -1,11 +1,12 @@
 package com.haulmont.addon.admintools.gui.xterm.components;
 
+import com.haulmont.cuba.gui.components.PasswordField;
 import com.haulmont.cuba.gui.components.TextInputField;
 
 /**
  * The differences from PasswordField is possibility to add EnterPressListener.
  */
-public interface EnterReactivePasswordField extends TextInputField, TextInputField.EnterPressNotifier, TextInputField.MaxLengthLimited  {
+public interface EnterReactivePasswordField extends PasswordField, TextInputField.EnterPressNotifier, TextInputField.MaxLengthLimited  {
 
     String NAME = "enterReactivePasswordField";
 

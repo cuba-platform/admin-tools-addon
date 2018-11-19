@@ -1,38 +1,17 @@
 package com.haulmont.addon.admintools.web.xterm.component;
 
 import com.haulmont.addon.admintools.gui.xterm.components.EnterReactivePasswordField;
-import com.haulmont.cuba.web.gui.components.WebAbstractTextField;
-import com.haulmont.cuba.web.toolkit.ui.CubaPasswordField;
+import com.haulmont.bali.events.Subscription;
+import com.haulmont.cuba.web.gui.components.WebPasswordField;
+import com.haulmont.cuba.web.gui.components.util.ShortcutListenerDelegate;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 
-public class WebEnterReactivePasswordField extends WebAbstractTextField<CubaPasswordField> implements EnterReactivePasswordField {
+import java.util.function.Consumer;
+
+public class WebEnterReactivePasswordField extends WebPasswordField implements EnterReactivePasswordField {
 
     protected ShortcutListener enterShortcutListener;
-
-    @Override
-    protected CubaPasswordField createTextFieldImpl() {
-        return new CubaPasswordField();
-    }
-
-    @Override
-    public int getMaxLength() {
-        return component.getMaxLength();
-    }
-
-    @Override
-    public void setMaxLength(int value) {
-        component.setMaxLength(value);
-    }
-
-    @Override
-    public boolean isAutocomplete() {
-        return component.isAutocomplete();
-    }
-
-    @Override
-    public void setAutocomplete(Boolean value) {
-        component.setAutocomplete(value);
-    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -41,27 +20,29 @@ public class WebEnterReactivePasswordField extends WebAbstractTextField<CubaPass
     }
 
     @Override
-    public void addEnterPressListener(EnterPressListener listener) {
-        getEventRouter().addListener(EnterPressListener.class, listener);
-
+    public Subscription addEnterPressListener(Consumer<EnterPressEvent> listener) {
         if (enterShortcutListener == null) {
-            enterShortcutListener = new ShortcutListener("", com.vaadin.event.ShortcutAction.KeyCode.ENTER, null) {
-                @Override
-                public void handleAction(Object sender, Object target) {
-                    EnterPressEvent event = new EnterPressEvent(WebEnterReactivePasswordField.this);
-                    getEventRouter().fireEvent(EnterPressListener.class, EnterPressListener::enterPressed, event);
-                }
-            };
+            enterShortcutListener = new ShortcutListenerDelegate("", ShortcutAction.KeyCode.ENTER, null)
+                    .withHandler((sender, target) -> {
+                        EnterPressEvent event = new EnterPressEvent(WebEnterReactivePasswordField.this);
+                        publish(EnterPressEvent.class, event);
+                    });
             component.addShortcutListener(enterShortcutListener);
         }
+
+        getEventHub().subscribe(EnterPressEvent.class, listener);
+
+        return () -> removeEnterPressListener(listener);
     }
 
     @Override
-    public void removeEnterPressListener(EnterPressListener listener) {
-        getEventRouter().removeListener(EnterPressListener.class, listener);
+    public void removeEnterPressListener(Consumer<EnterPressEvent> listener) {
+        unsubscribe(EnterPressEvent.class, listener);
 
-        if (enterShortcutListener != null && !getEventRouter().hasListeners(EnterPressListener.class)) {
+        if (enterShortcutListener != null
+                && !hasSubscriptions(EnterPressEvent.class)) {
             component.removeShortcutListener(enterShortcutListener);
+            enterShortcutListener = null;
         }
     }
 }

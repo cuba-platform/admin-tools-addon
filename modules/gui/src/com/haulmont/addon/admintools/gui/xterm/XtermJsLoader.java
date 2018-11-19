@@ -6,7 +6,7 @@ import com.haulmont.cuba.gui.xml.layout.loaders.AbstractComponentLoader;
 public class XtermJsLoader extends AbstractComponentLoader<XtermJs> {
     @Override
     public void createComponent() {
-        resultComponent = factory.createComponent(XtermJs.class);
+        resultComponent = factory.create(XtermJs.class);
         loadId(resultComponent, element);
     }
 

@@ -1,6 +1,7 @@
 buildscript {
-    ext.cubaVersion = '6.10.2'
+    ext.cubaVersion = '7.0-SNAPSHOT'
     repositories {
+        mavenLocal()
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
@@ -17,20 +18,21 @@ buildscript {
     }
 }
 
-def globalModule = project(':cuba-at-global')
-def coreModule = project(':cuba-at-core')
-def guiModule = project(':cuba-at-gui')
-def webModule = project(':cuba-at-web')
+def modulePrefix = 'cuba-at'
+
+def globalModule = project(":${modulePrefix}-global" )
+def coreModule = project(":${modulePrefix}-core" )
+def guiModule = project(":${modulePrefix}-gui" )
+def webModule = project(":${modulePrefix}-web" )
 
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
-apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 cuba {
     artifact {
         group = 'com.haulmont.addon.admintools'
-        version = "1.2"
+        version = "1.3"
         isSnapshot = true
     }
     tomcat {
@@ -43,7 +45,7 @@ cuba {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.diedavids.cuba.runtimediagnose:runtime-diagnose-global:1.1.0")
+    appComponent("de.diedavids.cuba.runtimediagnose:runtime-diagnose-global:1.3.0")
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
@@ -52,7 +54,6 @@ configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'groovy')
     apply(plugin: 'maven')
-    apply(plugin: 'idea')
     apply(plugin: 'cuba')
     apply(plugin: 'checkstyle')
 
@@ -83,7 +84,6 @@ configure([globalModule, coreModule, guiModule, webModule]) {
 
     dependencies {
         compile('io.vavr:vavr:0.9.0')
-        compile('org.codehaus.groovy:groovy-all:2.4.11')
         compile('jaxen:jaxen:1.1.6')
         compile('org.jetbrains:annotations:15.0')
         testCompile('junit:junit:4.12')
@@ -182,15 +182,15 @@ configure(coreModule) {
 
     dependencies {
         compile(globalModule)
-        provided(servletApi)
+        compileOnly(servletApi)
         jdbc(hsql)
-        testCompile project(path: ':cuba-at-global', configuration: 'testOutput')
+        testCompile project(path: ":${modulePrefix}-global" , configuration: 'testOutput')
         testRuntime(hsql)
     }
 
     task cleanConf(description: 'Cleans up conf directory') {
         doLast {
-            def dir = new File(cuba.tomcat.dir, '/conf/cuba-at-core')
+            def dir = new File(cuba.tomcat.dir, '/conf/${modulePrefix}-core')
             if (dir.isDirectory()) {
                 ant.delete(includeemptydirs: true) {
                     fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -200,8 +200,8 @@ configure(coreModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'cuba-at-core'
-        appJars('cuba-at-global', 'cuba-at-core')
+        appName = "${modulePrefix}-core"
+        appJars("${modulePrefix}-global", "${modulePrefix}-core")
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
@@ -261,7 +261,7 @@ configure(guiModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/haulmont/addon/admintools/**"
-        into "$cuba.tomcat.dir/conf/cuba-at"
+        into "$cuba.tomcat.dir/conf/${modulePrefix}"
     }
 }
 
@@ -271,10 +271,10 @@ configure(webModule) {
     }
 
     dependencies {
-        provided(servletApi)
+        compileOnly(servletApi)
         compile(guiModule)
         compile group: 'com.jcraft', name: 'jsch', version: '0.1.54'
-        testCompile project(path: ':cuba-at-global', configuration: 'testOutput')
+        testCompile project(path: ":${modulePrefix}-global" , configuration: 'testOutput')
     }
 
     task webArchive(type: Zip) {
@@ -290,17 +290,17 @@ configure(webModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/haulmont/addon/admintools/**"
-        into "$cuba.tomcat.dir/conf/cuba-at"
+        into "$cuba.tomcat.dir/conf/${modulePrefix}"
     }
 
     task clearMessagesCache(type: CubaClearMessagesCache) {
-        appName = 'cuba-at'
+        appName = "${modulePrefix}"
     }
     deployConf.dependsOn clearMessagesCache
 
     task cleanConf(description: 'Cleans up conf directory') {
         doLast {
-            def dir = new File(cuba.tomcat.dir, '/conf/cuba-at')
+            def dir = new File(cuba.tomcat.dir, "/conf/${modulePrefix}")
             if (dir.isDirectory()) {
                 ant.delete(includeemptydirs: true) {
                     fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -310,22 +310,18 @@ configure(webModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'cuba-at'
-        appJars('cuba-at-global', 'cuba-at-gui', 'cuba-at-web')
+        appName = "${modulePrefix}"
+        appJars("${modulePrefix}-global", "${modulePrefix}-gui", "${modulePrefix}-web")
     }
 }
 
-
-
-
-
-task undeploy(type: Delete, dependsOn: ':cuba-at-web:cleanConf') {
+task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf" ) {
     delete("$cuba.tomcat.dir/shared")
-    delete("$cuba.tomcat.dir/webapps/cuba-at-core")
-    delete("$cuba.tomcat.dir/webapps/cuba-at")
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}-core" )
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}" )
 }
 
-task restart(dependsOn: ['stop', ':cuba-at-core:deploy', ':cuba-at-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') {
+task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy" , ":${modulePrefix}-web:deploy" ], description: 'Redeploys applications and restarts local Tomcat') {
     doLast {
         ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
             not {
@@ -336,8 +332,5 @@ task restart(dependsOn: ['stop', ':cuba-at-core:deploy', ':cuba-at-web:deploy'],
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
-}
 
 apply from: 'extra.gradle'

@@ -15,7 +15,7 @@ import java.util.Map;
 
 import static java.lang.String.valueOf;
 import static org.apache.commons.io.FilenameUtils.getExtension;
-import static org.apache.commons.lang.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class ConfigLoader extends AbstractWindow {
 
