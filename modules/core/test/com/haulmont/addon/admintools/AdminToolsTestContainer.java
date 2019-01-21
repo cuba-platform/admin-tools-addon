@@ -47,7 +47,7 @@ public class AdminToolsTestContainer extends TestContainer {
         Element resourceElem = contextXmlDoc.getRootElement().element("Resource");
 
         dbDriver = resourceElem.attributeValue("driverClassName");
-        dbUrl = "jdbc:hsqldb:hsql://localhost/cubaat-test";
+        dbUrl = "jdbc:hsqldb:hsql://localhost/cubaat";
         dbUser = resourceElem.attributeValue("username");
         dbPassword = resourceElem.attributeValue("password");
     }
