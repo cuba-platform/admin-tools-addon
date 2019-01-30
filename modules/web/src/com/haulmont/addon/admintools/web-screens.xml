@@ -9,8 +9,8 @@
             template="com/haulmont/addon/admintools/web/console_script_loader/console-script-loader.xml"/>
     <screen id="console-frame"
             template="com/haulmont/addon/admintools/web/screens/console/console-frame-extended.xml"/>
-    <screen id="groovyConsole"
-            template="com/haulmont/addon/admintools/web/screens/groovy/groovy-console-extended.xml"/>
+    <screen id="groovy-console-frame"
+            template="com/haulmont/addon/admintools/web/screens/groovy/groovy-frame-extended.xml"/>
     <screen id="jpqlConsole"
             template="com/haulmont/addon/admintools/web/screens/jpql/jpql-console-extended.xml"/>
     <screen id="sqlConsole"

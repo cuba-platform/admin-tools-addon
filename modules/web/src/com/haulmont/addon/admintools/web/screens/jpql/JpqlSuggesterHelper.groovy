@@ -16,8 +16,8 @@ import java.util.stream.Collectors
 import java.util.stream.Stream
 
 import static java.util.Collections.emptyList
-import static org.apache.commons.lang.StringUtils.containsIgnoreCase
-import static org.apache.commons.lang.StringUtils.substringBefore
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase
+import static org.apache.commons.lang3.StringUtils.substringBefore
 
 @Component('admintools_JpqlSuggesterHelper')
 class JpqlSuggesterHelper {

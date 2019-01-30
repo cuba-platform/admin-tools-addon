@@ -17,7 +17,6 @@ class SqlConsoleExtended extends SqlConsole{
 
     @Override
     void init(Map<String, Object> params) {
-        params.put('diagnoseType', DiagnoseType.SQL)
-        openFrame(consoleFrame, 'console-frame', params)
+        super.init(params)
     }
 }

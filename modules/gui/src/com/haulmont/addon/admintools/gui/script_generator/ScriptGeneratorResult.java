@@ -22,7 +22,7 @@ import java.util.*;
 import static com.haulmont.addon.admintools.global.script_generator.ScriptGenerationOptions.INSERT;
 import static com.haulmont.cuba.gui.components.Frame.NotificationType.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class ScriptGeneratorResult extends AbstractWindow {
 
@@ -35,19 +35,19 @@ public class ScriptGeneratorResult extends AbstractWindow {
     @Inject
     protected Metadata metadata;
     @Inject
-    protected LookupField entitiesMetaClasses;
+    protected LookupField<MetaClass> entitiesMetaClasses;
     @Inject
-    protected LookupField entityViews;
+    protected LookupField<String> entityViews;
     @Inject
     protected GroupBoxLayout querySettings;
     @Inject
-    protected LookupField generateOptions;
+    protected LookupField<ScriptGenerationOptions> generateOptions;
     @Inject
     protected EntityViewSqlGenerationService sqlGenerationService;
     @Inject
     protected ExportDisplay exportDisplay;
     @Inject
-    protected TextField entityLimitField;
+    protected TextField<Integer> entityLimitField;
     @Inject
     protected ProgressBar executeProgressBar;
 

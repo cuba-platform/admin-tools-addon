@@ -34,7 +34,7 @@ import static com.haulmont.cuba.gui.components.Frame.NotificationType.WARNING;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.IOUtils.toByteArray;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class SshTerminal extends AbstractWindow {
 
@@ -292,7 +292,7 @@ public class SshTerminal extends AbstractWindow {
     }
 
     public void onLoadCredentialBtnClick() {
-        SshCredentials credential = optionsList.getValue();
+        SshCredentials credential = (SshCredentials) optionsList.getValue();
 
         if (credential != null) {
             sshCredentialDs.setItem(credential);
@@ -330,7 +330,7 @@ public class SshTerminal extends AbstractWindow {
     }
 
     public void onRemoveCredentialBtnClick() {
-        SshCredentials credential = optionsList.getValue();
+        SshCredentials credential = (SshCredentials) optionsList.getValue();
 
         if (credential != null) {
             optionsList.setValue(null);

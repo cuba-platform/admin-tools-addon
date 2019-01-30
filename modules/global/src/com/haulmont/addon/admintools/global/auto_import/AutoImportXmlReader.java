@@ -4,7 +4,7 @@ import com.haulmont.addon.admintools.global.auto_import.dto.AutoImportFileDescri
 import com.haulmont.bali.util.Dom4j;
 import com.haulmont.cuba.core.global.Resources;
 import com.haulmont.cuba.core.sys.AppContext;
-import org.apache.commons.lang.text.StrTokenizer;
+import org.apache.commons.lang3.text.StrTokenizer;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * This class read an auto-import xml config and converts it to a list {@link AutoImportFileDescriptor}

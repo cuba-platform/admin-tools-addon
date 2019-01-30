@@ -16,7 +16,7 @@
               screen="admintools$configLoader"/>
         <separator/>
         <item id="consoleScriptLoader"
-              openType="NEW_TAB"
+              openType="DIALOG"
               screen="console-script-loader"/>
     </menu>
 </menu-config>

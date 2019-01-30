@@ -18,7 +18,6 @@
         </property>
     </bean>
 
-    <bean id="ddcrd_SqlConsoleService" class="com.haulmont.addon.admintools.core.db.ExtendedDbDiagnoseServiceBean"/>
     <bean id="ddcrd_SqlSelectResultFactory" class="com.haulmont.addon.admintools.core.db.ExtendedSqlSelectResultFactoryBean"/>
 
 </beans>
