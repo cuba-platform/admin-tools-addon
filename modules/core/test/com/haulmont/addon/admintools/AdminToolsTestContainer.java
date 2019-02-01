@@ -29,7 +29,7 @@ public class AdminToolsTestContainer extends TestContainer {
                 // Add this file which is located in CUBA and defines some properties
                 // specifically for test environment. You can replace it with your own
                 // or add another one in the end.
-                "test-app.properties");
+                "com/haulmont/addon/admintools/test-app.properties");
         initDbProperties();
     }
 
@@ -46,7 +46,7 @@ public class AdminToolsTestContainer extends TestContainer {
         Element resourceElem = contextXmlDoc.getRootElement().element("Resource");
 
         dbDriver = resourceElem.attributeValue("driverClassName");
-        dbUrl = "jdbc:hsqldb:hsql://localhost/cubaat";
+        dbUrl = resourceElem.attributeValue("url");
         dbUser = resourceElem.attributeValue("username");
         dbPassword = resourceElem.attributeValue("password");
     }
