@@ -1,57 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <app-component xmlns="http://schemas.haulmont.com/cuba/app-component.xsd"
                dependsOn="com.haulmont.cuba">
-    <module blocks="*"
-            name="global">
-        <artifact appJar="true"
-                  name="cuba-at-global"/>
-        <property name="cuba.persistenceConfig"
-                  value="+com/haulmont/addon/admintools/persistence.xml"/>
-        <property name="cuba.metadataConfig"
-                  value="+com/haulmont/addon/admintools/metadata.xml"/>
-        <property name="cuba.viewsConfig"
-                  value="+com/haulmont/addon/admintools/views.xml"/>
+
+    <module name="global" blocks="*">
+        <artifact name="cuba-at-global" appJar="true"/>
+
+
     </module>
-    <module blocks="core"
-            dependsOn="global"
-            name="core">
-        <artifact appJar="true"
-                  name="cuba-at-core"/>
+    <module name="core" dependsOn="global" blocks="core">
+        <artifact name="cuba-at-core" appJar="true"/>
+        <artifact name="cuba-at-core" classifier="db" ext="zip" configuration="dbscripts"/>
+
         <property name="cuba.springContextConfig"
-                  value="+com/haulmont/addon/admintools/spring.xml"/>
+                  value="+com/haulmont/addon/admintools/spring.xml de/diedavids/cuba/runtimediagnose/spring.xml"/>
         <property name="cuba.mainMessagePack"
-                  value="+com.haulmont.addon.admintools.core"/>
-        <artifact classifier="db"
-                  configuration="dbscripts"
-                  ext="zip"
-                  name="cuba-at-core"/>
+                  value="+com.haulmont.addon.admintools.core de.diedavids.cuba.runtimediagnose.core"/>
     </module>
-    <module blocks="web,desktop"
-            dependsOn="global"
-            name="gui">
-        <artifact appJar="true"
-                  name="cuba-at-gui"/>
+    <module name="gui" dependsOn="global" blocks="web,desktop">
+        <artifact name="cuba-at-gui" appJar="true"/>
     </module>
-    <module blocks="web"
-            dependsOn="gui"
-            name="web">
-        <artifact appJar="true"
-                  name="cuba-at-web"/>
-        <artifact classifier="web"
-                  configuration="webcontent"
-                  ext="zip"
-                  name="cuba-at-web"/>
+    <module name="web" dependsOn="gui" blocks="web">
+        <artifact name="cuba-at-web" appJar="true"/>
+        <artifact name="cuba-at-web" classifier="web" ext="zip" configuration="webcontent"/>
+
         <property name="cuba.springContextConfig"
-                  value="+com/haulmont/addon/admintools/web-spring.xml"/>
+                  value="+com/haulmont/addon/admintools/web-spring.xml de/diedavids/cuba/runtimediagnose/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"
-                  value="+com/haulmont/addon/admintools/web-dispatcher-spring.xml"/>
+                  value="+com/haulmont/addon/admintools/web-dispatcher-spring.xml de/diedavids/cuba/runtimediagnose/web-dispatcher-spring.xml"/>
         <property name="cuba.windowConfig"
-                  value="+com/haulmont/addon/admintools/web-screens.xml"/>
+                  value="+com/haulmont/addon/admintools/web-screens.xml de/diedavids/cuba/runtimediagnose/web-screens.xml"/>
         <property name="cuba.menuConfig"
-                  value="+com/haulmont/addon/admintools/web-menu.xml"/>
+                  value="+de/diedavids/cuba/runtimediagnose/web-menu.xml com/haulmont/addon/admintools/web-menu.xml"/>
         <property name="cuba.permissionConfig"
-                  value="+com/haulmont/addon/admintools/web-permissions.xml"/>
+                  value="+com/haulmont/addon/admintools/web-permissions.xml de/diedavids/cuba/runtimediagnose/web-permissions.xml"/>
         <property name="cuba.mainMessagePack"
-                  value="+com.haulmont.addon.admintools.web"/>
+                  value="+com.haulmont.addon.admintools.web de.diedavids.cuba.runtimediagnose.web"/>
     </module>
 </app-component>
