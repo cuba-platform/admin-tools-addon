@@ -4,7 +4,10 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.Configuration;
 import com.haulmont.cuba.core.global.GlobalConfig;
 import com.haulmont.cuba.core.global.Messages;
+import com.haulmont.cuba.gui.Dialogs;
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.screen.StandardCloseAction;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -27,6 +30,10 @@ public class ConfigLoader extends AbstractWindow {
     protected TextField configPathField;
     @Inject
     protected Messages messages;
+    @Inject
+    protected Notifications notifications;
+    @Inject
+    protected Dialogs dialogs;
 
     protected Path configDir;
 
@@ -40,7 +47,9 @@ public class ConfigLoader extends AbstractWindow {
         FileDescriptor fileDescriptor = uploadField.getValue();
 
         if (fileDescriptor == null) {
-            showNotification(getMessage("fileNotUploaded"));
+            notifications.create()
+                    .withCaption(getMessage("fileNotUploaded"))
+                    .show();
             return;
         }
 
@@ -57,30 +66,30 @@ public class ConfigLoader extends AbstractWindow {
                 createNewFile(targetFile);
             }
         } catch (InvalidPathException e) {
-            showNotification(formatMessage(getMessage("pathValidMessage"), pathFieldValue));
+            notifications.create()
+                    .withCaption(formatMessage(getMessage("pathValidMessage"), pathFieldValue))
+                    .show();
         }
 
     }
 
     public void cancel() {
-        this.close("cancel");
+        close(new StandardCloseAction("cancel"));
     }
 
     protected void confirmOverwriteFile(String fileName, File targetFile) {
-        showOptionDialog(
-                getMessage("replaceConfirmation"),
-                formatMessage(getMessage("replaceMessage"), fileName),
-                MessageType.CONFIRMATION,
-                new Action[]{
+        dialogs.createOptionDialog(Dialogs.MessageType.CONFIRMATION)
+                .withCaption(getMessage("replaceConfirmation"))
+                .withMessage(formatMessage(getMessage("replaceMessage"), fileName))
+                .withActions(
                         new DialogAction(DialogAction.Type.OK) {
                             @Override
                             public void actionPerform(Component component) {
                                 writeToFile(targetFile);
                             }
                         },
-                        new DialogAction(DialogAction.Type.CANCEL)
-                }
-        );
+                        new DialogAction(DialogAction.Type.CANCEL))
+                .show();
     }
 
     protected void createNewFile(File targetFile) {
@@ -92,20 +101,26 @@ public class ConfigLoader extends AbstractWindow {
         InputStream loadedFile = uploadField.getFileContent();
 
         if (loadedFile == null) {
-            showNotification(getMessage("fileIsEmpty"), NotificationType.ERROR);
+            notifications.create(Notifications.NotificationType.ERROR)
+                    .withCaption(getMessage("fileIsEmpty"))
+                    .show();
             return;
         }
 
         try {
             Files.copy(loadedFile, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            showNotification(getMessage("uploadSuccessful"), NotificationType.HUMANIZED);
+            notifications.create(Notifications.NotificationType.HUMANIZED)
+                    .withCaption(getMessage("uploadSuccessful"))
+                    .show();
             uploadField.setValue(null);
 
             if ("properties".equals(getExtension(targetFile.getPath()))) {
                 messages.clearCache();
             }
         } catch (IOException e) {
-            showNotification(e.getLocalizedMessage(), NotificationType.ERROR);
+            notifications.create(Notifications.NotificationType.ERROR)
+                    .withCaption(e.getLocalizedMessage())
+                    .show();
         }
     }
 

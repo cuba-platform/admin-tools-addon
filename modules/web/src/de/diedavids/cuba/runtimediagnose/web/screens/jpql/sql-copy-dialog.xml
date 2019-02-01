@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://sqlDialogHeader"
+        class="de.diedavids.cuba.runtimediagnose.web.screens.jpql.SqlCopyDialog"
+        messagesPack="de.diedavids.cuba.runtimediagnose.web.screens.jpql">
+    <layout margin="true"
+            spacing="true">
+        <textArea id="sqlTextArea"
+                  editable="false"
+                  width="100%"/>
+        <buttonsPanel align="TOP_RIGHT"
+                      width="100%">
+            <button id="copyBtn"
+                    align="TOP_RIGHT"
+                    caption="msg://copy"
+                    icon="font-icon:CLIPBOARD"/>
+        </buttonsPanel>
+    </layout>
+</window>

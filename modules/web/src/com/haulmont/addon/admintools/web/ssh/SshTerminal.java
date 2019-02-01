@@ -8,14 +8,17 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.FileLoader;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.Dialogs;
+import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.data.value.DatasourceValueSource;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.executors.BackgroundTask;
 import com.haulmont.cuba.gui.executors.BackgroundTaskHandler;
 import com.haulmont.cuba.gui.executors.BackgroundWorker;
 import com.haulmont.cuba.gui.executors.TaskLifeCycle;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
@@ -29,8 +32,8 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
-import static com.haulmont.cuba.gui.components.Frame.NotificationType.WARNING;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.IOUtils.toByteArray;
@@ -45,7 +48,7 @@ public class SshTerminal extends AbstractWindow {
     @Inject
     protected Metadata metadata;
     @Inject
-    protected ComponentsFactory componentsFactory;
+    protected UiComponents componentsFactory;
     @Inject
     protected Datasource<SshCredentials> sshCredentialDs;
     @Inject
@@ -62,6 +65,10 @@ public class SshTerminal extends AbstractWindow {
     protected XtermJs terminal;
     @Inject
     protected BackgroundWorker backgroundWorker;
+    @Inject
+    protected Notifications notifications;
+    @Inject
+    protected Dialogs dialogs;
 
     protected JSch jsch = new JSch();
     protected Session session;
@@ -73,14 +80,14 @@ public class SshTerminal extends AbstractWindow {
     protected BackgroundTask<Integer, Void> connectionTask;
     protected BackgroundTaskHandler connectionTaskHandler;
     protected SshCredentials credentials;
-    protected TextField hostnameField;
+    protected TextField<String> hostnameField;
 
     @Override
     public void init(Map<String, Object> params) {
         SshCredentials credentials = metadata.create(SshCredentials.class);
         sshCredentialDs.setItem(credentials);
 
-        connectionTask = new BackgroundTask<Integer, Void>(CONNECTION_TIMEOUT_SECONDS, getFrame()) {
+        connectionTask = new BackgroundTask<Integer, Void>(CONNECTION_TIMEOUT_SECONDS, TimeUnit.SECONDS, this) {
             @Override
             public Void run(TaskLifeCycle<Integer> taskLifeCycle) throws JSchException, IOException, FileStorageException {
                 internalConnect();
@@ -124,21 +131,25 @@ public class SshTerminal extends AbstractWindow {
 
     @Override
     public void ready() {
-        hostnameField.requestFocus();
+        hostnameField.focus();
     }
 
     @Override
     protected boolean preClose(String actionId) {
         if (isBackgroundTaskExecuted()) {
             connectionTaskHandler.cancel();
-            showNotification(formatMessage("console.disconnected", sshCredentialDs.getItem().getHostname()));
+            notifications.create()
+                    .withCaption(formatMessage("console.disconnected", sshCredentialDs.getItem().getHostname()))
+                    .show();
         } else {
             if (isMainChannelOpen()) {
                 mainChannel.disconnect();
             }
             if (isSessionOpen()) {
                 session.disconnect();
-                showNotification(formatMessage("console.disconnected", sshCredentialDs.getItem().getHostname()));
+                notifications.create()
+                        .withCaption(formatMessage("console.disconnected", sshCredentialDs.getItem().getHostname()))
+                        .show();
             }
         }
         return super.preClose(actionId);
@@ -177,14 +188,16 @@ public class SshTerminal extends AbstractWindow {
         }
 
         if (isMainChannelOpen()) {
-            showOptionDialog(getMessage("confirmReconnect.title"), getMessage("confirmReconnect.msg"),
-                    MessageType.CONFIRMATION, new Action[]{
+            dialogs.createOptionDialog(Dialogs.MessageType.CONFIRMATION)
+                    .withCaption(getMessage("confirmReconnect.title"))
+                    .withMessage(getMessage("confirmReconnect.msg"))
+                    .withActions(
                             new DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY).withHandler(e -> {
                                 disconnectSsh();
                                 executeConnectionProgressTask();
                             }),
-                            new DialogAction(DialogAction.Type.CANCEL, Action.Status.NORMAL)
-                    });
+                            new DialogAction(DialogAction.Type.CANCEL, Action.Status.NORMAL))
+                    .show();
         } else {
             executeConnectionProgressTask();
         }
@@ -235,16 +248,16 @@ public class SshTerminal extends AbstractWindow {
         return session;
     }
 
-    public Component generateHostnameField(Datasource datasource, String fieldId) {
-        hostnameField = componentsFactory.createComponent(TextField.class);
-        hostnameField.setDatasource(datasource, "hostname");
+    public Component generateHostnameField(Datasource<SshCredentials> datasource, String fieldId) {
+        hostnameField = componentsFactory.create(TextField.class);
+        hostnameField.setValueSource(new DatasourceValueSource<>(datasource, "hostname"));
         hostnameField.setWidth("70%");
 
-        TextField portField = componentsFactory.createComponent(TextField.class);
-        portField.setDatasource(datasource, "port");
+        TextField<String> portField = componentsFactory.create(TextField.class);
+        portField.setValueSource(new DatasourceValueSource<>(datasource, "port"));
         portField.setWidth("60px");
 
-        HBoxLayout hostnameBox = componentsFactory.createComponent(HBoxLayout.class);
+        HBoxLayout hostnameBox = componentsFactory.create(HBoxLayout.class);
 
         hostnameBox.add(hostnameField);
         hostnameBox.add(portField);
@@ -256,9 +269,9 @@ public class SshTerminal extends AbstractWindow {
     }
 
     public Component generatePasswordField(Datasource datasource, String fieldId) {
-        EnterReactivePasswordField component = componentsFactory.createComponent(EnterReactivePasswordField.class);
+        EnterReactivePasswordField component = componentsFactory.create(EnterReactivePasswordField.class);
         component.addEnterPressListener(e -> connect());
-        component.setDatasource(datasource, fieldId);
+        component.setValueSource(new DatasourceValueSource<>(datasource, fieldId));
         return component;
     }
 
@@ -302,7 +315,9 @@ public class SshTerminal extends AbstractWindow {
 
     public void onSaveCredentialBtnClick() {
         if (!fieldGroup.isValid()) {
-            showNotification(getMessage("credetialsNotValid"), WARNING);
+            notifications.create(Notifications.NotificationType.WARNING)
+                    .withCaption(getMessage("credetialsNotValid"))
+                    .show();
             return;
         }
 
@@ -313,7 +328,9 @@ public class SshTerminal extends AbstractWindow {
         }
 
         if (isSessionNameDuplicated(item)) {
-            showNotification(formatMessage("sessionNameDuplicated", item.getSessionName()), WARNING);
+            notifications.create(Notifications.NotificationType.WARNING)
+                    .withCaption(formatMessage("sessionNameDuplicated", item.getSessionName()))
+                    .show();
             return;
         }
 
@@ -351,7 +368,7 @@ public class SshTerminal extends AbstractWindow {
                 .stream()
                 .anyMatch(cred ->
                         cred.getSessionName().equals(item.getSessionName()) &&
-                        !cred.getUuid().equals(item.getUuid())
+                                !cred.getUuid().equals(item.getUuid())
                 );
     }
 }

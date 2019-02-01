@@ -15,7 +15,7 @@ public class AdminToolsTestContainer extends TestContainer {
         super();
         appComponents = new ArrayList<>(Arrays.asList(
                 "com.haulmont.cuba",
-                "de.diedavids.cuba.runtimediagnose"
+                "com.haulmont.addon.admintools.global"
                 // add CUBA premium add-ons here
                 // "com.haulmont.bpm",
                 // "com.haulmont.charts",

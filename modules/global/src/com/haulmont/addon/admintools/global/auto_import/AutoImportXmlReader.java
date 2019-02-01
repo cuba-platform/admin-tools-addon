@@ -4,7 +4,7 @@ import com.haulmont.addon.admintools.global.auto_import.dto.AutoImportFileDescri
 import com.haulmont.bali.util.Dom4j;
 import com.haulmont.cuba.core.global.Resources;
 import com.haulmont.cuba.core.sys.AppContext;
-import org.apache.commons.lang3.text.StrTokenizer;
+import org.apache.commons.text.StringTokenizer;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.springframework.stereotype.Component;
@@ -46,7 +46,7 @@ public class AutoImportXmlReader {
     protected List<AutoImportFileDescriptor> convertXmlToFileDescriptors(List<XmlFile> xmlFiles) {
         List<AutoImportFileDescriptor> list = new ArrayList<>();
         for (XmlFile xmlFile : xmlFiles) {
-            List<Element> elements = Dom4j.elements(xmlFile.root, "auto-import-file");
+            List<Element> elements = xmlFile.root.elements("auto-import-file");
             for (Element element : elements) {
                 String path = element.attributeValue("path");
                 String bean = element.attributeValue("bean");
@@ -59,7 +59,7 @@ public class AutoImportXmlReader {
 
     protected List<XmlFile> extractXmlFiles(String config) throws IOException {
         List<XmlFile> xmlFiles = new ArrayList<>();
-        StrTokenizer tokenizer = new StrTokenizer(config);
+        StringTokenizer tokenizer = new StringTokenizer(config);
         for (String fileName : tokenizer.getTokenArray()) {
             xmlFiles.add(new XmlFile(fileName, readXml(fileName)));
         }

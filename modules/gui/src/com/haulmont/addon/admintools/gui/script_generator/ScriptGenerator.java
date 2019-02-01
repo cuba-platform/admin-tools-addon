@@ -1,10 +1,13 @@
 package com.haulmont.addon.admintools.gui.script_generator;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.gui.WindowManager;
+import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.OptionsGroup;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.OpenMode;
+import com.haulmont.cuba.gui.screen.StandardCloseAction;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -21,6 +24,9 @@ public class ScriptGenerator extends AbstractWindow {
     @Inject
     protected OptionsGroup generationMode;
 
+    @Inject
+    protected Screens screens;
+
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
@@ -29,17 +35,14 @@ public class ScriptGenerator extends AbstractWindow {
     }
 
     public void windowCommit(){
-        openWindow("admintools$generateScriptsResult",
-                WindowManager.OpenType.DIALOG,
-                ParamsMap.of(
-                        PARAMETER_SELECTED_ENTITIES, selectedEntities,
-                        GENERATION_MODE, generationMode.getValue()
-                )
-        );
+        screens.create("admintools$generateScriptsResult", OpenMode.DIALOG,new MapScreenOptions(ParamsMap.of(
+                PARAMETER_SELECTED_ENTITIES, selectedEntities,
+                GENERATION_MODE, generationMode.getValue()
+        ))).show();
         windowClose();
     }
 
     public void windowClose(){
-        this.close("windowClose");
+        close(new StandardCloseAction(CLOSE_ACTION_ID));
     }
 }

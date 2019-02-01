@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.executors.BackgroundTask;
@@ -18,9 +19,9 @@ import com.haulmont.cuba.gui.export.ExportDisplay;
 
 import javax.inject.Inject;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static com.haulmont.addon.admintools.global.script_generator.ScriptGenerationOptions.INSERT;
-import static com.haulmont.cuba.gui.components.Frame.NotificationType.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -50,6 +51,8 @@ public class ScriptGeneratorResult extends AbstractWindow {
     protected TextField<Integer> entityLimitField;
     @Inject
     protected ProgressBar executeProgressBar;
+    @Inject
+    protected Notifications notifications;
 
     @WindowParam(name = "generationMode")
     protected Enum generationMode;
@@ -73,7 +76,7 @@ public class ScriptGeneratorResult extends AbstractWindow {
             querySettings.setVisible(true);
         }
 
-        BackgroundTask<Integer, Set<String>> connectionTask = new BackgroundTask<Integer, Set<String>>(60, getFrame()) {
+        BackgroundTask<Integer, Set<String>> connectionTask = new BackgroundTask<Integer, Set<String>>(60, TimeUnit.SECONDS, this) {
             @Override
             public Set<String> run(TaskLifeCycle<Integer> taskLifeCycle) {
                 return getSQLScript();
@@ -87,14 +90,18 @@ public class ScriptGeneratorResult extends AbstractWindow {
             @Override
             public boolean handleException(Exception ex) {
                 executeProgressBar.setIndeterminate(false);
-                showNotification(ex.getLocalizedMessage(), ERROR);
+                notifications.create(Notifications.NotificationType.ERROR)
+                        .withCaption(ex.getLocalizedMessage())
+                        .show();
                 return true;
             }
 
             @Override
             public boolean handleTimeoutException() {
                 executeProgressBar.setIndeterminate(false);
-                showNotification(getMessage("timeout"), WARNING);
+                notifications.create(Notifications.NotificationType.WARNING)
+                        .withCaption(getMessage("timeout"))
+                        .show();
                 return true;
             }
 
@@ -116,14 +123,16 @@ public class ScriptGeneratorResult extends AbstractWindow {
     }
 
     public void windowClose() {
-        this.close("windowClose");
+        close(WINDOW_CLOSE_ACTION);
     }
 
     public void execute() {
         Integer limit = entityLimitField.getValue();
 
         if (limit != null && limit <= 0) {
-            showNotification(getMessage("entityLimitWarning"), WARNING);
+            notifications.create(Notifications.NotificationType.WARNING)
+                    .withCaption(getMessage("entityLimitWarning"))
+                    .show();
             return;
         }
 
@@ -169,7 +178,9 @@ public class ScriptGeneratorResult extends AbstractWindow {
 
     protected void printResult(Set<String> result) {
         if (result == null || result.isEmpty()) {
-            showNotification(getMessage("message.noDataFound"), HUMANIZED);
+            notifications.create(Notifications.NotificationType.HUMANIZED)
+                    .withCaption(getMessage("message.noDataFound"))
+                    .show();
             return;
         }
         resultScript.setValue("");

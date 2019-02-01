@@ -1,22 +1,23 @@
 package com.haulmont.addon.admintools.gui.console;
 
 import com.haulmont.addon.admintools.global.console.ConsoleException;
-import com.haulmont.cuba.gui.WindowManager;
-import com.haulmont.cuba.gui.components.Frame;
-import com.haulmont.cuba.gui.exception.AbstractGenericExceptionHandler;
+import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.exception.AbstractUiExceptionHandler;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
 
 @Component("admintools_ConsoleExceptionHandler")
-public class ConsoleExceptionHandler extends AbstractGenericExceptionHandler {
+public class ConsoleExceptionHandler extends AbstractUiExceptionHandler {
 
     public ConsoleExceptionHandler() {
         super(ConsoleException.class.getName());
     }
 
     @Override
-    protected void doHandle(String className, String message, @Nullable Throwable throwable, WindowManager windowManager) {
-        windowManager.showNotification(message, Frame.NotificationType.ERROR);
+    protected void doHandle(String className, String message, @Nullable Throwable throwable, UiContext context) {
+        context.getNotifications().create(Notifications.NotificationType.ERROR)
+                .withCaption(message)
+                .show();
     }
 }
