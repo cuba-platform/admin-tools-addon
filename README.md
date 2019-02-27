@@ -143,7 +143,7 @@ a message requesting to confirm file replacement appears.
 Console Script Loader is used to import scripts in the [Groovy, JPQL and SQL consoles](#runtime-diagnose-components).
 Upload ZIP in the corresponding field and it redirects to a necessary console with a script in a text field.
 
-![console-script-loader-menu-item](img/config-loader.png)
+![console-script-loader-menu-item](img/console-script-loader.png)
 
 ## Auto Import Subsystem
 
