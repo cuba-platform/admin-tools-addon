@@ -13,7 +13,7 @@
     <!--Application component-->
     <context-param>
         <param-name>appComponents</param-name>
-        <param-value>com.haulmont.cuba de.diedavids.cuba.runtimediagnose</param-value>
+        <param-value>com.haulmont.cuba</param-value>
     </context-param>
     <listener>
         <listener-class>com.haulmont.cuba.core.sys.AppContextLoader</listener-class>
