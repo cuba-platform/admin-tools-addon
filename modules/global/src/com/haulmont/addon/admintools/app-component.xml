@@ -5,7 +5,12 @@
     <module name="global" blocks="*">
         <artifact name="cuba-at-global" appJar="true"/>
 
-
+        <property name="cuba.persistenceConfig"
+                  value="+com/haulmont/addon/admintools/persistence.xml de/diedavids/cuba/runtimediagnose/persistence.xml"/>
+        <property name="cuba.metadataConfig"
+                  value="+com/haulmont/addon/admintools/metadata.xml de/diedavids/cuba/runtimediagnose/metadata.xml"/>
+        <property name="cuba.viewsConfig"
+                  value="+com/haulmont/addon/admintools/views.xml de/diedavids/cuba/runtimediagnose/views.xml"/>
     </module>
     <module name="core" dependsOn="global" blocks="core">
         <artifact name="cuba-at-core" appJar="true"/>
