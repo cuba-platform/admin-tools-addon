@@ -29,7 +29,7 @@ Where `{add-on version}` should match the platform version used in your project.
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
-| 7.0.x            | 1.3.0          |
+| 7.0.x            | 1.3.1          |
 | 6.10.x           | 1.2.1          |
 | 6.9.x            | 1.1.3          |
 | 6.8.x            | 1.0.5          |
