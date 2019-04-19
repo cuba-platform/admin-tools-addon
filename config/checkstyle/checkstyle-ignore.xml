@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0"?>
+
 <!--
   ~ Copyright (c) 2008-2019 Haulmont.
   ~
@@ -15,13 +16,9 @@
   ~ limitations under the License.
   -->
 
-<studio>
-    <functionalitySettings>
-        <functionality id="joinedInheritanceDeleteCascade"
-                       state="ENABLE"/>
-        <functionality id="newFkConstraintNaming"
-                       state="ENABLE"/>
-        <functionality id="oneToOneIndex"
-                       state="ENABLE"/>
-    </functionalitySettings>
-</studio>
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+</suppressions>
