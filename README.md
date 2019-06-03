@@ -3,32 +3,42 @@
     <a href="https://travis-ci.org/cuba-platform/admin-tools-addon"><img src="https://travis-ci.org/cuba-platform/admin-tools-addon.svg?branch=master" alt="Build Status" title=""></a>
 </p>
 
-# Admin Tools Application Component
+- [Overview](#overview)
+- [Installation](#installation)
+  - [Enabling and Disabling Components](#enabling-and-disabling-components)
+- [Add-on Components](#add-on-components)
+ - [Runtime Diagnose Components](#runtime-diagnose-components)
+ - [SQL Script Generator](#sql-script-generator)
+ - [Shell Executor](#shell-executor)
+ - [SSH Terminal](#ssh-terminal)
+ - [Config Loader](#config-loader)
+ - [Console Script Loader](#console-script-loader)
+ - [Auto Import Subsystem](#auto-import-subsystem)
+ - [Tomcat JMX Bean](#tomcat-jmx-bean)
 
-This application component can be used to extend the capabilities of a [CUBA](https://www.cuba-platform.com) application with interactive runtime diagnosis and management tools.
+# Overview
+
+The add-on extends the capabilities of CUBA applications with runtime diagnostics and management tools. You can use the add-on to interactively inspect the running application, interact with the database and generate SQL scripts, send OS commands (only for Unix systems) and connect to remote servers.
+
+Auto Import Subsystem provides preconfiguring servers and transferring data among servers automatically during the server start/restart.
 
 See [sample application](https://github.com/cuba-platform/admin-tools-demo), using this component.
 
-The component consists of the following parts:
-* [Runtime Diagnose Components](#runtime-diagnose-components)
-* [SQL Script Generator](#sql-script-generator)
-* [Shell Executor](#shell-executor)
-* [SSH Terminal](#ssh-terminal)
-* [Config Loader](#config-loader)
-* [Console Script Loader](#console-script-loader)
-* [Auto Import Subsystem](#auto-import-subsystem)
-* [Tomcat JMX Bean](#tomcat-jmx-bean)
+# Installation
 
-## Installation
+1. Open your application in CUBA Studio.
 
-The component binaries are available in both `https://repo.cuba-platform.com/content/groups/work` and `https://dl.bintray.com/cuba-platform/main` repositories.
-Edit your project properties in Studio and add the following custom component in the *App components* panel:
+2. Edit *Project properties*.
 
-```
-com.haulmont.addon.admintools:cuba-at-global:{add-on version}
-```
+3. Click the *Plus* button in the *App components* section of the *Main* tab.
 
-Where `{add-on version}` should match the platform version used in your project. The following versions are now available:
+4. Specify the coordinates of the component in the corresponding field as follows: group:name:version.
+
+  - Artifact group: *com.haulmont.addon.admintools*
+  - Artifact name: *cuba-at-global*
+  - Version: *add-on version*  
+
+When specifying the component version, you should select the one, which is compatible with the platform version used in your project.
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
@@ -37,8 +47,10 @@ Where `{add-on version}` should match the platform version used in your project.
 | 6.9.x            | 1.1.3          |
 | 6.8.x            | 1.0.5          |
 
+5. Click *OK* to confirm the operating.
+
 ## Enabling and Disabling Components
-Each part of the component can be enabled or disabled. It can be turned on or off explicitly or by using a corresponding application property. By default, all components are enabled, except [Auto Import Subsystem](#auto-import-subsystem).
+Each part of the add-on can be enabled or disabled. It can be turned on or off explicitly or by using a corresponding application property. By default, all components are enabled, except [Auto Import Subsystem](#auto-import-subsystem).
 
 You can turn on *Auto Import Subsystem* in the middleware block, writing the next property in the file `app.properties`:
 
@@ -60,13 +72,15 @@ admintools.configLoader.enabled = false
 admintools.consoleScriptLoader.enabled = false
 ```
 
+# Add-on Components
+
 ## Runtime Diagnose Components
 Components *Groovy Console*, *JPQL Console*, *SQL Console* and *Diagnose Execution Logs* are imported
 from the [Runtime Diagnose Component](https://github.com/mariodavid/cuba-component-runtime-diagnose).
 
 The following enhancements have been made for this component:
 
-* Added an ability to import scripts from ZIP files for *Groovy Console*, *JPQL Console* and *SQL Console*;
+* Added an ability to import scripts from ZIP files for *Groovy Console*, *JPQL Console* and *SQL Console*.
 * Added the autocomplete for providing suggestions  while you type JPQL request in *JPQL Console*.
 
 ## SQL Script Generator
@@ -111,7 +125,7 @@ SSH Terminal is designed for working with remote servers from the application UI
 
 Before connecting to a remote server, it is required to specify credentials and a hostname in the corresponding section.
 As an alternative, use a private key and a passphrase for a connection instead of a password. After that, use action buttons to connect to a server.
-The toolbar of *SSH Console* contains also the __Fit__ button, which allows a user to change the size of the terminal.
+The toolbar of *SSH Console* contains also the _Fit_ button, which allows a user to change the size of the terminal.
 
 Connection parameters can be stored in the database (except the password and the passphrase). For saving, removing and loading
 connection parameters, use corresponding buttons. By default, connection parameters are saved only for the current user
@@ -161,7 +175,7 @@ There are several options for exporting various entities:
 * Security roles and access groups can be exported using the __Export as ZIP__  or __Export as JSON__ actions available on the *Roles* and *Access Groups* screens.
 * Arbitrary entities can be exported using the __Export as ZIP__  or __Export as JSON__ actions available on the *Administration > Entity Inspector* screen.
 
-#### Creating an Auto Import Configuration File
+### Creating an Auto Import Configuration File
 
 1. Example of a configuration file:
 
