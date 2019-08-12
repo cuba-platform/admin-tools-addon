@@ -20,6 +20,7 @@ import com.haulmont.bali.util.Dom4j;
 import com.haulmont.cuba.testsupport.TestContainer;
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.junit.platform.commons.util.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,10 +62,24 @@ public class AdminToolsTestContainer extends TestContainer {
         Document contextXmlDoc = Dom4j.readDocument(contextXmlFile);
         Element resourceElem = contextXmlDoc.getRootElement().element("Resource");
 
-        dbDriver = resourceElem.attributeValue("driverClassName");
-        dbUrl = resourceElem.attributeValue("url");
-        dbUser = resourceElem.attributeValue("username");
-        dbPassword = resourceElem.attributeValue("password");
+        dbDriver = getDbConfigurationValue(resourceElem, "driverClassName");
+        dbUrl = getDbConfigurationValue(resourceElem, "url");
+        dbUser = getDbConfigurationValue(resourceElem, "username");
+        dbPassword = getDbConfigurationValue(resourceElem, "password");
+    }
+
+    @Override
+    protected void initAppProperties() {
+        super.initAppProperties();
+        String dbmsType = System.getProperty("test.db.dbmsType");
+        if (dbmsType != null) {
+            getAppProperties().put("cuba.dbmsType", dbmsType);
+        }
+    }
+
+    protected String getDbConfigurationValue(Element resourceElem, String attributeName) {
+        String externalValue = System.getProperty("test.db." + attributeName);
+        return StringUtils.isNotBlank(externalValue) ? externalValue : resourceElem.attributeValue(attributeName);
     }
 
     public final static class Common extends AdminToolsTestContainer {
