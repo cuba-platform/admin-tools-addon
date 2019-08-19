@@ -118,6 +118,9 @@ configure([globalModule, coreModule, guiModule, webModule]) {
                 srcDirs = ['test-unit']
             }
         }
+
+        sourceSets.main.output.classesDir = new File(project.buildDir, "classes/main")
+        sourceSets.test.output.classesDir = new File(project.buildDir, "classes/test")
     }
 
     dependencies {
