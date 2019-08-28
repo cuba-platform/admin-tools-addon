@@ -15,7 +15,7 @@
  */
 
 buildscript {
-    ext.cubaVersion = '7.0.4'
+    ext.cubaVersion = '7.1-SNAPSHOT'
     repositories {
         mavenLocal()
 
@@ -58,7 +58,7 @@ apply(plugin: 'addon-gradle-plugin')
 cuba {
     artifact {
         group = 'com.haulmont.addon.admintools'
-        version = "1.3"
+        version = "1.4"
         isSnapshot = true
     }
     tomcat {
@@ -118,6 +118,9 @@ configure([globalModule, coreModule, guiModule, webModule]) {
                 srcDirs = ['test-unit']
             }
         }
+
+        sourceSets.main.output.classesDir = new File(project.buildDir, "classes/main")
+        sourceSets.test.output.classesDir = new File(project.buildDir, "classes/test")
     }
 
     dependencies {
