@@ -3,53 +3,86 @@
     <a href="https://travis-ci.org/cuba-platform/admin-tools-addon"><img src="https://travis-ci.org/cuba-platform/admin-tools-addon.svg?branch=master" alt="Build Status" title=""></a>
 </p>
 
+# Admin Tools
+
 - [Overview](#overview)
 - [Installation](#installation)
-  - [Enabling and Disabling Components](#enabling-and-disabling-components)
+  - [From the Marketplace](#from-the-marketplace)
+  - [By Coordinates](#by-coordinates)
+- [Enabling and Disabling Components](#enabling-and-disabling-components)
 - [Add-on Components](#add-on-components)
- - [Runtime Diagnose Components](#runtime-diagnose-components)
- - [SQL Script Generator](#sql-script-generator)
- - [Shell Executor](#shell-executor)
- - [SSH Terminal](#ssh-terminal)
- - [Config Loader](#config-loader)
- - [Console Script Loader](#console-script-loader)
- - [Auto Import Subsystem](#auto-import-subsystem)
- - [Tomcat JMX Bean](#tomcat-jmx-bean)
+  - [Runtime Diagnose Components](#runtime-diagnose-components)
+  - [SQL Script Generator](#sql-script-generator)
+  - [Shell Executor](#shell-executor)
+  - [SSH Terminal](#ssh-terminal)
+  - [Config Loader](#config-loader)
+  - [Console Script Loader](#console-script-loader)
+  - [Auto Import Subsystem](#auto-import-subsystem)
+  - [Tomcat JMX Bean](#tomcat-jmx-bean)
 
 # Overview
 
-The add-on extends the capabilities of CUBA applications with runtime diagnostics and management tools. You can use the add-on to interactively inspect the running application, interact with the database and generate SQL scripts, send OS commands (only for Unix systems) and connect to remote servers.
+The add-on extends the capabilities of CUBA applications with runtime diagnostics and management tools. Using console you can interactively inspect the running application, interact with the database and generate SQL scripts.
 
-Auto Import Subsystem provides preconfiguring servers and transferring data among servers automatically during the server start/restart.
+You can also send OS commands (only for Unix-like systems) and connect to remote servers. Auto Import Subsystem provides preconfiguring servers and transferring data among servers automatically during the server start/restart.
 
-See [sample application](https://github.com/cuba-platform/admin-tools-demo), using this component.
+Key features:
+
+* Working with console straight from the user interface.
+* Ability to diagnose runtime applications.
+* Working with remote servers with the UI.
+* Downloading/uploading configuration files and scripts.
+* Executing operations on Tomcat server.
+
+See [sample application](https://github.com/cuba-platform/admin-tools-demo) using this component.
 
 # Installation
 
-1. Open your application in CUBA Studio.
+The add-on can be added to your project in one of the ways described below. Installation from the Marketplace is the simplest way. The last version of the add-on compatible with the used version of the platform will be installed.
+Also, you can install the add-on by coordinates choosing the required version of the add-on from the table.
 
-2. Edit *Project properties*.
+In case you want to install the add-on by manual editing or by building from sources see the complete add-ons installation guide in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/manual.html#app_components_usage).
 
-3. Click the *Plus* button in the *App components* section of the *Main* tab.
+## From the Marketplace
 
-4. Specify the coordinates of the component in the corresponding field as follows: group:name:version.
+1. Open your application in CUBA Studio. Check the latest version of CUBA Studio on the [CUBA Platform site](https://www.cuba-platform.com/download/previous-studio/).
+2. Go to *CUBA -> Marketplace* in the main menu.
 
-  - Artifact group: *com.haulmont.addon.admintools*
-  - Artifact name: *cuba-at-global*
-  - Version: *add-on version*  
+ ![marketplace](img/marketplace.png)
 
-When specifying the component version, you should select the one, which is compatible with the platform version used in your project.
+3. Find the Admin Tools add-on there.
 
-| Platform Version | Add-on Version |
-| ---------------- | -------------- |
+ ![addons](img/addons.png)
+
+4. Click *Install* and apply the changes.
+The add-on corresponding to the used platform version will be installed.
+
+## By coordinates
+
+1. Open your application in CUBA Studio. Check the latest version of CUBA Studio on the [CUBA Platform site](https://www.cuba-platform.com/download/previous-studio/).
+2. Go to *CUBA -> Marketplace* in the main menu.
+3. Click the icon in the upper-right corner.
+
+ ![by-coordinates](img/by-coordinates.png)
+
+4. Paste the add-on coordinates in the corresponding field as follows:
+
+ `com.haulmont.addon.admintools:cuba-at-global:<add-on version>`
+
+ where `<add-on version>` is compatible with the used version of the CUBA platform.
+
+ | Platform Version | Add-on Version |
+|------------------|----------------|
+| 7.1.x            | 1.4.0          |
 | 7.0.x            | 1.3.1          |
 | 6.10.x           | 1.2.1          |
 | 6.9.x            | 1.1.3          |
 | 6.8.x            | 1.0.5          |
 
-5. Click *OK* to confirm the operating.
+5. Click *Install* and apply the changes. The add-on will be installed to your project.
 
-## Enabling and Disabling Components
+# Enabling and Disabling Components
+
 Each part of the add-on can be enabled or disabled. It can be turned on or off explicitly or by using a corresponding application property. By default, all components are enabled, except [Auto Import Subsystem](#auto-import-subsystem).
 
 You can turn on *Auto Import Subsystem* in the middleware block, writing the next property in the file `app.properties`:
