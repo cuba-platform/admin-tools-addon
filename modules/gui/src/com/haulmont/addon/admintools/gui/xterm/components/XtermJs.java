@@ -25,12 +25,12 @@ public interface XtermJs extends Component {
     String NAME = "xterm-js";
 
     /**
-     * Print the {@code text} on the terminal
+     * Print the {@param text} on the terminal
      */
     void write(String text);
 
     /**
-     * Print the {@code text} on the terminal and then terminate the line.
+     * Print the {@param text} on the terminal and then terminate the line.
      */
     void writeln(String text);
 

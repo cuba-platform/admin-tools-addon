@@ -24,6 +24,7 @@ public interface AutoImportProcessor {
 
     /**
      * @param filePath is a classpath to a file
+     * @throws Exception
      */
     void processFile(String filePath) throws Exception;
 }

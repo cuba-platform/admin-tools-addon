@@ -83,6 +83,9 @@ public class AutoImportXmlReader {
     }
 
     /**
+     * @param path file path to read xml
+     * @return Element
+     * @throws  IOException
      * copy/paste from {@link com.haulmont.cuba.core.sys.MetadataBuildSupport#readXml(String)}
      */
     protected Element readXml(String path) throws IOException {

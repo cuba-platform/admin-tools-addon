@@ -33,7 +33,7 @@ import static org.apache.commons.lang3.SystemUtils.*;
 public class ConsoleTools {
 
     /**
-     * Tried parse arguments {@code line} like in a command console of a current OS
+     * Tried parse arguments {@param line} like in a command console of a current OS
      * @return prepared arguments for {@link ProcessBuilder}
      */
     public List<String> parseArgs(String line) {

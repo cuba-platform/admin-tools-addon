@@ -15,7 +15,7 @@
  */
 
 buildscript {
-    ext.cubaVersion = '7.1.0'
+    ext.cubaVersion = '7.2-SNAPSHOT'
     repositories {
         mavenLocal()
 
@@ -28,27 +28,23 @@ buildscript {
                 url System.getenv('HAULMONT_REPOSITORY_URL')
             }
         }
-        
+
         maven {
-            url 'https://repo.cuba-platform.com/content/groups/work'
-            credentials {
-                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
-                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
-            }
+            url 'https://dl.bintray.com/cuba-platform/main'
         }
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
-        classpath "com.haulmont.gradle:addon-gradle-plugin:1.1.1"
+        classpath "com.haulmont.gradle:addon-gradle-plugin:1.1.2"
     }
 }
 
 def modulePrefix = 'cuba-at'
 
-def globalModule = project(":${modulePrefix}-global" )
-def coreModule = project(":${modulePrefix}-core" )
-def guiModule = project(":${modulePrefix}-gui" )
-def webModule = project(":${modulePrefix}-web" )
+def globalModule = project(":${modulePrefix}-global")
+def coreModule = project(":${modulePrefix}-core")
+def guiModule = project(":${modulePrefix}-gui")
+def webModule = project(":${modulePrefix}-web")
 
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
@@ -58,7 +54,7 @@ apply(plugin: 'addon-gradle-plugin')
 cuba {
     artifact {
         group = 'com.haulmont.addon.admintools'
-        version = "1.4"
+        version = "1.5"
         isSnapshot = true
     }
     tomcat {
@@ -90,38 +86,36 @@ def hsql = 'org.hsqldb:hsqldb:2.4.1'
 
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
-    apply(plugin: 'groovy')
     apply(plugin: 'maven')
     apply(plugin: 'cuba')
+    apply(plugin: 'groovy')
     apply(plugin: 'addon-gradle-plugin')
 
     sourceSets {
         main {
             groovy { srcDirs = ["src"] }
-            resources {
-                srcDir 'resources'
-            }
+            resources { srcDirs 'resources' }
+            // new config
+            java.outputDir = new File(project.buildDir, "classes/main")
+            groovy.outputDir = new File(project.buildDir, "classes/main")
         }
         test {
-            java {
-                srcDirs = ['test']
-            }
-            groovy {
-                srcDirs = ['test']
-            }
+            groovy { srcDirs = ["test"] }
+            // new config
+            java.outputDir = new File(project.buildDir, "classes/test")
+            groovy.outputDir = new File(project.buildDir, "classes/test")
         }
         testUnit {
-            java {
-                srcDirs = ['test-unit']
-            }
-            groovy {
-                srcDirs = ['test-unit']
-            }
+            groovy { srcDirs = ["test-unit"] }
+            // new config
+            java.outputDir = new File(project.buildDir, "classes/test")
+            groovy.outputDir = new File(project.buildDir, "classes/test")
         }
-
-        sourceSets.main.output.classesDir = new File(project.buildDir, "classes/main")
-        sourceSets.test.output.classesDir = new File(project.buildDir, "classes/test")
     }
+    sourceSets.main.output.classesDirs.setFrom(new File(project.buildDir, "classes/main"))
+    sourceSets.test.output.classesDirs.setFrom(new File(project.buildDir, "classes/test"))
+    sourceSets.testUnit.output.classesDirs.setFrom(new File(project.buildDir, "classes/test"))
+
 
     dependencies {
         compile('io.vavr:vavr:0.9.0')
@@ -138,6 +132,11 @@ configure([globalModule, coreModule, guiModule, webModule]) {
         testUnitCompile sourceSets.main.output
         testUnitCompile configurations.testCompile
         testUnitRuntime configurations.testRuntime
+    }
+
+    task testUnit(type: Test) {
+        testClassesDirs = sourceSets.testUnit.output.classesDirs
+        classpath = sourceSets.testUnit.runtimeClasspath
     }
 
     task sourceJar(type: Jar) {
@@ -159,19 +158,21 @@ configure([globalModule, coreModule, guiModule, webModule]) {
         }
     }
 
-    task testUnit(type: Test) {
-        testClassesDir = sourceSets.testUnit.output.classesDir
-        classpath = sourceSets.testUnit.runtimeClasspath
-    }
-
-    tasks.withType(Test) {
-        reports.html.destination = file("${reporting.baseDir}/${name}")
-    }
 }
 
+
 configure(globalModule) {
+    dependencies {
+        if (!JavaVersion.current().isJava8()) {
+            runtime('javax.xml.bind:jaxb-api:2.3.1')
+            runtime('org.glassfish.jaxb:jaxb-runtime:2.3.1')
+        }
+    }
+
     entitiesEnhancing {
-        main { enabled = true }
+        main {
+            enabled = true
+        }
     }
 
     jar {
@@ -195,9 +196,6 @@ configure(globalModule) {
     }
 }
 
-def dbNameParam = 'cubaat'
-def dbTestNameParam = 'cubaat-test'
-
 configure(coreModule) {
 
     configurations {
@@ -209,21 +207,14 @@ configure(coreModule) {
         compile(globalModule)
         compileOnly(servletApi)
         jdbc(hsql)
-        testCompile project(path: ":${modulePrefix}-global" , configuration: 'testOutput')
+        testCompile project(path: ":${modulePrefix}-global", configuration: 'testOutput')
         testRuntime(hsql)
 
         compile 'com.github.jsqlparser:jsqlparser:0.9.7'
     }
 
-    task cleanConf(description: 'Cleans up conf directory') {
-        doLast {
-            def dir = new File(cuba.tomcat.dir, '/conf/${modulePrefix}-core')
-            if (dir.isDirectory()) {
-                ant.delete(includeemptydirs: true) {
-                    fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
-                }
-            }
-        }
+    task cleanConf(description: 'Cleans up conf directory', type: Delete) {
+        delete "$cuba.appHome/${modulePrefix}-core/conf"
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
@@ -257,7 +248,7 @@ configure(guiModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/haulmont/addon/admintools/**"
-        into "$cuba.tomcat.dir/conf/${modulePrefix}"
+        into "$cuba.appHome/${modulePrefix}/conf"
     }
 }
 
@@ -270,7 +261,7 @@ configure(webModule) {
         compileOnly(servletApi)
         compile(guiModule)
         compile group: 'com.jcraft', name: 'jsch', version: '0.1.54'
-        testCompile project(path: ":${modulePrefix}-global" , configuration: 'testOutput')
+        testCompile project(path: ":${modulePrefix}-global", configuration: 'testOutput')
     }
 
     task webArchive(type: Zip) {
@@ -286,7 +277,7 @@ configure(webModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "com/haulmont/addon/admintools/**"
-        into "$cuba.tomcat.dir/conf/${modulePrefix}"
+        into "$cuba.appHome/${modulePrefix}/conf"
     }
 
     task clearMessagesCache(type: CubaClearMessagesCache) {
@@ -294,15 +285,8 @@ configure(webModule) {
     }
     deployConf.dependsOn clearMessagesCache
 
-    task cleanConf(description: 'Cleans up conf directory') {
-        doLast {
-            def dir = new File(cuba.tomcat.dir, "/conf/${modulePrefix}")
-            if (dir.isDirectory()) {
-                ant.delete(includeemptydirs: true) {
-                    fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
-                }
-            }
-        }
+    task cleanConf(description: 'Cleans up conf directory', type: Delete) {
+        delete "$cuba.appHome/${modulePrefix}/conf"
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
@@ -311,22 +295,22 @@ configure(webModule) {
     }
 }
 
-task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf" ) {
+task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
     delete("$cuba.tomcat.dir/shared")
-    delete("$cuba.tomcat.dir/webapps/${modulePrefix}-core" )
-    delete("$cuba.tomcat.dir/webapps/${modulePrefix}" )
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}-core")
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}")
 }
 
-task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy" , ":${modulePrefix}-web:deploy" ], description: 'Redeploys applications and restarts local Tomcat') {
+task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefix}-web:deploy"], description: 'Redeploys applications and restarts local Tomcat') {
     doLast {
         ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
             not {
                 socket(server: 'localhost', port: '8787')
             }
         }
-        start.execute()
     }
 }
+restart.finalizedBy start
 
 
 apply from: 'extra.gradle'

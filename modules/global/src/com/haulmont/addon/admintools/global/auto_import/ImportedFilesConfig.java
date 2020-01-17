@@ -43,6 +43,7 @@ public interface ImportedFilesConfig extends Config {
     ImportedFilesInfo getImportedFilesInfo();
 
     /**
+     * @param filesInfo the map of imported files
      * set information about files {@param filesInfo} imported by AutoImporterImpl
      */
     void setImportedFilesInfo(ImportedFilesInfo filesInfo);

@@ -28,8 +28,10 @@ public interface EntityViewSqlGenerationService {
     String NAME = "admintools_EntityViewSqlGenerationService";
 
     /**
+     * @param entity entity to generate SQL scripts (SELECT, INSERT, etc.)
+     * @param viewName view to generate SQL scripts (SELECT, INSERT, etc.)
      * @param scriptType is type of generated SQL scripts (SELECT, INSERT, etc.)
-     * @return set of SQL scripts for @{@code entity} and nested entities by {@code viewName}
+     * @return set of SQL scripts for @{@param entity} and nested entities by {@param viewName}
      */
     Set<String> generateScript(Entity entity, String viewName, ScriptGenerationOptions scriptType);
 }

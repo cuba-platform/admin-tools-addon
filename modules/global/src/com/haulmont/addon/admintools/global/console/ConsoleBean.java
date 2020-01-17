@@ -53,6 +53,7 @@ public class ConsoleBean {
     /**
      * Try execute {@code script} in a terminal
      *
+     * @param script script to execute
      * @param arguments emulates args in command console
      * @return process of executing script
      * @throws IOException  if an I/O error occurs
