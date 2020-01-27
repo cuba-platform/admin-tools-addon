@@ -74,9 +74,9 @@ class EntityViewSqlGenerationServiceTest extends Specification {
         Set<String> scripts = delegate.generateScript(editAdmin, editView, ScriptGenerationOptions.INSERT)
 
         then:
-        scripts.size() == 4
+        scripts.size() == 3
 
-        scripts.stream().anyMatch({ s -> s.startsWith('insert into SEC_ROLE') })
+        scripts.stream().anyMatch({ s -> s.startsWith('insert into SEC_USER') })
         scripts.stream().anyMatch({ s -> s.startsWith('insert into SEC_GROUP') })
         scripts.stream().anyMatch({ s -> s.startsWith('insert into SEC_USER_ROLE') })
 
@@ -105,9 +105,9 @@ class EntityViewSqlGenerationServiceTest extends Specification {
         Set<String> scripts = delegate.generateScript(editAdmin, editView, ScriptGenerationOptions.UPDATE)
 
         then:
-        scripts.size() == 4
+        scripts.size() == 3
 
-        scripts.stream().anyMatch({ s -> s.startsWith('update SEC_ROLE') })
+        scripts.stream().anyMatch({ s -> s.startsWith('update SEC_USER') })
         scripts.stream().anyMatch({ s -> s.startsWith('update SEC_GROUP') })
         scripts.stream().anyMatch({ s -> s.startsWith('update SEC_USER_ROLE') })
 
@@ -137,9 +137,9 @@ class EntityViewSqlGenerationServiceTest extends Specification {
         Set<String> scripts = delegate.generateScript(editAdmin, editView, ScriptGenerationOptions.INSERT_UPDATE)
 
         then:
-        scripts.size() == 4
+        scripts.size() == 3
 
-        scripts.stream().anyMatch({ s -> s.startsWith('insert into SEC_ROLE') && s.contains('update SEC_ROLE') })
+        scripts.stream().anyMatch({ s -> s.startsWith('insert into SEC_USER') && s.contains('update SEC_USER') })
         scripts.stream().anyMatch({ s -> s.startsWith('insert into SEC_GROUP') && s.contains('update SEC_GROUP') })
         scripts.stream().anyMatch({ s -> s.startsWith('insert into SEC_USER_ROLE') && s.contains('update SEC_USER_ROLE') })
 

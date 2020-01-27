@@ -21,11 +21,12 @@ import com.haulmont.cuba.core.global.DataManager
 import com.haulmont.cuba.core.global.Metadata
 import org.junit.Before
 import org.junit.ClassRule
+import spock.lang.Shared
 
 class AdminToolsIntegrationTest {
 
-    @ClassRule
-    public static AdminToolsTestContainer container = AdminToolsTestContainer.Common.INSTANCE
+    @Shared @ClassRule
+    public AdminToolsTestContainer container = AdminToolsTestContainer.Common.INSTANCE
 
     Metadata metadata
     DataManager dataManager

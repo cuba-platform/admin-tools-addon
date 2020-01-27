@@ -29,6 +29,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+import spock.lang.Shared;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ import static org.junit.Assert.assertEquals;
 public class SampleIntegrationTest {
 
     @ClassRule
+    @Shared
     public static AdminToolsTestContainer cont = AdminToolsTestContainer.Common.INSTANCE;
 
     private Metadata metadata;

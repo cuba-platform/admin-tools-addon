@@ -15,7 +15,7 @@
  */
 
 buildscript {
-    ext.cubaVersion = '7.2-SNAPSHOT'
+    ext.cubaVersion = rootProject.hasProperty('cubaVersion') ? rootProject['cubaVersion'] : '7.2-SNAPSHOT'
     repositories {
         mavenLocal()
 
@@ -105,17 +105,9 @@ configure([globalModule, coreModule, guiModule, webModule]) {
             java.outputDir = new File(project.buildDir, "classes/test")
             groovy.outputDir = new File(project.buildDir, "classes/test")
         }
-        testUnit {
-            groovy { srcDirs = ["test-unit"] }
-            // new config
-            java.outputDir = new File(project.buildDir, "classes/test")
-            groovy.outputDir = new File(project.buildDir, "classes/test")
-        }
     }
     sourceSets.main.output.classesDirs.setFrom(new File(project.buildDir, "classes/main"))
     sourceSets.test.output.classesDirs.setFrom(new File(project.buildDir, "classes/test"))
-    sourceSets.testUnit.output.classesDirs.setFrom(new File(project.buildDir, "classes/test"))
-
 
     dependencies {
         compile('io.vavr:vavr:0.9.0')
@@ -124,19 +116,10 @@ configure([globalModule, coreModule, guiModule, webModule]) {
         compile('org.codehaus.groovy:groovy-all:2.5.4')
         testCompile('junit:junit:4.12')
         testCompile('cglib:cglib-nodep:3.2.4')
-        testCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-3')
+        testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
         testCompile('org.springframework:spring-test:4.3.1.RELEASE')
         testRuntime "cglib:cglib-nodep:3.2.4"
         testRuntime('javax.servlet:javax.servlet-api:3.1.0')
-
-        testUnitCompile sourceSets.main.output
-        testUnitCompile configurations.testCompile
-        testUnitRuntime configurations.testRuntime
-    }
-
-    task testUnit(type: Test) {
-        testClassesDirs = sourceSets.testUnit.output.classesDirs
-        classpath = sourceSets.testUnit.runtimeClasspath
     }
 
     task sourceJar(type: Jar) {
@@ -207,7 +190,6 @@ configure(coreModule) {
         compile(globalModule)
         compileOnly(servletApi)
         jdbc(hsql)
-        testCompile project(path: ":${modulePrefix}-global", configuration: 'testOutput')
         testRuntime(hsql)
 
         compile 'com.github.jsqlparser:jsqlparser:0.9.7'
