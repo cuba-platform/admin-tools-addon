@@ -58,8 +58,8 @@ public class ConfigLoader extends AbstractWindow {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        configDir = Paths.get(configuration.getConfig(GlobalConfig.class).getConfDir()).getParent();
-        helpLabel.setValue(String.format(getMessage("helpMessage"), configuration.getConfig(GlobalConfig.class).getConfDir()));
+        configDir = Paths.get(configuration.getConfig(GlobalConfig.class).getConfDir());
+        helpLabel.setValue(String.format(getMessage("helpMessage"), configDir.normalize()));
     }
 
     public void apply() {
