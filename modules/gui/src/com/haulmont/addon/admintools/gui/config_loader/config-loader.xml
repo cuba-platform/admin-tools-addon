@@ -24,7 +24,7 @@
     <layout expand="vBox"
             spacing="true"
             width="100%">
-        <label id="helpLabel" value="msg://helpMessage"/>
+        <label id="helpLabel" htmlEnabled="true"/>
         <label id="helpLabel2" value="msg://helpMessage2"/>
         <hbox expand="configPathField"
               spacing="true"

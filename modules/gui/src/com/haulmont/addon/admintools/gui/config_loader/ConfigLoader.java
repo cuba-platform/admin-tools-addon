@@ -50,6 +50,8 @@ public class ConfigLoader extends AbstractWindow {
     protected Notifications notifications;
     @Inject
     protected Dialogs dialogs;
+    @Inject
+    private Label<String> helpLabel;
 
     protected Path configDir;
 
@@ -57,6 +59,7 @@ public class ConfigLoader extends AbstractWindow {
     public void init(Map<String, Object> params) {
         super.init(params);
         configDir = Paths.get(configuration.getConfig(GlobalConfig.class).getConfDir()).getParent();
+        helpLabel.setValue(String.format(getMessage("helpMessage"), configuration.getConfig(GlobalConfig.class).getConfDir()));
     }
 
     public void apply() {
