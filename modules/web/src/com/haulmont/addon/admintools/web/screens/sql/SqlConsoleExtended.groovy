@@ -34,5 +34,7 @@ class SqlConsoleExtended extends SqlConsole{
     @Override
     void init(Map<String, Object> params) {
         super.init(params)
+
+        console.setValue(params.getOrDefault('script', ''))
     }
 }

@@ -38,5 +38,7 @@ class JpqlConsoleExtended extends JpqlConsole {
         console.setSuggester({ source, text, cursorPosition ->
             suggesterHelper.getHint(console, text, cursorPosition)
         })
+
+        console.setValue(params.getOrDefault('script', ''))
     }
 }
