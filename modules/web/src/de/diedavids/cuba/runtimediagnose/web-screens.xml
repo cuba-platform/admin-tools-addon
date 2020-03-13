@@ -16,19 +16,19 @@
   -->
 
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
-    <include file="de/diedavids/cuba/runtimediagnose/screens.xml"/>
+<!--    <include file="de/diedavids/cuba/runtimediagnose/screens.xml"/>-->
     <screen id="diagnoseWizard"
             template="/de/diedavids/cuba/runtimediagnose/web/screens/wizard/diagnose-wizard.xml"/>
-    <screen id="groovyConsole"
-            template="/de/diedavids/cuba/runtimediagnose/web/screens/groovy/groovy-console.xml"/>
-    <screen id="sqlConsole"
-            template="/de/diedavids/cuba/runtimediagnose/web/screens/sql/sql-console.xml"/>
+<!--    <screen id="groovyConsole"-->
+<!--            template="/de/diedavids/cuba/runtimediagnose/web/screens/groovy/groovy-console.xml"/>-->
+<!--    <screen id="sqlConsole"-->
+<!--            template="/de/diedavids/cuba/runtimediagnose/web/screens/sql/sql-console.xml"/>-->
     <screen id="ddcrd$DiagnoseExecutionLog.browse"
             template="de/diedavids/cuba/runtimediagnose/web/diagnoseexecutionlog/diagnose-execution-log-browse.xml"/>
-    <screen id="console-frame"
-            template="/de/diedavids/cuba/runtimediagnose/web/screens/console/console-frame.xml"/>
-    <screen id="jpqlConsole"
-            template="/de/diedavids/cuba/runtimediagnose/web/screens/jpql/jpql-console.xml"/>
+<!--    <screen id="console-frame"-->
+<!--            template="/de/diedavids/cuba/runtimediagnose/web/screens/console/console-frame.xml"/>-->
+<!--    <screen id="jpqlConsole"-->
+<!--            template="/de/diedavids/cuba/runtimediagnose/web/screens/jpql/jpql-console.xml"/>-->
     <screen id="sqlCopyDialog"
             template="/de/diedavids/cuba/runtimediagnose/web/screens/jpql/sql-copy-dialog.xml"/>
 </screen-config>
