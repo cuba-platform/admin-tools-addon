@@ -30,8 +30,13 @@ import com.haulmont.cuba.security.role.ScreenPermissionsContainer;
 import de.diedavids.cuba.runtimediagnose.entity.DiagnoseExecutionLog;
 import de.diedavids.cuba.runtimediagnose.wizard.DiagnoseWizardResult;
 
-@Role(name = "Admin tools full access")
+@Role(name = "admin-tools-full-access")
 public class AdminToolsAdminRole extends AnnotatedRoleDefinition {
+
+    @Override
+    public String getLocName() {
+        return "Admin tools full access";
+    }
 
     @EntityAccess(entityClass = DiagnoseWizardResult.class, operations = {EntityOp.CREATE, EntityOp.UPDATE, EntityOp.READ, EntityOp.DELETE})
     @EntityAccess(entityClass = DiagnoseExecutionLog.class,
