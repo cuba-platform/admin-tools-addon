@@ -10,7 +10,7 @@
   - [From the Marketplace](#from-the-marketplace)
   - [By Coordinates](#by-coordinates)
 - [Enabling and Disabling Components](#enabling-and-disabling-components)
-- [Predefined roles](#predefined-roles)
+- [Predefined Roles](#predefined-roles)
 - [Add-on Components](#add-on-components)
   - [Runtime Diagnose Components](#runtime-diagnose-components)
   - [SQL Script Generator](#sql-script-generator)
@@ -107,10 +107,10 @@ admintools.configLoader.enabled = false
 admintools.consoleScriptLoader.enabled = false
 ```
 
-# Predefined roles
+# Predefined Roles
 
-- **Admin tools full access** - full access to admin tools add-on features
-- **Admin tools diagnose** - ability to upload diagnose info in admin tools diagnose wizard
+- **admin-tools-full-access** - grants full access to the add-on features.
+- **admin-tools-diagnose** - grants an ability to upload diagnose info in admin tools *Diagnose Wizard* dialog window.
 
 # Add-on Components
 
