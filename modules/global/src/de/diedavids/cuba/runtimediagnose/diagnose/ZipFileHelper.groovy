@@ -65,14 +65,14 @@ class ZipFileHelper {
     protected void addArchiveEntryToZipFile(ZipArchiveOutputStream zipOutputStream, String fileName, byte[] fileContent) {
 
         byte[] correctFileContent = fileContent ?: [] as byte[]
-        ArchiveEntry resultArchiveEntry = createArchiveEntry(fileName, correctFileContent)
+        ZipArchiveEntry resultArchiveEntry = createArchiveEntry(fileName, correctFileContent)
 
         zipOutputStream.putArchiveEntry(resultArchiveEntry)
         zipOutputStream.write(correctFileContent)
         zipOutputStream.closeArchiveEntry()
     }
 
-    protected ArchiveEntry createArchiveEntry(String name, byte[] data) {
+    protected ZipArchiveEntry createArchiveEntry(String name, byte[] data) {
         ZipArchiveEntry zipEntry = new ZipArchiveEntry(name)
         zipEntry.size = data.length
         zipEntry.compressedSize = zipEntry.size

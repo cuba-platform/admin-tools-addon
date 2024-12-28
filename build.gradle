@@ -82,7 +82,7 @@ dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.4.1'
+def hsql = 'org.hsqldb:hsqldb:2.5.2'
 
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
@@ -113,7 +113,7 @@ configure([globalModule, coreModule, guiModule, webModule]) {
         compile('io.vavr:vavr:0.9.0')
         compile('jaxen:jaxen:1.1.6')
         compile('org.jetbrains:annotations:15.0')
-        compile('org.codehaus.groovy:groovy-all:2.5.4')
+        compile('org.codehaus.groovy:groovy-all:2.5.23')
         testCompile('junit:junit:4.12')
         testCompile('cglib:cglib-nodep:3.2.4')
         testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
